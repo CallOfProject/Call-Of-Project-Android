@@ -1,4 +1,4 @@
-package callofproject.dev.mobile.android.screen
+package callofproject.dev.mobile.android.view
 
 import android.app.DatePickerDialog
 import android.content.Context

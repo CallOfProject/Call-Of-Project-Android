@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "CallOfProject"
 include(":app")
- 
+include(":ServiceLib")

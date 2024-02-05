@@ -1,4 +1,4 @@
-package callofproject.dev.mobile.android.screen
+package callofproject.dev.mobile.android.view
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -38,7 +38,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -46,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import callofproject.dev.mobile.android.R
 import callofproject.dev.mobile.android.ui.theme.LightColorScheme
-import callofproject.dev.mobile.android.ui.theme.asd
 
 
 @OptIn(ExperimentalMaterial3Api::class)

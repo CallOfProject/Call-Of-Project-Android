@@ -1,4 +1,4 @@
-package callofproject.dev.mobile.android.screen
+package callofproject.dev.mobile.android.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

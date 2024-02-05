@@ -4,16 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import callofproject.dev.mobile.android.screen.ForgotPasswordScreen
-import callofproject.dev.mobile.android.screen.LoginScreen
-import callofproject.dev.mobile.android.screen.MainScreen
-import callofproject.dev.mobile.android.screen.RegisterScreen
+import callofproject.dev.mobile.android.view.ForgotPasswordScreen
+import callofproject.dev.mobile.android.view.LoginScreen
+import callofproject.dev.mobile.android.view.MainScreen
+import callofproject.dev.mobile.android.view.RegisterScreen
 import callofproject.dev.mobile.android.ui.theme.CallOfProjectTheme
-import callofproject.dev.mobile.android.viewmodel.LoginViewModel
 
 class MainActivity : ComponentActivity()
 {
@@ -21,35 +19,23 @@ class MainActivity : ComponentActivity()
     {
         super.onCreate(savedInstanceState)
 
-
         setContent {
             CallOfProjectTheme {
-                App()
+                AppStartPoint()
             }
         }
     }
 
     @Composable
-    fun App()
+    fun AppStartPoint()
     {
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = "login") {
-            composable("login") { // ViewModel sağlama
-                val loginViewModel : LoginViewModel = viewModel()
-                LoginScreen(loginViewModel = loginViewModel, navController = navController)
-            }
-            composable("otherScreen") { // "otherScreen" rota adı
-                MainScreen(navController = navController)
-            }
 
-            composable("registerScreen") { // "otherScreen" rota adı
-                RegisterScreen(navController = navController)
-            }
-
-            composable("forgotPasswordScreen") { // "otherScreen" rota adı
-                ForgotPasswordScreen(navController = navController)
-            }
+        NavHost(navController = navController, startDestination = LOGIN_PAGE) {
+            composable(LOGIN_PAGE) { LoginScreen(navController = navController) }
+            composable(MAIN_PAGE) { MainScreen(navController = navController) }
+            composable(REGISTER_PAGE) { RegisterScreen(navController = navController) }
+            composable(FORGOT_PASSWORD_PAGE) { ForgotPasswordScreen(navController = navController) }
         }
-
     }
 }
