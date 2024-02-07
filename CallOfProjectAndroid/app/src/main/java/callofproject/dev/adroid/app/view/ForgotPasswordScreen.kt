@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import callofproject.dev.adroid.app.R
+import callofproject.dev.adroid.app.view.util.NormalTextField
 
 
 @Composable
@@ -40,11 +41,7 @@ fun ForgotPasswordScreen(navController : NavController)
                 .size(256.dp)
                 .align(Alignment.CenterHorizontally), contentScale = ContentScale.FillWidth)
 
-            OutlinedTextField(value = mEmail, onValueChange = {
-                mEmail = it
-            }, label = { Text("email", color = Color.Gray) }, modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email), colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFF295a8c), unfocusedBorderColor = Color.Gray))
+            NormalTextField(text = "email", keyboardType = KeyboardType.Email, value = mEmail, onValueChange = { mEmail = it })
 
             Button(onClick = { }, modifier = Modifier.align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF295a8c))) {
                 Text("Send Email")
