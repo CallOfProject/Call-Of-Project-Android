@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
+import callofproject.dev.adroid.app.util.LOGIN_PAGE
 import callofproject.dev.adroid.app.view.util.BoxAndColumnComponent
 import callofproject.dev.adroid.app.view.util.NormalTextField
 import callofproject.dev.adroid.app.view.util.PasswordTextField
@@ -49,9 +50,9 @@ fun CustomDatePicker(isOpenDateDialog : Boolean,
 
         DatePickerDialog(onDismissRequest = onDismiss, confirmButton = {
             TextButton(onClick = {
-                val selectedDate =
-                    formatter.format(Instant.ofEpochMilli(datePickerState.selectedDateMillis!!)
-                        .atZone(ZoneId.systemDefault()).toLocalDate())
+                val selectedDate = formatter.format(Instant.ofEpochMilli(datePickerState.selectedDateMillis!!)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate())
                 onDateSelected(selectedDate)
                 onDismiss()
             }, enabled = confirmEnabled.value) {
@@ -99,12 +100,17 @@ fun RegisterScreen(navController : NavController)
                 mBirthDate = selectedDate
             }, onDismiss = { mIsOpenDateDialog = false })
         }
-        Button(onClick = {}, modifier = Modifier
+        Button(onClick = { registerUser(navController) }, modifier = Modifier
             .width(250.dp)
             .align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF295a8c))) {
             Text("Register")
         }
     }
+}
+
+fun registerUser(navController : NavController)
+{
+    navController.navigate(LOGIN_PAGE)
 }
 
 

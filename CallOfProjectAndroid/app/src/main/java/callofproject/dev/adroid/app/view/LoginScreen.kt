@@ -2,7 +2,6 @@ package callofproject.dev.adroid.app.view
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -36,7 +35,6 @@ import callofproject.dev.adroid.app.R
 import callofproject.dev.adroid.app.util.FORGOT_PASSWORD_PAGE
 import callofproject.dev.adroid.app.util.MAIN_PAGE
 import callofproject.dev.adroid.app.util.REGISTER_PAGE
-import callofproject.dev.adroid.app.view.util.LifeCycleObserver
 import callofproject.dev.adroid.app.view.util.NormalTextField
 import callofproject.dev.adroid.app.view.util.PasswordTextField
 

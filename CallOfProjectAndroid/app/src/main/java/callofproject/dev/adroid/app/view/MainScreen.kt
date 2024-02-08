@@ -177,7 +177,7 @@ fun bottomBarComponent(navController : NavController) : @Composable () -> Unit
                 run {
                     NavigationBarItem(selected = false, onClick = {
                         selectedItem.intValue = index
-                        handleNavbarComponentClicked(navController, BOTTOM_NAVBAR_COMPONENTS[index]);
+                        handleNavbarComponentClicked(navController, BOTTOM_NAVBAR_COMPONENTS[index])
                     }, label = { Text(text = item) }, icon = {
                         when (item)
                         {

@@ -20,6 +20,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
+import callofproject.dev.adroid.app.util.EDIT_ABOUT_ME_PAGE
+import callofproject.dev.adroid.app.util.EDIT_COURSE_PAGE
+import callofproject.dev.adroid.app.util.EDIT_EDUCATION_PAGE
+import callofproject.dev.adroid.app.util.EDIT_EXPERIENCE_PAGE
+import callofproject.dev.adroid.app.util.EDIT_LINK_PAGE
+import callofproject.dev.adroid.app.util.EDIT_PROJECT_PAGE
 import callofproject.dev.adroid.app.util.FORGOT_PASSWORD_PAGE
 import callofproject.dev.adroid.app.util.LOGIN_PAGE
 import callofproject.dev.adroid.app.util.MAIN_PAGE
@@ -36,6 +42,12 @@ import callofproject.dev.adroid.app.view.ProfileScreen.Companion.ProfileScreenCo
 import callofproject.dev.adroid.app.view.ProjectDetailsScreen
 import callofproject.dev.adroid.app.view.ProjectOverviewScreen
 import callofproject.dev.adroid.app.view.RegisterScreen
+import callofproject.dev.adroid.app.view.UserAboutMeEditComponent
+import callofproject.dev.adroid.app.view.UserCourseEditComponent
+import callofproject.dev.adroid.app.view.UserEducationEditComponent
+import callofproject.dev.adroid.app.view.UserExperienceEditComponent
+import callofproject.dev.adroid.app.view.UserLinkEditComponent
+import callofproject.dev.adroid.app.view.UserProjectEditComponent
 
 class MainActivity : ComponentActivity()
 {
@@ -73,8 +85,16 @@ class MainActivity : ComponentActivity()
                 composable(REGISTER_PAGE) { RegisterScreen(navController = navController) }
                 composable(PROJECT_OVERVIEW_PAGE) { ProjectOverviewScreen(navController = navController) }
                 composable(PROJECT_DETAILS_PAGE) { ProjectDetailsScreen(navController = navController) }
-                composable(FORGOT_PASSWORD_PAGE) { ForgotPasswordScreen(navController = navController) }
+                composable(FORGOT_PASSWORD_PAGE) { ForgotPasswordScreen() }
                 composable(PROFILE_PAGE) { ProfileScreenComponent(navController = navController) }
+                composable(EDIT_ABOUT_ME_PAGE) { UserAboutMeEditComponent(navController) }
+                composable(EDIT_EDUCATION_PAGE) { UserEducationEditComponent(navController) }
+                composable(EDIT_EXPERIENCE_PAGE) { UserExperienceEditComponent(navController) }
+                composable(EDIT_COURSE_PAGE) { UserCourseEditComponent(navController) }
+                composable(EDIT_PROJECT_PAGE) { UserProjectEditComponent(navController) }
+                composable(EDIT_LINK_PAGE) { UserLinkEditComponent(navController) }
+
+
             }
         }
 
