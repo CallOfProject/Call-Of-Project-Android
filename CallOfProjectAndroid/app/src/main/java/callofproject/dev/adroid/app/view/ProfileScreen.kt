@@ -65,7 +65,7 @@ class ProfileScreen : ComponentActivity()
         @Composable
         fun ProfileScreenComponent(navController : NavController)
         {
-            Scaffold(topBar = topBarComponent(), bottomBar = bottomBarComponent(navController)) {
+            Scaffold(topBar = topBarComponent(), bottomBar = { bottomBarComponent(navController) }) {
                 Box(contentAlignment = Alignment.TopCenter, modifier = Modifier
                     .fillMaxSize()
                     .padding(it)) {
@@ -192,15 +192,15 @@ class ProfileScreen : ComponentActivity()
         private fun UserLinksComponent(navController : NavController)
         {
             NotEditableCardComponent("Links", 400.dp) {
-                EditableCardComponent(title = "Github", height = 150.dp,onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
+                EditableCardComponent(title = "Github", height = 150.dp, onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
                     Text(text = "https://www.github.com/nuricanozturk01", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
                 }
 
-                EditableCardComponent(title = "Linkedln", height = 150.dp,onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
+                EditableCardComponent(title = "Linkedln", height = 150.dp, onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
                     Text(text = "https://www.linkedln.com/nuricanozturk", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
                 }
 
-                EditableCardComponent(title = "Medium", height = 150.dp,onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
+                EditableCardComponent(title = "Medium", height = 150.dp, onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
                     Text(text = "", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
                 }
             }

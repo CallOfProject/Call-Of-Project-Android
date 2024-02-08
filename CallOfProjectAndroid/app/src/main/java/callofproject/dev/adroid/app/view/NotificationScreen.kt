@@ -33,7 +33,7 @@ import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
 @Composable
 fun NotificationScreen(navController : NavController)
 {
-    Scaffold(topBar = topBarComponent(), bottomBar = bottomBarComponent(navController)) {
+    Scaffold(topBar = topBarComponent(), bottomBar = { bottomBarComponent(navController) }) {
         Box(contentAlignment = Alignment.TopCenter, modifier = Modifier
             .fillMaxSize()
             .padding(it)) {

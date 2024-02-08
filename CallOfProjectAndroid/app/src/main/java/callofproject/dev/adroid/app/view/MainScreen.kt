@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,20 +58,18 @@ private val BOTTOM_NAVBAR_COMPONENTS = arrayOf(BOTTOM_NAVBAR_HOME, BOTTOM_NAVBAR
 @Composable
 fun MainScreen(navController : NavController)
 {
-    Scaffold(bottomBar = bottomBarComponent(navController), topBar = topBarComponent()) {
-        Column(modifier = Modifier
+    Scaffold(bottomBar = { bottomBarComponent(navController) }, topBar = { topBarComponent() }) {
+        LazyColumn(modifier = Modifier
             .fillMaxWidth()
             .padding(it)
             .padding(10.dp)
-            .verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally, content = {
-            (0..10).forEach { _ ->
+            , verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally,) {
+            items(10) {
                 ProjectCardComponent(navController)
             }
-        })
+        }
     }
-
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -88,7 +87,6 @@ fun ProjectCardComponent(navController : NavController)
     Card(modifier = Modifier
         .clickable { navController.navigate(PROJECT_OVERVIEW_PAGE) }
         .fillMaxWidth()
-        .height(150.dp)
         .padding(10.dp), shape = RoundedCornerShape(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxSize(), content = {
             Image(painter = painterResource(id = R.drawable.project_icon), contentDescription = "project", modifier = Modifier
@@ -166,31 +164,26 @@ fun topBarComponent() : @Composable () -> Unit
 
 
 @Composable
-fun bottomBarComponent(navController : NavController) : @Composable () -> Unit
+fun bottomBarComponent(navController : NavController)
 {
-    val selectedItem = remember { mutableIntStateOf(0) }
-    return {
-        NavigationBar(modifier = Modifier
-            .fillMaxWidth()
-            .height(75.dp)) {
-            BOTTOM_NAVBAR_COMPONENTS.forEachIndexed { index, item ->
-                run {
-                    NavigationBarItem(selected = false, onClick = {
-                        selectedItem.intValue = index
-                        handleNavbarComponentClicked(navController, BOTTOM_NAVBAR_COMPONENTS[index])
-                    }, label = { Text(text = item) }, icon = {
-                        when (item)
-                        {
-                            BOTTOM_NAVBAR_HOME         -> Image(painter = painterResource(id = R.drawable.home_icon), contentDescription = "Home", modifier = Modifier.size(24.dp))
-                            BOTTOM_NAVBAR_PROFILE      -> Image(painter = painterResource(id = R.drawable.account), contentDescription = "Profile", modifier = Modifier.size(24.dp))
-                            BOTTOM_NAVBAR_PROJECT      -> Image(painter = painterResource(id = R.drawable.project_icon), contentDescription = "Project", modifier = Modifier.size(24.dp))
-                            BOTTOM_NAVBAR_NOTIFICATION -> Image(painter = painterResource(id = R.drawable.notification_icon), contentDescription = "Notifications", modifier = Modifier.size(24.dp))
-                        }
-                    })
+    val selectedItem = remember { mutableStateOf(0) }
+    NavigationBar {
+        BOTTOM_NAVBAR_COMPONENTS.forEachIndexed { index, item ->
+            NavigationBarItem(selected = selectedItem.value == index, onClick = {
+                selectedItem.value = index
+                handleNavbarComponentClicked(navController, item)
+            }, label = { Text(text = item) }, icon = {
+                when (item)
+                {
+                    BOTTOM_NAVBAR_HOME         -> Image(painter = painterResource(id = R.drawable.home_icon), contentDescription = "Home", modifier = Modifier.size(24.dp))
+                    BOTTOM_NAVBAR_PROFILE      -> Image(painter = painterResource(id = R.drawable.account), contentDescription = "Profile", modifier = Modifier.size(24.dp))
+                    BOTTOM_NAVBAR_PROJECT      -> Image(painter = painterResource(id = R.drawable.project_icon), contentDescription = "Project", modifier = Modifier.size(24.dp))
+                    BOTTOM_NAVBAR_NOTIFICATION -> Image(painter = painterResource(id = R.drawable.notification_icon), contentDescription = "Notifications", modifier = Modifier.size(24.dp))
                 }
-            }
+            })
         }
     }
+
 }
 
 

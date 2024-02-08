@@ -56,7 +56,7 @@ fun Tag(text : String)
 fun ProjectOverviewScreen(navController : NavController)
 {
     val context = LocalContext.current
-    Scaffold(topBar = topNavigationBar(navController), bottomBar = bottomBarComponent(navController = navController)) {
+    Scaffold(topBar = topNavigationBar(navController), bottomBar = { bottomBarComponent(navController = navController) }) {
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(it), contentAlignment = Alignment.Center) {

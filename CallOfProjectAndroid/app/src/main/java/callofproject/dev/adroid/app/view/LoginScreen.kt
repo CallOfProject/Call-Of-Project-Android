@@ -1,6 +1,5 @@
 package callofproject.dev.adroid.app.view
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
@@ -38,11 +37,14 @@ import callofproject.dev.adroid.app.util.REGISTER_PAGE
 import callofproject.dev.adroid.app.view.util.NormalTextField
 import callofproject.dev.adroid.app.view.util.PasswordTextField
 
+// Buton renklerini ortak bir değişkende tanımlayarak tekrarı önleyin
 
-@SuppressLint("UnrememberedMutableState")
+
 @Composable
 fun LoginScreen(navController : NavController)
 {
+    val buttonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF295a8c))
+
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -52,13 +54,12 @@ fun LoginScreen(navController : NavController)
         {
             override fun handleOnBackPressed()
             {
-                if (context is Activity)
-                    context.finish()
-
+                if (context is Activity) context.finish()
             }
         }
     }
 
+    // Geri tuşu işleyicisini doğrudan BackHandler ile yönetin
     BackHandler(onBack = onBackPressedCallback::handleOnBackPressed)
 
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -69,31 +70,28 @@ fun LoginScreen(navController : NavController)
                 .size(250.dp)
                 .align(Alignment.CenterHorizontally), contentScale = ContentScale.FillWidth)
 
-            NormalTextField("username", username, { username = it })
-            PasswordTextField("password", password, { password = it })
+            NormalTextField(value = username, onValueChange = { username = it }, text = "Username")
+            PasswordTextField(value = password, onValueChange = { password = it }, text = "Password")
 
+            // Buton stillerini yeniden kullanılabilir şekilde uygulayın
             Button(onClick = { navController.navigate(MAIN_PAGE) }, modifier = Modifier
                 .width(250.dp)
-                .align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF295a8c))) {
+                .align(Alignment.CenterHorizontally), colors = buttonColors) {
                 Text("Login")
             }
 
-
             Button(onClick = { navController.navigate(REGISTER_PAGE) }, modifier = Modifier
                 .width(250.dp)
-                .align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF295a8c))) {
+                .align(Alignment.CenterHorizontally), colors = buttonColors) {
                 Text("Register")
             }
 
             Button(onClick = { navController.navigate(FORGOT_PASSWORD_PAGE) }, modifier = Modifier
                 .width(250.dp)
-                .align(Alignment.CenterHorizontally), colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF295a8c),
-            )) {
+                .align(Alignment.CenterHorizontally), colors = buttonColors) {
                 Text("Forgot Password")
             }
         }
-
     }
 }
 
