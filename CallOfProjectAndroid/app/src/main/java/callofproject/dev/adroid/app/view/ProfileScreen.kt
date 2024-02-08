@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -57,19 +58,25 @@ import callofproject.dev.adroid.app.view.util.EditableCardComponent
 import callofproject.dev.adroid.app.view.util.NormalTextField
 import callofproject.dev.adroid.app.view.util.NotEditableCardComponent
 
-class ProfileScreen : ComponentActivity()
-{
-    companion object
-    {
+class ProfileScreen : ComponentActivity() {
+    companion object {
         @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
         @Composable
-        fun ProfileScreenComponent(navController : NavController)
-        {
-            Scaffold(topBar = topBarComponent(), bottomBar = { bottomBarComponent(navController) }) {
-                Box(contentAlignment = Alignment.TopCenter, modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.verticalScroll(rememberScrollState())) {
+        fun ProfileScreenComponent(navController: NavController) {
+            Scaffold(
+                topBar = topBarComponent(),
+                bottomBar = { bottomBarComponent(navController) }) {
+                Box(
+                    contentAlignment = Alignment.TopCenter, modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it)
+                )
+                {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.verticalScroll(rememberScrollState())
+                    ) {
                         UserProfileTopComponent()
                         UserRatingComponent()
                         UserAboutMeComponent(navController)
@@ -84,24 +91,49 @@ class ProfileScreen : ComponentActivity()
         }
 
         @Composable
-        private fun UserRatingComponent()
-        {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)) {
+        private fun UserRatingComponent() {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+            ) {
 
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth(0.2f)) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth(0.2f)
+                ) {
                     Text(text = "User", fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                        Icon(painter = painterResource(id = R.drawable.star_icon), contentDescription = "")
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.star_icon),
+                            contentDescription = ""
+                        )
                         Text(text = "4.5", fontSize = 15.sp, fontWeight = FontWeight.Normal)
                     }
                 }
 
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth(0.4f)) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth(0.4f)
+                ) {
                     Text(text = "Feedback", fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                        Icon(painter = painterResource(id = R.drawable.star_icon), contentDescription = "")
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.star_icon),
+                            contentDescription = ""
+                        )
                         Text(text = "4.5", fontSize = 15.sp, fontWeight = FontWeight.Normal)
                     }
                 }
@@ -109,99 +141,241 @@ class ProfileScreen : ComponentActivity()
         }
 
         @Composable
-        private fun UserProfileTopComponent()
-        {
-            Image(painter = painterResource(id = R.drawable.account), contentDescription = "Logo", Modifier
-                .width(200.dp)
-                .height(150.dp))
-            Text(text = "Nuri Can ÖZTÜRK", fontSize = 20.sp, fontWeight = FontWeight(700), fontStyle = FontStyle.Normal)
-            Text(text = "Software Engineering Student", fontSize = 15.sp, fontWeight = FontWeight.Normal)
+        private fun UserProfileTopComponent() {
+            Image(
+                painter = painterResource(id = R.drawable.account),
+                contentDescription = "Logo",
+                Modifier
+                    .width(200.dp)
+                    .height(150.dp)
+            )
+            Text(
+                text = "Nuri Can ÖZTÜRK",
+                fontSize = 20.sp,
+                fontWeight = FontWeight(700),
+                fontStyle = FontStyle.Normal
+            )
+            Text(
+                text = "Software Engineering Student",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Normal
+            )
         }
 
         @Composable
-        private fun UserAboutMeComponent(navController : NavController)
-        {
-            EditableCardComponent(title = "About me", onIconClick = { navController.navigate(EDIT_ABOUT_ME_PAGE) }) {
-                Text(text = "I am final year Software Engineering student.I am interesting with Backend and Android development", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+        private fun UserAboutMeComponent(navController: NavController) {
+            EditableCardComponent(
+                title = "About me",
+                onIconClick = { navController.navigate(EDIT_ABOUT_ME_PAGE) }) {
+                Text(
+                    text = "I am final year Software Engineering student.I am interesting with Backend and Android development",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(5.dp)
+                )
             }
         }
 
-
         @Composable
-        private fun UserExperienceComponent(navController : NavController)
-        {
+        private fun UserExperienceComponent(navController: NavController) {
             NotEditableCardComponent("Experience", 400.dp) {
-                EditableCardComponent(title = "", onIconClick = { navController.navigate(EDIT_EXPERIENCE_PAGE) }) {
-                    Text(text = "Firma: Kafein Technology", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Pozisyon: Backend Developer", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Tarih: 2021-2022", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+                EditableCardComponent(
+                    title = "Kafein Technology",
+                    onIconClick = { navController.navigate(EDIT_EXPERIENCE_PAGE) }) {
+                    Text(
+                        text = "Firma: Kafein Technology",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Pozisyon: Backend Developer",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Tarih: 2021-2022",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
             }
         }
 
         @Composable
-        private fun UserEducationComponent(navController : NavController)
-        {
+        private fun UserEducationComponent(navController: NavController) {
             NotEditableCardComponent("Education", 400.dp) {
-                EditableCardComponent(title = "Yasar University", onIconClick = { navController.navigate(EDIT_EDUCATION_PAGE) }) {
-                    Text(text = "Bölüm: Yazılım Mühendisliği", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Tarih: 2018-2024", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "GPA: 2.95", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+                EditableCardComponent(
+                    title = "Yasar University",
+                    onIconClick = { navController.navigate(EDIT_EDUCATION_PAGE) }) {
+                    Text(
+                        text = "Bölüm: Yazılım Mühendisliği",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Tarih: 2018-2024",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "GPA: 2.95",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
             }
         }
 
 
         @Composable
-        private fun UserCoursesComponent(navController : NavController)
-        {
+        private fun UserCoursesComponent(navController: NavController) {
             NotEditableCardComponent("Courses", 400.dp) {
-                EditableCardComponent(title = "İleri Java", onIconClick = { navController.navigate(EDIT_COURSE_PAGE) }) {
-                    Text(text = "Firma: CSD", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Tarih: 2020-2023", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Açıklama: Java öğrendik", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+
+                EditableCardComponent(
+                    title = "İleri Java",
+                    onIconClick = { navController.navigate(EDIT_COURSE_PAGE) }) {
+                    Text(
+                        text = "Firma: CSD",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Tarih: 2020-2023",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Açıklama: Java öğrendik",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
 
-                EditableCardComponent(title = "Temel Java", onIconClick = { navController.navigate(EDIT_COURSE_PAGE) }) {
-                    Text(text = "Firma: CSD", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Tarih: 2020-2023", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Açıklama: Java öğrendik", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+
+                EditableCardComponent(
+                    title = "Temel Java",
+                    onIconClick = { navController.navigate(EDIT_COURSE_PAGE) }) {
+                    Text(
+                        text = "Firma: CSD",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Tarih: 2020-2023",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Açıklama: Java öğrendik",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
+
             }
         }
 
         @Composable
-        private fun UserProjectsComponent(navController : NavController)
-        {
+        private fun UserProjectsComponent(navController: NavController) {
             NotEditableCardComponent("Projects", 400.dp) {
-                EditableCardComponent(title = "Project - 1", onIconClick = { navController.navigate(EDIT_PROJECT_PAGE) }) {
-                    Text(text = "Açıklama: ", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Summary: Backend Developer", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Link: 2021-2022", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+                EditableCardComponent(
+                    title = "Project - 1",
+                    onIconClick = { navController.navigate(EDIT_PROJECT_PAGE) }) {
+                    Text(
+                        text = "Açıklama: ",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Summary: Backend Developer",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Link: 2021-2022",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
 
-                EditableCardComponent(title = "Project - 2", onIconClick = { navController.navigate(EDIT_PROJECT_PAGE) }) {
-                    Text(text = "Açıklama: ", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Summary: Backend Developer", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
-                    Text(text = "Link: 2021-2022", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+                EditableCardComponent(
+                    title = "Project - 2",
+                    onIconClick = { navController.navigate(EDIT_PROJECT_PAGE) }) {
+                    Text(
+                        text = "Açıklama: ",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Summary: Backend Developer",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Link: 2021-2022",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
             }
         }
 
         @Composable
-        private fun UserLinksComponent(navController : NavController)
-        {
+        private fun UserLinksComponent(navController: NavController) {
+
             NotEditableCardComponent("Links", 400.dp) {
-                EditableCardComponent(title = "Github", height = 150.dp, onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
-                    Text(text = "https://www.github.com/nuricanozturk01", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+                EditableCardComponent(
+                    title = "Github",
+                    height = 150.dp,
+                    onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
+                    Text(
+                        text = "https://www.github.com/nuricanozturk01",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
 
-                EditableCardComponent(title = "Linkedln", height = 150.dp, onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
-                    Text(text = "https://www.linkedln.com/nuricanozturk", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+                EditableCardComponent(
+                    title = "Linkedln",
+                    height = 150.dp,
+                    onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
+                    Text(
+                        text = "https://www.linkedln.com/nuricanozturk",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
 
-                EditableCardComponent(title = "Medium", height = 150.dp, onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
-                    Text(text = "", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+                EditableCardComponent(
+                    title = "Medium",
+                    height = 150.dp,
+                    onIconClick = { navController.navigate(EDIT_LINK_PAGE) }) {
+                    Text(
+                        text = "",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
                 }
             }
         }
@@ -210,8 +384,7 @@ class ProfileScreen : ComponentActivity()
 
 @Preview(showBackground = true)
 @Composable
-fun ProfileScreenPreview()
-{
+fun ProfileScreenPreview() {
     CallOfProjectAndroidTheme {
         ProfileScreen.ProfileScreenComponent(rememberNavController())
     }

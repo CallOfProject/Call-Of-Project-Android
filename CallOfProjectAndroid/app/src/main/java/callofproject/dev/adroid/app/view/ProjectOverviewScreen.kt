@@ -41,14 +41,16 @@ import callofproject.dev.adroid.app.R
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
 import callofproject.dev.adroid.app.view.util.NotEditableCardComponent
 
+/*
 @Composable
-fun Tag(text : String)
+fun TagComponent(text : String)
 {
     Text(text = text, fontSize = 15.sp, fontWeight = FontWeight.Bold, modifier = Modifier
         .padding(5.dp)
         .background(color = Color.LightGray, shape = RoundedCornerShape(50))
         .padding(horizontal = 8.dp, vertical = 4.dp))
 }
+*/
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalLayoutApi::class)
@@ -131,16 +133,16 @@ fun ProjectOverviewScreen(navController : NavController)
                             .fillMaxWidth()
                             .wrapContentSize(Alignment.TopCenter),
                     ) {
-                        Tag(text = "JAVA")
-                        Tag(text = "Spring Boot")
-                        Tag(text = "Angular 16.0.x")
-                        Tag(text = "RESTFul API")
-                        Tag(text = "Python")
-                        Tag(text = "Python")
-                        Tag(text = "Kotlin")
-                        Tag(text = "Kotlin")
-                        Tag(text = "Android")
-                        Tag(text = "Android")
+                        TagComponent(text = "JAVA")
+                        TagComponent(text = "Spring Boot")
+                        TagComponent(text = "Angular 16.0.x")
+                        TagComponent(text = "RESTFul API")
+                        TagComponent(text = "Python")
+                        TagComponent(text = "Python")
+                        TagComponent(text = "Kotlin")
+                        TagComponent(text = "Kotlin")
+                        TagComponent(text = "Android")
+                        TagComponent(text = "Android")
                     }
                 }
 

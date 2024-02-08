@@ -48,8 +48,6 @@ import kotlinx.coroutines.delay
 
     companion object
     {
-
-
         @Composable
         fun SplashScreenComponent(finishSplash : () -> Unit)
         {
@@ -64,7 +62,7 @@ import kotlinx.coroutines.delay
 
                 (1..5).forEach { _ ->
                     logos.indices.forEach { index ->
-                        delay(80)
+                        delay(10)
                         currentLogoIndex = index
                     }
                 }
