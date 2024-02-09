@@ -27,14 +27,11 @@ private const val PROJECT_DETAILS_TAB = "Project Details"
 private val TOP_NAVIGATION_ITEMS = arrayOf(PROJECT_OVERVIEW_TAB, PROJECT_DETAILS_TAB)
 
 @Composable
-fun topNavigationBar(navController : NavController) : @Composable () -> Unit
-{
+fun topNavigationBar(navController: NavController) {
     val selectedItem = remember { mutableStateOf(0) }
     val onBackPressedCallback = remember {
-        object : OnBackPressedCallback(true)
-        {
-            override fun handleOnBackPressed()
-            {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
                 navController.navigate(MAIN_PAGE) {
                     popUpTo(MAIN_PAGE) { inclusive = true }
                 }
@@ -46,39 +43,51 @@ fun topNavigationBar(navController : NavController) : @Composable () -> Unit
 
     LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.route)
-            {
-                PROJECT_OVERVIEW_PAGE -> selectedItem.value = TOP_NAVIGATION_ITEMS.indexOf(PROJECT_OVERVIEW_TAB)
-                PROJECT_DETAILS_PAGE  -> selectedItem.value = TOP_NAVIGATION_ITEMS.indexOf(PROJECT_DETAILS_TAB)
+            when (destination.route) {
+                PROJECT_OVERVIEW_PAGE -> selectedItem.value =
+                    TOP_NAVIGATION_ITEMS.indexOf(PROJECT_OVERVIEW_TAB)
+
+                PROJECT_DETAILS_PAGE -> selectedItem.value =
+                    TOP_NAVIGATION_ITEMS.indexOf(PROJECT_DETAILS_TAB)
             }
         }
     }
 
-    return {
-        NavigationBar(modifier = Modifier
+    NavigationBar(
+        modifier = Modifier
             .fillMaxWidth()
-            .height(75.dp)) {
-            TOP_NAVIGATION_ITEMS.forEachIndexed { index, item ->
-                NavigationBarItem(selected = selectedItem.value == index, onClick = { // Tıklama işlemi ile manuel olarak selectedItem değerini ayarla
+            .height(75.dp)
+    ) {
+        TOP_NAVIGATION_ITEMS.forEachIndexed { index, item ->
+            NavigationBarItem(
+                selected = selectedItem.value == index,
+                onClick = { // Tıklama işlemi ile manuel olarak selectedItem değerini ayarla
                     selectedItem.value = index
                     handleProjectsTopNavbarComponentClicked(navController, item)
-                }, label = { Text(text = item) }, icon = {
-                    when (item)
-                    {
-                        PROJECT_OVERVIEW_TAB -> Image(painter = painterResource(id = R.drawable.overview_icon), contentDescription = "Overview", modifier = Modifier.size(24.dp))
-                        PROJECT_DETAILS_TAB  -> Image(painter = painterResource(id = R.drawable.baseline_details_24), contentDescription = "Details", modifier = Modifier.size(24.dp))
+                },
+                label = { Text(text = item) },
+                icon = {
+                    when (item) {
+                        PROJECT_OVERVIEW_TAB -> Image(
+                            painter = painterResource(id = R.drawable.overview_icon),
+                            contentDescription = "Overview",
+                            modifier = Modifier.size(24.dp)
+                        )
+
+                        PROJECT_DETAILS_TAB -> Image(
+                            painter = painterResource(id = R.drawable.baseline_details_24),
+                            contentDescription = "Details",
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 })
-            }
         }
     }
 }
 
-fun handleProjectsTopNavbarComponentClicked(navController : NavController, item : String)
-{
-    when (item)
-    {
+fun handleProjectsTopNavbarComponentClicked(navController: NavController, item: String) {
+    when (item) {
         PROJECT_OVERVIEW_TAB -> navController.navigate(PROJECT_OVERVIEW_PAGE)
-        PROJECT_DETAILS_TAB  -> navController.navigate(PROJECT_DETAILS_PAGE)
+        PROJECT_DETAILS_TAB -> navController.navigate(PROJECT_DETAILS_PAGE)
     }
 }

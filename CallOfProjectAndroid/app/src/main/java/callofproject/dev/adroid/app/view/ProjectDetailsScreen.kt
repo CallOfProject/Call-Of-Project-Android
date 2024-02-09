@@ -72,8 +72,16 @@ fun projectHeader() {
         modifier = Modifier.size(120.dp),
         alignment = Alignment.Center
     )
-    Text(text = "Call-Of-Project", modifier = Modifier.padding(5.dp), style = MaterialTheme.typography.headlineMedium)
-    Text(text = "Nuri Can OZTURK", modifier = Modifier.padding(5.dp), style = MaterialTheme.typography.bodyMedium)
+    Text(
+        text = "Call-Of-Project",
+        modifier = Modifier.padding(5.dp),
+        style = MaterialTheme.typography.headlineMedium
+    )
+    Text(
+        text = "Nuri Can OZTURK",
+        modifier = Modifier.padding(5.dp),
+        style = MaterialTheme.typography.bodyMedium
+    )
 }
 
 @Composable
@@ -96,7 +104,12 @@ fun projectInformationSections() {
                     requirementCard("- Req-$index")
                 }
             } else {
-                Text(text = content, fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+                Text(
+                    text = content,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(5.dp)
+                )
             }
         }
     }
@@ -108,9 +121,17 @@ fun requirementCard(text: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
-            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(5.dp))
+            .border(
+                BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                shape = RoundedCornerShape(5.dp)
+            )
     ) {
-        Text(text = text, fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
+        Text(
+            text = text,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Normal,
+            modifier = Modifier.padding(5.dp)
+        )
     }
 }
 
@@ -144,7 +165,15 @@ fun TagComponent(text: String) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun projectTags() {
-    val tags = listOf("JAVA", "Spring Boot", "Angular 16.0.x", "RESTFul API", "Python", "Kotlin", "Android")
+    val tags = listOf(
+        "JAVA",
+        "Spring Boot",
+        "Angular 16.0.x",
+        "RESTFul API",
+        "Python",
+        "Kotlin",
+        "Android"
+    )
 
     NotEditableCardComponent(title = "Tags", height = 250.dp) {
         FlowRow(
@@ -164,8 +193,7 @@ fun projectTags() {
 
 @Preview(showBackground = true)
 @Composable
-fun DetailPreview()
-{
+fun DetailPreview() {
     CallOfProjectAndroidTheme {
         ProjectDetailsScreen(navController = rememberNavController())
 

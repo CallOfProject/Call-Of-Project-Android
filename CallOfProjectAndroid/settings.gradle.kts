@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "CallOfProjectAndroid"
 include(":app")
- 
+include(":ServiceLib")
+include(":RepositoryLib")

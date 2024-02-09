@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -225,13 +224,13 @@ fun MultipleFilterChipComponent(
                     selected = selectedItems.value.contains(item),
                     onClick = {
                         val currentList =
-                            selectedItems.value.toMutableList() // List'i MutableList'e çevir
+                            selectedItems.value.toMutableList()
                         if (currentList.contains(item)) {
-                            currentList.remove(item) // Eğer item varsa, çıkar
+                            currentList.remove(item)
                         } else {
-                            currentList.add(item) // Eğer item yoksa, ekle
+                            currentList.add(item)
                         }
-                        selectedItems.value = currentList // Güncellenmiş listeyi tekrar state'e ata
+                        selectedItems.value = currentList
                     },
                     label = {
                         Text(text = item, fontSize = 9.5.sp)

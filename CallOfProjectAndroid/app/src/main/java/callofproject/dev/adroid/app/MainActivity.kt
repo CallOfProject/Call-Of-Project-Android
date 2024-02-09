@@ -20,42 +20,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
-import callofproject.dev.adroid.app.util.UPSERT_ABOUT_ME_PAGE
-import callofproject.dev.adroid.app.util.UPSERT_COURSE_PAGE
-import callofproject.dev.adroid.app.util.UPSERT_EDUCATION_PAGE
-import callofproject.dev.adroid.app.util.UPSERT_EXPERIENCE_PAGE
-import callofproject.dev.adroid.app.util.UPSERT_LINK_PAGE
-import callofproject.dev.adroid.app.util.UPSERT_PROJECT_PAGE
-import callofproject.dev.adroid.app.util.FORGOT_PASSWORD_PAGE
-import callofproject.dev.adroid.app.util.LOGIN_PAGE
-import callofproject.dev.adroid.app.util.MAIN_PAGE
-import callofproject.dev.adroid.app.util.NOTIFICATION_PAGE
-import callofproject.dev.adroid.app.util.PROFILE_PAGE
-import callofproject.dev.adroid.app.util.PROJECT_DETAILS_PAGE
-import callofproject.dev.adroid.app.util.PROJECT_DISCOVERY_PAGE
-import callofproject.dev.adroid.app.util.PROJECT_OVERVIEW_PAGE
-import callofproject.dev.adroid.app.util.REGISTER_PAGE
-import callofproject.dev.adroid.app.view.ForgotPasswordScreen
-import callofproject.dev.adroid.app.view.LoginScreen
-import callofproject.dev.adroid.app.view.MainScreen
-import callofproject.dev.adroid.app.view.NotificationScreen
-import callofproject.dev.adroid.app.view.ProfileScreen.Companion.ProfileScreenComponent
-import callofproject.dev.adroid.app.view.ProjectDetailsScreen
-import callofproject.dev.adroid.app.view.ProjectDiscoveryScreen
-import callofproject.dev.adroid.app.view.ProjectOverviewScreen
-import callofproject.dev.adroid.app.view.RegisterScreen
-import callofproject.dev.adroid.app.view.UserAboutMeEditComponent
-import callofproject.dev.adroid.app.view.UserCourseEditComponent
-import callofproject.dev.adroid.app.view.UserEducationEditComponent
-import callofproject.dev.adroid.app.view.UserExperienceEditComponent
-import callofproject.dev.adroid.app.view.UserLinkEditComponent
-import callofproject.dev.adroid.app.view.UserProjectEditComponent
+import callofproject.dev.adroid.app.util.*
+import callofproject.dev.adroid.app.view.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CallOfProjectAndroidTheme { // A surface container using the 'background' color from the theme
+            CallOfProjectAndroidTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -93,7 +67,6 @@ class MainActivity : ComponentActivity() {
                 composable(PROJECT_OVERVIEW_PAGE) { ProjectOverviewScreen(navController = navController) }
                 composable(PROJECT_DISCOVERY_PAGE) { ProjectDiscoveryScreen(navController = navController) }
                 composable(PROJECT_DETAILS_PAGE) { ProjectDetailsScreen(navController = navController) }
-                composable(FORGOT_PASSWORD_PAGE) { ForgotPasswordScreen() }
                 composable(PROFILE_PAGE) { ProfileScreenComponent(navController = navController) }
                 composable(UPSERT_ABOUT_ME_PAGE) { UserAboutMeEditComponent(navController) }
                 composable(UPSERT_EDUCATION_PAGE) { UserEducationEditComponent(navController) }

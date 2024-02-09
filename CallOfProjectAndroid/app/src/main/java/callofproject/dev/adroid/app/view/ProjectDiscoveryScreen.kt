@@ -49,12 +49,9 @@ fun ProjectDiscoveryScreen(navController: NavController) {
 
                     }
                 }
-
             })
-
         })
 }
-
 
 
 @Preview(showBackground = true)

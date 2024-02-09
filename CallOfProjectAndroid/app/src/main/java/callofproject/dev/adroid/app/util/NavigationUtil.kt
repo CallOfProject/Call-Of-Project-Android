@@ -2,7 +2,6 @@ package callofproject.dev.adroid.app.util
 
 const val LOGIN_PAGE = "LOGIN_PAGE"
 const val REGISTER_PAGE = "REGISTER_PAGE"
-const val FORGOT_PASSWORD_PAGE = "FORGOT_PASSWORD_PAGE"
 const val MAIN_PAGE = "MAIN_PAGE"
 const val PROJECT_DETAILS_PAGE = "PROJECT_DETAILS_SCREEN"
 const val PROJECT_OVERVIEW_PAGE = "PROJECT_OVERVIEW_PAGE"

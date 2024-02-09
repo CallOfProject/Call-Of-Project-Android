@@ -31,13 +31,18 @@ import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NotificationScreen(navController : NavController)
-{
+fun NotificationScreen(navController: NavController) {
     Scaffold(topBar = { TopBarComponent() }, bottomBar = { BottomBarComponent(navController) }) {
-        Box(contentAlignment = Alignment.TopCenter, modifier = Modifier
-            .fillMaxSize()
-            .padding(it)) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Box(
+            contentAlignment = Alignment.TopCenter, modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
 
                 (0..10).forEach { _ ->
                     NotificationCard("Ömer ERTAş senin \"Call-Of-Project\" isimli projene katılmak için istek gönderdi.")
@@ -50,20 +55,33 @@ fun NotificationScreen(navController : NavController)
 
 
 @Composable
-fun NotificationCard(msg : String)
-{
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .height(120.dp)
-        .padding(15.dp), shape = RoundedCornerShape(15.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Absolute.Left, modifier = Modifier.fillMaxSize()) {
-            Image(painter = painterResource(id = R.drawable.notification_icon), contentDescription = "project", modifier = Modifier
-                .size(60.dp)
-                .align(Alignment.CenterVertically), alignment = Alignment.Center)
+fun NotificationCard(msg: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+            .padding(15.dp), shape = RoundedCornerShape(15.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Absolute.Left,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.notification_icon),
+                contentDescription = "project",
+                modifier = Modifier
+                    .size(60.dp)
+                    .align(Alignment.CenterVertically),
+                alignment = Alignment.Center
+            )
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(10.dp), content = {
-                Text(text = msg, style = MaterialTheme.typography.bodyMedium)
-            })
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(10.dp),
+                content = {
+                    Text(text = msg, style = MaterialTheme.typography.bodyMedium)
+                })
         }
     }
 }
@@ -71,8 +89,7 @@ fun NotificationCard(msg : String)
 
 @Preview(showBackground = true)
 @Composable
-fun NotificationScreenPreview()
-{
+fun NotificationScreenPreview() {
     CallOfProjectAndroidTheme {
         NotificationScreen(rememberNavController())
     }

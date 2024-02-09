@@ -31,13 +31,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,8 +43,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 
 
 @Composable
@@ -85,7 +81,8 @@ fun PasswordTextField(
     textStyle: TextStyle = TextStyle.Default,
     unFocusedBorderColor: Color = Color.Gray
 ) {
-    OutlinedTextField(value = value,
+    OutlinedTextField(
+        value = value,
         onValueChange = { onValueChange(it) },
         label = { Text(text, color = Color.Gray) },
         modifier = Modifier
@@ -117,22 +114,6 @@ fun BoxAndColumnComponent(
         }
     }
 }
-
-
-/*@Composable
-fun BoxAndColumnComponentWithModifier(content : @Composable ColumnScope.() -> Unit,
-                                      modifier : Modifier)
-{
-    Box(contentAlignment = Alignment.Center, modifier = modifier) {
-        Column(modifier = Modifier
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())) {
-            content()
-        }
-    }
-}*/
-
-
 
 
 @Composable
@@ -200,7 +181,6 @@ fun NotEditableCardComponent(
 ) {
     Card(modifier = modifier) {
         Column(modifier = Modifier.padding(10.dp)) {
-            // Başlık ve altındaki çizgiyi içeren Box
             Box {
                 Column {
                     Row(
@@ -210,11 +190,9 @@ fun NotEditableCardComponent(
                     ) {
                         Text(text = title, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                     }
-                    // Başlık metninin altında bir sınır ekleyin
                     Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
                 }
             }
-            // İçerik için LazyColumn kullanımı
             LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
                 item {
                     content()

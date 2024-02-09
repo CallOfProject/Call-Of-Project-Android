@@ -148,8 +148,7 @@ fun SearchBar() {
 
             )
 
-        }
-        else if (isFiltering.value) {
+        } else if (isFiltering.value) {
             FilterScreen(isFiltering)
 
         } else {
