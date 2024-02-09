@@ -40,7 +40,7 @@ import callofproject.dev.adroid.app.view.util.NotEditableCardComponent
 fun ProjectDetailsScreen(navController: NavController) {
     Scaffold(
         topBar = { topNavigationBar(navController) },
-        bottomBar = { bottomBarComponent(navController = navController) }
+        bottomBar = { BottomBarComponent(navController = navController) }
     ) {
         Box(
             modifier = Modifier

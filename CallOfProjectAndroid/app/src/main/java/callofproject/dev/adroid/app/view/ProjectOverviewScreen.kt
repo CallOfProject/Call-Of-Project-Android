@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,16 +53,15 @@ fun TagComponent(text : String)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ProjectOverviewScreen(navController : NavController)
-{
+fun ProjectOverviewScreen(navController: NavController) {
     val context = LocalContext.current
-    Scaffold(topBar = topNavigationBar(navController), bottomBar = { bottomBarComponent(navController = navController) }) {
+    Scaffold(topBar = topNavigationBar(navController), bottomBar = { BottomBarComponent(navController = navController) }) {
         Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(it), contentAlignment = Alignment.Center) {
-            Column(modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top, content = {
+                .padding(it), contentAlignment = Alignment.Center) {
+            Column(modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top, content = {
                 Image(painter = painterResource(id = R.drawable.project_icon), contentDescription = "project", modifier = Modifier.size(120.dp), alignment = Alignment.Center)
                 Text(text = "Call-Of-Project", modifier = Modifier.padding(5.dp), style = MaterialTheme.typography.headlineMedium)
                 Text(text = "Nuri Can OZTURK", modifier = Modifier.padding(5.dp), style = MaterialTheme.typography.bodyMedium)
@@ -90,9 +87,9 @@ fun ProjectOverviewScreen(navController : NavController)
                 NotEditableCardComponent(title = "Technical Requirements", height = 270.dp) {
                     (1..10).forEachIndexed { index, _ ->
                         Card(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(5.dp))) {
+                                .fillMaxWidth()
+                                .padding(5.dp)
+                                .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(5.dp))) {
                             Text(text = "- Req-${index}", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
                         }
                     }
@@ -101,9 +98,9 @@ fun ProjectOverviewScreen(navController : NavController)
                 NotEditableCardComponent(title = "Specific Requirements", height = 270.dp) {
                     (1..10).forEachIndexed { index, _ ->
                         Card(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(5.dp))) {
+                                .fillMaxWidth()
+                                .padding(5.dp)
+                                .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(5.dp))) {
                             Text(text = "- Req-${index}", fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
                         }
                     }
@@ -129,9 +126,9 @@ fun ProjectOverviewScreen(navController : NavController)
 
                 NotEditableCardComponent("Tags", 250.dp) {
                     FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize(Alignment.TopCenter),
+                            modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentSize(Alignment.TopCenter),
                     ) {
                         TagComponent(text = "JAVA")
                         TagComponent(text = "Spring Boot")
@@ -149,7 +146,7 @@ fun ProjectOverviewScreen(navController : NavController)
 
                 Button(onClick = {
                     Toast.makeText(context, "Project Join Request sent to Owner!", Toast.LENGTH_LONG)
-                        .show()
+                            .show()
                 }, modifier = Modifier.padding(10.dp)) {
                     Text(text = "Join Project")
 
@@ -161,12 +158,11 @@ fun ProjectOverviewScreen(navController : NavController)
 
 
 @Composable
-fun RowBasedCardComponent(title : String, value : String)
-{
+fun RowBasedCardComponent(title: String, value: String) {
     Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(3.dp)
-        .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(5.dp))) {
+            .fillMaxWidth()
+            .padding(3.dp)
+            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary), shape = RoundedCornerShape(5.dp))) {
         Row {
             Text(text = "-${title}:", fontSize = 15.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(5.dp))
             Text(text = value, fontSize = 15.sp, fontWeight = FontWeight.Normal, modifier = Modifier.padding(5.dp))
@@ -176,8 +172,7 @@ fun RowBasedCardComponent(title : String, value : String)
 
 @Preview
 @Composable
-fun ProjectOverviewScreenPreview()
-{
+fun ProjectOverviewScreenPreview() {
     CallOfProjectAndroidTheme {
         ProjectOverviewScreen(rememberNavController())
     }

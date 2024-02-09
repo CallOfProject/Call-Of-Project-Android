@@ -214,7 +214,7 @@ fun UserExperienceEditComponent(navController : NavController)
 
 
 @Composable
-fun UserCourseEditComponent(navController : NavController)
+fun UserCourseEditComponent(navController : NavController, title: String = "Edit Education")
 {
     val context = LocalContext.current
     var isOpenStartDateDialog by remember { mutableStateOf(false) }
@@ -229,7 +229,7 @@ fun UserCourseEditComponent(navController : NavController)
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.secondary), contentAlignment = Alignment.Center) {
         Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            NotEditableCardComponent(title = "Edit Education", modifier = Modifier.fillMaxWidth(), height = 500.dp) {
+            NotEditableCardComponent(title = title, modifier = Modifier.fillMaxWidth(), height = 500.dp) {
 
                 NormalTextField(text = "Firm Name", value = firm, modifier = Modifier
                     .fillMaxWidth()
