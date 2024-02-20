@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -47,18 +48,29 @@ import callofproject.dev.adroid.app.util.*
 private const val BOTTOM_NAVBAR_HOME = "Home"
 private const val BOTTOM_NAVBAR_PROFILE = "Profile"
 private const val BOTTOM_NAVBAR_NOTIFICATION = "Notification"
-private const val BOTTOM_NAVBAR_PROJECT = "Project"
+private const val BOTTOM_NAVBAR_PROJECT = "My Projects"
 private val BOTTOM_NAVBAR_COMPONENTS = arrayOf(
     BOTTOM_NAVBAR_HOME,
     BOTTOM_NAVBAR_PROFILE,
     BOTTOM_NAVBAR_NOTIFICATION,
-    BOTTOM_NAVBAR_PROJECT
+    BOTTOM_NAVBAR_PROJECT,
 )
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(navController: NavController) {
-    Scaffold(bottomBar = { BottomBarComponent(navController) }, topBar = { TopBarComponent() }) {
+    /*    val showSnackbar = remember { mutableStateOf(true) }
+        val snackbarHostState = remember { SnackbarHostState() }
+        TextSnackbarContainer(
+            snackbarText = "Sucess Login Operation",
+            showSnackbar = showSnackbar.value,
+            onDismissSnackbar = { showSnackbar.value = false },
+            snackbarHostState = snackbarHostState
+        )*/
+    Scaffold(
+        bottomBar = { BottomBarComponent(navController) },
+        topBar = { TopBarComponent("Main-Screen") }) {
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -69,6 +81,7 @@ fun MainScreen(navController: NavController) {
             items(10) {
                 ProjectCardComponent(navController)
             }
+
         }
     }
 }
@@ -121,7 +134,7 @@ fun ProjectCardComponent(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar() {
+fun TopBarComponent(title: String = "") {
     val isSearching = remember { mutableStateOf(false) }
     val isFiltering = remember { mutableStateOf(false) }
     val tf = remember { mutableStateOf("") }
@@ -129,7 +142,6 @@ fun SearchBar() {
         containerColor = MaterialTheme.colorScheme.secondaryContainer,
         navigationIconContentColor = MaterialTheme.colorScheme.secondaryContainer,
         titleContentColor = Color.Black
-
     ), title = {
         if (isSearching.value) {
             BasicTextField(
@@ -152,7 +164,7 @@ fun SearchBar() {
             FilterScreen(isFiltering)
 
         } else {
-
+            Text(text = title)
         }
     }, actions = {
         if (isSearching.value) {
@@ -190,18 +202,32 @@ fun SearchBar() {
     })
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopBarComponent() {
-    TopAppBar(title = { Text(text = "Main Screen") }, navigationIcon = {
-        SearchBar()
-    })
-}
-
 
 @Composable
 fun BottomBarComponent(navController: NavController) {
+
     val selectedItem = remember { mutableStateOf(0) }
+
+
+    LaunchedEffect(navController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.route) {
+                MAIN_PAGE -> selectedItem.value =
+                    BOTTOM_NAVBAR_COMPONENTS.indexOf(BOTTOM_NAVBAR_HOME)
+
+                PROFILE_PAGE -> selectedItem.value =
+                    BOTTOM_NAVBAR_COMPONENTS.indexOf(BOTTOM_NAVBAR_PROFILE)
+
+                MY_PROJECTS_PAGE -> selectedItem.value =
+                    BOTTOM_NAVBAR_COMPONENTS.indexOf(BOTTOM_NAVBAR_PROJECT)
+
+                NOTIFICATION_PAGE -> selectedItem.value =
+                    BOTTOM_NAVBAR_COMPONENTS.indexOf(BOTTOM_NAVBAR_NOTIFICATION)
+            }
+        }
+    }
+
+
     NavigationBar {
         BOTTOM_NAVBAR_COMPONENTS.forEachIndexed { index, item ->
             NavigationBarItem(selected = selectedItem.value == index, onClick = {
@@ -232,6 +258,8 @@ fun BottomBarComponent(navController: NavController) {
                         contentDescription = "Notifications",
                         modifier = Modifier.size(24.dp)
                     )
+
+
                 }
             })
         }
@@ -245,6 +273,6 @@ fun handleNavbarComponentClicked(navController: NavController, selectedComponent
         BOTTOM_NAVBAR_HOME -> navController.navigate(MAIN_PAGE)
         BOTTOM_NAVBAR_PROFILE -> navController.navigate(PROFILE_PAGE)
         BOTTOM_NAVBAR_NOTIFICATION -> navController.navigate(NOTIFICATION_PAGE)
-        BOTTOM_NAVBAR_PROJECT -> navController.navigate(PROJECT_DISCOVERY_PAGE)
+        BOTTOM_NAVBAR_PROJECT -> navController.navigate(MY_PROJECTS_PAGE)
     }
 }

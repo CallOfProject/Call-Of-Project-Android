@@ -2,8 +2,10 @@ package callofproject.dev.adroid.app.viewmodel
 
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import callofproject.dev.adroid.servicelib.di.ICallOfProjectService
+import callofproject.dev.adroid.servicelib.dto.ApiResponse
 import callofproject.dev.adroid.servicelib.dto.AuthenticationResponse
 import callofproject.dev.adroid.servicelib.dto.UserLoginDTO
 import callofproject.dev.adroid.servicelib.dto.UserRegisterDTO
@@ -28,11 +30,60 @@ class AuthenticationViewModel @Inject constructor(
     private val _registerResult = MutableStateFlow<Boolean?>(null)
     val registerResult: StateFlow<Boolean?> = _registerResult
 
-    fun login(userLoginDTO: UserLoginDTO) = executor.execute { loginCallback(userLoginDTO) }
-    fun register(registerDTO: UserRegisterDTO) = executor.execute { registerCallback(registerDTO) }
+    fun login(userLoginDTO: UserLoginDTO) {
+        executor.execute {
+            executeApiCall(callOfProjectService.login(userLoginDTO)) { response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        _loginResult.value = true
+
+                    }
+
+                    is ApiResponse.Error -> {
+                        _loginResult.value = false
+                    }
+                }
+            }
+        }
+    }
+
+    fun register(registerDTO: UserRegisterDTO) {
+        executor.execute {
+            executeApiCall(callOfProjectService.register(registerDTO)) { response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        _registerResult.value = true
+                    }
+
+                    is ApiResponse.Error -> {
+                        _registerResult.value = false
+                    }
+                }
+            }
+        }
+    }
 
 
-    private fun registerCallback(registerDTO: UserRegisterDTO) {
+    private fun <T> executeApiCall(call: Call<T>, callback: (ApiResponse<T>) -> Unit) {
+        call.enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        callback(ApiResponse.Success(it))
+                    } ?: callback(ApiResponse.Error("Empty Response"))
+                } else {
+                    callback(ApiResponse.Error(response.message()))
+                }
+            }
+
+            override fun onFailure(call: Call<T>, t: Throwable) {
+                callback(ApiResponse.Error(t.message ?: "Unknown Error"))
+            }
+        })
+    }
+
+
+    /*private fun registerCallback(registerDTO: UserRegisterDTO) {
         val call = callOfProjectService.register(registerDTO)
 
         call.enqueue(object : Callback<AuthenticationResponse> {
@@ -60,7 +111,7 @@ class AuthenticationViewModel @Inject constructor(
         })
     }
 
-    private fun loginCallback(userLoginDTO: UserLoginDTO) {
+     fun loginCallback(userLoginDTO: UserLoginDTO) {
         val call = callOfProjectService.login(userLoginDTO)
 
         call.enqueue(object : Callback<AuthenticationResponse> {
@@ -85,5 +136,5 @@ class AuthenticationViewModel @Inject constructor(
                 _loginResult.value = false
             }
         })
-    }
+    }*/
 }

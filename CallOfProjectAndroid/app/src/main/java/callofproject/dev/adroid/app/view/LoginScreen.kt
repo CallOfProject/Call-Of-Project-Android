@@ -17,9 +17,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,12 +55,13 @@ fun ObserveLoginOperation(
     navController: NavController,
     context: Context
 ) {
-    val loginResult by viewModel.loginResult.collectAsState(initial = null)
 
+    val loginResult by viewModel.loginResult.collectAsState(initial = null)
     LaunchedEffect(loginResult) {
         loginResult?.let { result ->
             if (result) {
-                Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT)
+                    .show()
                 navController.navigate(MAIN_PAGE)
             } else {
                 Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
@@ -68,7 +73,10 @@ fun ObserveLoginOperation(
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginScreen(navController: NavController, viewModel: AuthenticationViewModel = hiltViewModel()) {
+fun LoginScreen(
+    navController: NavController,
+    viewModel: AuthenticationViewModel = hiltViewModel()
+) {
 
     val buttonColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF295a8c))
 
@@ -98,6 +106,7 @@ fun LoginScreen(navController: NavController, viewModel: AuthenticationViewModel
             NormalTextField("Username", username, { username = it.trim() })
             PasswordTextField("Password", password, { password = it.trim() })
 
+            //handleClickLoginButton(username, password, viewModel)
             Button(
                 onClick = { handleClickLoginButton(username, password, viewModel) },
                 modifier = Modifier

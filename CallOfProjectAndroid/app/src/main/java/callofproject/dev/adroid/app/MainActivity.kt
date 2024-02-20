@@ -64,6 +64,7 @@ class MainActivity : ComponentActivity() {
                 composable(MAIN_PAGE) { MainScreen(navController = navController) }
                 composable(NOTIFICATION_PAGE) { NotificationScreen(navController = navController) }
                 composable(REGISTER_PAGE) { RegisterScreen(navController = navController) }
+                composable(MY_PROJECTS_PAGE) { MyProjectsScreen(navController = navController) }
                 composable(PROJECT_OVERVIEW_PAGE) { ProjectOverviewScreen(navController = navController) }
                 composable(PROJECT_DISCOVERY_PAGE) { ProjectDiscoveryScreen(navController = navController) }
                 composable(PROJECT_DETAILS_PAGE) { ProjectDetailsScreen(navController = navController) }
