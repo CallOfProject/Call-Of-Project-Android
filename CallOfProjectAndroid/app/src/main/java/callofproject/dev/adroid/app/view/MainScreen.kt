@@ -27,23 +27,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import callofproject.dev.adroid.app.R
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
 import callofproject.dev.adroid.app.util.*
-
+import callofproject.dev.adroid.app.viewmodel.ProjectViewModel
+import callofproject.dev.adroid.servicelib.dto.ProjectDiscoveryDTO
+import coil.compose.rememberAsyncImagePainter
 
 private const val BOTTOM_NAVBAR_HOME = "Home"
 private const val BOTTOM_NAVBAR_PROFILE = "Profile"
@@ -58,15 +65,14 @@ private val BOTTOM_NAVBAR_COMPONENTS = arrayOf(
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen(navController: NavController) {
-    /*    val showSnackbar = remember { mutableStateOf(true) }
-        val snackbarHostState = remember { SnackbarHostState() }
-        TextSnackbarContainer(
-            snackbarText = "Sucess Login Operation",
-            showSnackbar = showSnackbar.value,
-            onDismissSnackbar = { showSnackbar.value = false },
-            snackbarHostState = snackbarHostState
-        )*/
+fun MainScreen(navController: NavController, viewModel: ProjectViewModel = hiltViewModel()) {
+    val projects by viewModel.result.collectAsState()
+
+    DisposableEffect(Unit) {
+        viewModel.projectDiscovery()
+        onDispose { /* Dispose işlemi gerekli değil */ }
+    }
+
     Scaffold(
         bottomBar = { BottomBarComponent(navController) },
         topBar = { TopBarComponent("Main-Screen") }) {
@@ -78,10 +84,11 @@ fun MainScreen(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            items(10) {
-                ProjectCardComponent(navController)
+            items(projects?.size ?: 0) {
+                projects?.get(it)?.let { project ->
+                    ProjectCardComponent(navController, project, viewModel = viewModel)
+                }
             }
-
         }
     }
 }
@@ -96,9 +103,19 @@ fun MainScreenPreview() {
 
 
 @Composable
-fun ProjectCardComponent(navController: NavController) {
+fun ProjectCardComponent(
+    navController: NavController,
+    project: ProjectDiscoveryDTO,
+    viewModel: ProjectViewModel
+) {
+    val overviewDTO by viewModel.overview.collectAsState()
+
+    val painter: Painter = rememberAsyncImagePainter(project.projectImagePath)
     Card(modifier = Modifier
-        .clickable { navController.navigate(PROJECT_OVERVIEW_PAGE) }
+        .clickable {
+            viewModel.findProjectOverviewByProjectId(project.projectId)
+            navController.navigate(PROJECT_OVERVIEW_PAGE)
+        }
         .fillMaxWidth()
         .padding(10.dp), shape = RoundedCornerShape(10.dp)) {
         Row(
@@ -106,8 +123,9 @@ fun ProjectCardComponent(navController: NavController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxSize(),
             content = {
+
                 Image(
-                    painter = painterResource(id = R.drawable.project_icon),
+                    painter = painter,
                     contentDescription = "project",
                     modifier = Modifier
                         .size(80.dp)
@@ -119,9 +137,12 @@ fun ProjectCardComponent(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(10.dp),
                     content = {
-                        Text(text = "Project", style = MaterialTheme.typography.headlineSmall)
                         Text(
-                            text = "Project Descrip tionfds glkdso gksadgj sdagljnf dlgjldfkj glfdjkgdsfl şfjksdlfj dslfjdslkfk sdlfkdjsf dskjf jsldjf dskjf sdajkf sadjksa",
+                            text = project.projectTitle,
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                        Text(
+                            text = project.projectSummary,
                             style = MaterialTheme.typography.bodySmall
                         )
                     })

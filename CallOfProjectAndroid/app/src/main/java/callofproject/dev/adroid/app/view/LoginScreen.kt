@@ -60,8 +60,7 @@ fun ObserveLoginOperation(
     LaunchedEffect(loginResult) {
         loginResult?.let { result ->
             if (result) {
-                Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                 navController.navigate(MAIN_PAGE)
             } else {
                 Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()

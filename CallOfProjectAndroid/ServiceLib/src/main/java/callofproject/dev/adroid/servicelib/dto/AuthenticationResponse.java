@@ -13,13 +13,13 @@ public class AuthenticationResponse
 
     private UUID user_id;
     private String role;
-    //@SerializedName("success")
+    @SerializedName("success")
     private boolean isSuccess;
-    //@SerializedName("access_token")
+    @SerializedName("access_token")
     private String accessToken;
-    //@SerializedName("refresh_token")
+    @SerializedName("refresh_token")
     private String refreshToken;
-    //@SerializedName("is_blocked")
+    @SerializedName("is_blocked")
     private boolean isBlocked;
 
 
@@ -209,5 +209,18 @@ public class AuthenticationResponse
     public void setRefreshToken(String refreshToken)
     {
         this.refreshToken = refreshToken;
+    }
+
+
+    @Override
+    public String toString() {
+        return "AuthenticationResponse{" +
+                "user_id=" + user_id +
+                ", role='" + role + '\'' +
+                ", isSuccess=" + isSuccess +
+                ", accessToken='" + accessToken + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                ", isBlocked=" + isBlocked +
+                '}';
     }
 }

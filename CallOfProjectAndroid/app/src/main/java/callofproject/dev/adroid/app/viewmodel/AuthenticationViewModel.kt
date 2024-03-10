@@ -35,11 +35,12 @@ class AuthenticationViewModel @Inject constructor(
             executeApiCall(callOfProjectService.login(userLoginDTO)) { response ->
                 when (response) {
                     is ApiResponse.Success -> {
+                        Log.v("RegisterViewModel", response.data.toString())
                         _loginResult.value = true
-
                     }
 
                     is ApiResponse.Error -> {
+                        Log.v("RegisterViewModel", "Register FAIL!")
                         _loginResult.value = false
                     }
                 }

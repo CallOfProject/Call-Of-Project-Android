@@ -50,6 +50,7 @@ fun CustomDatePicker(
     onDismiss: () -> Unit
 ) {
     if (isOpenDateDialog) {
+
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         val datePickerState = rememberDatePickerState()
         val confirmEnabled = remember {
@@ -129,7 +130,6 @@ fun RegisterScreen(
 
     ObserveRegisterOperation(viewModel, navController, context)
     BoxAndColumnComponent {
-
         NormalTextField("First Name", mFirstName, { mFirstName = it })
         NormalTextField("Middle Name", mMiddleName, { mMiddleName = it })
         NormalTextField("Last Name", mLastName, { mLastName = it })

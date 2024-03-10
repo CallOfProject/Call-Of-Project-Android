@@ -29,6 +29,7 @@ private val TOP_NAVIGATION_ITEMS = arrayOf(PROJECT_OVERVIEW_TAB, PROJECT_DETAILS
 @Composable
 fun topNavigationBar(navController: NavController) {
     val selectedItem = remember { mutableStateOf(0) }
+
     val onBackPressedCallback = remember {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
