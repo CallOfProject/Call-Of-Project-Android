@@ -1,15 +1,17 @@
 package callofproject.dev.adroid.app.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import callofproject.dev.adroid.servicelib.di.ICallOfProjectService
 import callofproject.dev.adroid.servicelib.dto.ApiResponse
 import callofproject.dev.adroid.servicelib.dto.ProjectDiscoveryDTO
 import callofproject.dev.adroid.servicelib.dto.ProjectOverviewDTO
-import callofproject.dev.adroid.servicelib.dto.ProjectsDiscoveryDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,6 +30,7 @@ class ProjectViewModel @Inject constructor(
 
     private val _overview = MutableStateFlow<ProjectOverviewDTO?>(null)
     val overview: StateFlow<ProjectOverviewDTO?> = _overview
+    var isLoading = mutableStateOf(false)
 
     fun projectDiscovery() {
         executor.execute {
@@ -47,20 +50,23 @@ class ProjectViewModel @Inject constructor(
 
 
     fun findProjectOverviewByProjectId(id: UUID) {
-        executor.execute {
-            executeApiCall(callOfProjectService.findProjectOverviewsById(id)) { response ->
-                when (response) {
-                    is ApiResponse.Success -> {
-                        _overview.value = response.data.`object`
-                        Log.v("OV:", response.data.`object`.toString())
-                    }
+       viewModelScope.launch {
+           isLoading.value = true
+           executeApiCall(callOfProjectService.findProjectOverviewsById(id)) { response ->
+               when (response) {
+                   is ApiResponse.Success -> {
+                       Log.v("ProjectOverview", "IN SUCCESS")
+                       _overview.value = response.data.`object`
+                       isLoading.value = false
+                       Log.v("ProjectOverview", response.data.`object`.toString())
+                   }
 
-                    is ApiResponse.Error -> {
-                        Log.v("ProjectViewModel", "PROJECT FAIL!")
-                    }
-                }
-            }
-        }
+                   is ApiResponse.Error -> {
+                       Log.v("ProjectViewModel", "PROJECT FAIL!")
+                   }
+               }
+           }
+       }
     }
 
 

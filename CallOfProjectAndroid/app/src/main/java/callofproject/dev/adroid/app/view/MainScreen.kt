@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -86,7 +87,7 @@ fun MainScreen(navController: NavController, viewModel: ProjectViewModel = hiltV
         ) {
             items(projects?.size ?: 0) {
                 projects?.get(it)?.let { project ->
-                    ProjectCardComponent(navController, project, viewModel = viewModel)
+                    ProjectCardComponent(navController, project)
                 }
             }
         }
@@ -105,16 +106,14 @@ fun MainScreenPreview() {
 @Composable
 fun ProjectCardComponent(
     navController: NavController,
-    project: ProjectDiscoveryDTO,
-    viewModel: ProjectViewModel
+    project: ProjectDiscoveryDTO
 ) {
-    val overviewDTO by viewModel.overview.collectAsState()
+
 
     val painter: Painter = rememberAsyncImagePainter(project.projectImagePath)
     Card(modifier = Modifier
         .clickable {
-            viewModel.findProjectOverviewByProjectId(project.projectId)
-            navController.navigate(PROJECT_OVERVIEW_PAGE)
+            navController.navigate(PROJECT_OVERVIEW_PAGE + "/${project.projectId}")
         }
         .fillMaxWidth()
         .padding(10.dp), shape = RoundedCornerShape(10.dp)) {
@@ -128,7 +127,7 @@ fun ProjectCardComponent(
                     painter = painter,
                     contentDescription = "project",
                     modifier = Modifier
-                        .size(80.dp)
+                        .size(100.dp)
                         .align(Alignment.CenterVertically),
                     alignment = Alignment.Center
                 )
@@ -226,9 +225,7 @@ fun TopBarComponent(title: String = "") {
 
 @Composable
 fun BottomBarComponent(navController: NavController) {
-
     val selectedItem = remember { mutableStateOf(0) }
-
 
     LaunchedEffect(navController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
