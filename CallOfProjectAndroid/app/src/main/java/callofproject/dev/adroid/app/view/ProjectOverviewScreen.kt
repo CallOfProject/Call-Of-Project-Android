@@ -88,7 +88,7 @@ fun ProjectOverviewScreen(
 
     else
         Scaffold(
-            topBar = { topNavigationBar(navController) },
+            topBar = { topNavigationBar(navController, projectId) },
             bottomBar = { BottomBarComponent(navController = navController) }) {
             Box(
                 modifier = Modifier

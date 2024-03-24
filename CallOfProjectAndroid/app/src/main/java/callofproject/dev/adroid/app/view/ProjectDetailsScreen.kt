@@ -1,6 +1,7 @@
 package callofproject.dev.adroid.app.view
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -18,90 +19,119 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import callofproject.dev.adroid.app.R
-import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
 import callofproject.dev.adroid.app.view.util.NotEditableCardComponent
+import callofproject.dev.adroid.app.viewmodel.ProjectViewModel
+import callofproject.dev.adroid.servicelib.dto.ProjectDetailDTO
+import callofproject.dev.adroid.servicelib.dto.ProjectParticipantDTO
+import callofproject.dev.adroid.servicelib.dto.ProjectTag
+import coil.compose.rememberAsyncImagePainter
+import java.util.UUID
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProjectDetailsScreen(navController: NavController) {
-    Scaffold(
-        topBar = { topNavigationBar(navController) },
-        bottomBar = { BottomBarComponent(navController = navController) }
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-            contentAlignment = Alignment.Center
+fun ProjectDetailsScreen(
+    navController: NavController,
+    projectId: String,
+    viewModel: ProjectViewModel = hiltViewModel()
+) {
+
+    val context = LocalContext.current
+    val detailDTO by viewModel.detail.collectAsState()
+    val painter: Painter = rememberAsyncImagePainter(detailDTO?.project_image_path)
+    val isLoading by remember { viewModel.isLoading }
+
+
+    DisposableEffect(Unit) {
+        viewModel.findProjectDetailsByProjectId(UUID.fromString(projectId))
+        onDispose { /* Dispose işlemi gerekli değil */ }
+    }
+
+    if (isLoading)
+        CircularProgressIndicator()
+
+    else
+        Scaffold(
+            topBar = { topNavigationBar(navController, projectId) },
+            bottomBar = { BottomBarComponent(navController = navController) }
         ) {
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                    .padding(it),
+                contentAlignment = Alignment.Center
             ) {
-                projectHeader()
-                projectInformationSections()
-                projectParticipants()
-                projectTags()
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    projectHeader(painter, detailDTO)
+                    projectInformationSections(detailDTO)
+                    projectParticipants(detailDTO!!.project_participants)
+                    projectTags(detailDTO!!.project_tags)
+                }
             }
         }
-    }
 }
 
 @Composable
-fun projectHeader() {
+fun projectHeader(painter: Painter, detailDTO: ProjectDetailDTO?) {
     Image(
-        painter = painterResource(id = R.drawable.project_icon),
+        painter = painter,
         contentDescription = "project",
         modifier = Modifier.size(120.dp),
         alignment = Alignment.Center
     )
     Text(
-        text = "Call-Of-Project",
+        text = detailDTO!!.project_owner_name,
         modifier = Modifier.padding(5.dp),
         style = MaterialTheme.typography.headlineMedium
     )
     Text(
-        text = "Nuri Can OZTURK",
+        text = detailDTO.project_owner_name,
         modifier = Modifier.padding(5.dp),
         style = MaterialTheme.typography.bodyMedium
     )
 }
 
 @Composable
-fun projectInformationSections() {
+fun projectInformationSections(detailDTO: ProjectDetailDTO?) {
     val sections = listOf(
-        "Project Summary" to "Call-Of-Project is a platform that allows you to create and manage your projects...",
-        "Project Aim" to "The aim of the project is to create a platform where you can create and manage your projects...",
-        "Project Description" to "The description of the project is to create a platform where you can create and manage your projects...",
-        "Technical Requirements" to (1..10).joinToString("\n") { "- Req-$it" },
-        "Specific Requirements" to (1..10).joinToString("\n") { "- Req-$it" },
-        "Project Date Information" to "Start Date: 25/02/2024\nExpected Completion Date: 25/02/2024\n...",
-        "Project Information" to "Max Participant: 5\nProfession Level: EXPERT\n...",
-        "Admin Notes" to "Max Participant: 5\nProfession Level: EXPERT\n..."
+        "Project Summary" to detailDTO!!.project_summary,
+        "Project Aim" to detailDTO.project_aim,
+        "Project Description" to detailDTO.project_description,
+        "Technical Requirements" to (0..detailDTO.technical_requirements.size).joinToString("\n") { detailDTO.technical_requirements[it] },
+        "Specific Requirements" to (0..detailDTO.special_requirements.size).joinToString("\n") { detailDTO.special_requirements[it] },
+        "Project Date Information" to "Start Date: ${detailDTO.start_date}\nExpected Completion Date: ${detailDTO.expected_completion_date}\n...",
+        "Project Information" to "Max Participant: ${detailDTO.max_participant}\nProfession Level: ${detailDTO.project_profession_level}\n...",
+        "Admin Notes" to detailDTO.admin_note
     )
 
     sections.forEach { (title, content) ->
         NotEditableCardComponent(title = title, height = 270.dp) {
             if (title.contains("Requirements")) {
                 (1..10).forEachIndexed { index, _ ->
-                    requirementCard("- Req-$index")
+                    requirementCard("- $index")
                 }
             } else {
                 Text(
@@ -136,13 +166,11 @@ fun requirementCard(text: String) {
 }
 
 @Composable
-fun projectParticipants() {
-    // Kod burada, örnek olarak sadece bir katılımcı için
+fun projectParticipants(participants: List<ProjectParticipantDTO>) {
     NotEditableCardComponent(title = "Project Participants", height = 280.dp) {
-        RowBasedCardComponent(title = "Nuri Can ÖZTÜRK", value = "Project Owner")
-        RowBasedCardComponent(title = "Ahmet KOÇ", value = "Participant")
-        RowBasedCardComponent(title = "Emir KAFADAR", value = "Participant")
-        // Diğer katılımcılar için benzer şekilde ekleme yapılabilir
+        participants.forEach {
+            RowBasedCardComponent(title = it.full_name, value = it.username)
+        }
     }
 }
 
@@ -164,16 +192,8 @@ fun TagComponent(text: String) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun projectTags() {
-    val tags = listOf(
-        "JAVA",
-        "Spring Boot",
-        "Angular 16.0.x",
-        "RESTFul API",
-        "Python",
-        "Kotlin",
-        "Android"
-    )
+fun projectTags(projectTags: List<ProjectTag>) {
+
 
     NotEditableCardComponent(title = "Tags", height = 250.dp) {
         FlowRow(
@@ -183,19 +203,9 @@ fun projectTags() {
             //mainAxisSpacing = 8.dp,
             //crossAxisSpacing = 8.dp
         ) {
-            tags.forEach { tag ->
-                TagComponent(text = tag)
+            projectTags.forEach { tag ->
+                TagComponent(text = tag.tagName)
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun DetailPreview() {
-    CallOfProjectAndroidTheme {
-        ProjectDetailsScreen(navController = rememberNavController())
-
     }
 }

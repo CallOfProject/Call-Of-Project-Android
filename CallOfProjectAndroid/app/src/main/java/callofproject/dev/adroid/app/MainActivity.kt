@@ -68,6 +68,7 @@ class MainActivity : ComponentActivity() {
                 composable(NOTIFICATION_PAGE) { NotificationScreen(navController = navController) }
                 composable(REGISTER_PAGE) { RegisterScreen(navController = navController) }
                 composable(MY_PROJECTS_PAGE) { MyProjectsScreen(navController = navController) }
+
                 composable(
                     "$PROJECT_OVERVIEW_PAGE/{projectId}", arguments = listOf(
                         navArgument("projectId") {
@@ -75,16 +76,31 @@ class MainActivity : ComponentActivity() {
                         })
                 )
                 {
+                    val projectId = remember { it.arguments?.getString("projectId") }
+                    ProjectOverviewScreen(
+                        navController = navController, projectId = projectId ?: ""
+                    )
+                }
+                composable(PROJECT_DISCOVERY_PAGE) { ProjectDiscoveryScreen(navController = navController) }
+
+                composable(
+                    "$PROJECT_DETAILS_PAGE/{projectId}",
+                    arguments = listOf(
+                        navArgument("projectId") {
+                            type = NavType.StringType
+                        })
+                )
+                {
+
                     val projectId = remember {
                         it.arguments?.getString("projectId")
                     }
-                    ProjectOverviewScreen(
+                    ProjectDetailsScreen(
                         navController = navController,
                         projectId = projectId ?: ""
                     )
                 }
-                composable(PROJECT_DISCOVERY_PAGE) { ProjectDiscoveryScreen(navController = navController) }
-                composable(PROJECT_DETAILS_PAGE) { ProjectDetailsScreen(navController = navController) }
+
                 composable(PROFILE_PAGE) { ProfileScreenComponent(navController = navController) }
                 composable(UPSERT_ABOUT_ME_PAGE) { UserAboutMeEditComponent(navController) }
                 composable(UPSERT_EDUCATION_PAGE) { UserEducationEditComponent(navController) }

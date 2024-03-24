@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.adroid.servicelib.di.ICallOfProjectService
 import callofproject.dev.adroid.servicelib.dto.ApiResponse
+import callofproject.dev.adroid.servicelib.dto.ProjectDetailDTO
 import callofproject.dev.adroid.servicelib.dto.ProjectDiscoveryDTO
 import callofproject.dev.adroid.servicelib.dto.ProjectOverviewDTO
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.UUID
+import java.util.UUID.fromString
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 
@@ -30,6 +32,10 @@ class ProjectViewModel @Inject constructor(
 
     private val _overview = MutableStateFlow<ProjectOverviewDTO?>(null)
     val overview: StateFlow<ProjectOverviewDTO?> = _overview
+
+    private val _details = MutableStateFlow<ProjectDetailDTO?>(null)
+    val detail: StateFlow<ProjectDetailDTO?> = _details
+
     var isLoading = mutableStateOf(false)
 
     fun projectDiscovery() {
@@ -50,23 +56,49 @@ class ProjectViewModel @Inject constructor(
 
 
     fun findProjectOverviewByProjectId(id: UUID) {
-       viewModelScope.launch {
-           isLoading.value = true
-           executeApiCall(callOfProjectService.findProjectOverviewsById(id)) { response ->
-               when (response) {
-                   is ApiResponse.Success -> {
-                       Log.v("ProjectOverview", "IN SUCCESS")
-                       _overview.value = response.data.`object`
-                       isLoading.value = false
-                       Log.v("ProjectOverview", response.data.`object`.toString())
-                   }
+        viewModelScope.launch {
+            isLoading.value = true
+            executeApiCall(callOfProjectService.findProjectOverviewsById(id)) { response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        Log.v("ProjectOverview", "IN SUCCESS")
+                        _overview.value = response.data.`object`
+                        isLoading.value = false
+                        Log.v("ProjectOverview", response.data.`object`.toString())
+                    }
 
-                   is ApiResponse.Error -> {
-                       Log.v("ProjectViewModel", "PROJECT FAIL!")
-                   }
-               }
-           }
-       }
+                    is ApiResponse.Error -> {
+                        Log.v("ProjectViewModel", "PROJECT FAIL!")
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun findProjectDetailsByProjectId(id: UUID) {
+        viewModelScope.launch {
+            isLoading.value = true
+            executeApiCall(
+                callOfProjectService.findProjectDetailsById(
+                    id,
+                    fromString("e584e8e4-c286-4aa3-8545-707cd5bdfdbc")
+                )
+            ) { response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        Log.v("DETAIL_P", "IN SUCCESS")
+                        _details.value = response.data.`object`
+                        isLoading.value = false
+                        Log.v("DETAIL_P", response.data.`object`.toString())
+                    }
+
+                    is ApiResponse.Error -> {
+                        Log.v("DETAIL_P", "PROJECT FAIL!")
+                    }
+                }
+            }
+        }
     }
 
 

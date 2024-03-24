@@ -2,6 +2,7 @@ package callofproject.dev.adroid.servicelib.di
 
 import callofproject.dev.adroid.servicelib.dto.AuthenticationResponse
 import callofproject.dev.adroid.servicelib.dto.MultipleResponseMessagePageable
+import callofproject.dev.adroid.servicelib.dto.ProjectDetailDTO
 import callofproject.dev.adroid.servicelib.dto.ProjectOverviewDTO
 import callofproject.dev.adroid.servicelib.dto.ProjectsDiscoveryDTO
 import callofproject.dev.adroid.servicelib.dto.ResponseMessage
@@ -16,7 +17,7 @@ import retrofit2.http.Query
 import java.util.UUID
 
 const val TOKEN =
-    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6IlJPTEVfVVNFUixST0xFX1JPT1QsUk9MRV9BRE1JTiIsInN1YiI6ImNvcF9yb290IiwiaWF0IjoxNzEwMTQzODI3LCJleHAiOjE3MTAxNTQ2Mjd9.M7lfY-bp0eiWLIUr1vIDGoax83FNRsYlfv509j23fOY"
+    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6IlJPTEVfVVNFUixST0xFX1JPT1QsUk9MRV9BRE1JTiIsInN1YiI6ImNvcF9yb290IiwiaWF0IjoxNzExMzA0MTc4LCJleHAiOjE3MTEzMTQ5Nzh9.DUQAHPSl1qHnCsvYedDkjX_666pJv5TZcF2VX925FoA"
 
 interface ICallOfProjectService {
 
@@ -37,4 +38,11 @@ interface ICallOfProjectService {
     fun findProjectOverviewsById(
         @Query("pid") projectId: UUID, @Header("Authorization") token: String? = TOKEN
     ): Call<ResponseMessage<ProjectOverviewDTO>>
+
+    @GET("/api/project/project/find/project-detail")
+    fun findProjectDetailsById(
+        @Query("pid") projectId: UUID,
+        @Query("uid") userId: UUID,
+        @Header("Authorization") token: String? = TOKEN
+    ): Call<ResponseMessage<ProjectDetailDTO>>
 }
