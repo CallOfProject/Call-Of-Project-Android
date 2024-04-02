@@ -1,7 +1,6 @@
 package callofproject.dev.adroid.app.view
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -55,21 +54,21 @@ fun ProjectDetailsScreen(
 
     val context = LocalContext.current
     val detailDTO by viewModel.detail.collectAsState()
-    val painter: Painter = rememberAsyncImagePainter(detailDTO?.project_image_path)
+    val painter: Painter = rememberAsyncImagePainter(detailDTO?.projectImagePath)
     val isLoading by remember { viewModel.isLoading }
+
 
 
     DisposableEffect(Unit) {
         viewModel.findProjectDetailsByProjectId(UUID.fromString(projectId))
-        onDispose { /* Dispose işlemi gerekli değil */ }
+        onDispose { }
     }
 
     if (isLoading)
         CircularProgressIndicator()
-
     else
         Scaffold(
-            topBar = { topNavigationBar(navController, projectId) },
+            topBar = { TopNavigationBar(navController, projectId) },
             bottomBar = { BottomBarComponent(navController = navController) }
         ) {
             Box(
@@ -85,17 +84,17 @@ fun ProjectDetailsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    projectHeader(painter, detailDTO)
-                    projectInformationSections(detailDTO)
-                    projectParticipants(detailDTO!!.project_participants)
-                    projectTags(detailDTO!!.project_tags)
+                    ProjectHeader(painter, detailDTO)
+                    ProjectInformationSections(detailDTO)
+                    ProjectParticipants(detailDTO!!.projectParticipants)
+                    ProjectTags(detailDTO!!.projectTags)
                 }
             }
         }
 }
 
 @Composable
-fun projectHeader(painter: Painter, detailDTO: ProjectDetailDTO?) {
+fun ProjectHeader(painter: Painter, detailDTO: ProjectDetailDTO?) {
     Image(
         painter = painter,
         contentDescription = "project",
@@ -103,35 +102,35 @@ fun projectHeader(painter: Painter, detailDTO: ProjectDetailDTO?) {
         alignment = Alignment.Center
     )
     Text(
-        text = detailDTO!!.project_owner_name,
+        text = detailDTO!!.projectOwnerName,
         modifier = Modifier.padding(5.dp),
         style = MaterialTheme.typography.headlineMedium
     )
     Text(
-        text = detailDTO.project_owner_name,
+        text = detailDTO.projectOwnerName,
         modifier = Modifier.padding(5.dp),
         style = MaterialTheme.typography.bodyMedium
     )
 }
 
 @Composable
-fun projectInformationSections(detailDTO: ProjectDetailDTO?) {
+fun ProjectInformationSections(detailDTO: ProjectDetailDTO?) {
     val sections = listOf(
-        "Project Summary" to detailDTO!!.project_summary,
-        "Project Aim" to detailDTO.project_aim,
-        "Project Description" to detailDTO.project_description,
-        "Technical Requirements" to (0..detailDTO.technical_requirements.size).joinToString("\n") { detailDTO.technical_requirements[it] },
-        "Specific Requirements" to (0..detailDTO.special_requirements.size).joinToString("\n") { detailDTO.special_requirements[it] },
-        "Project Date Information" to "Start Date: ${detailDTO.start_date}\nExpected Completion Date: ${detailDTO.expected_completion_date}\n...",
-        "Project Information" to "Max Participant: ${detailDTO.max_participant}\nProfession Level: ${detailDTO.project_profession_level}\n...",
-        "Admin Notes" to detailDTO.admin_note
+        "Project Summary" to detailDTO!!.projectSummary,
+        "Project Aim" to detailDTO.projectAim,
+        "Project Description" to detailDTO.projectDescription,
+        "Technical Requirements" to (0..detailDTO.technicalRequirements.size).joinToString("\n") { detailDTO.technicalRequirements[it] },
+        "Specific Requirements" to (0..detailDTO.specialRequirements.size).joinToString("\n") { detailDTO.specialRequirements[it] },
+        "Project Date Information" to "Start Date: ${detailDTO.startDate}\nExpected Completion Date: ${detailDTO.expectedCompletionDate}\n...",
+        "Project Information" to "Max Participant: ${detailDTO.maxParticipant}\nProfession Level: ${detailDTO.projectProfessionLevel}\n...",
+        "Admin Notes" to detailDTO.adminNote
     )
 
     sections.forEach { (title, content) ->
         NotEditableCardComponent(title = title, height = 270.dp) {
             if (title.contains("Requirements")) {
                 (1..10).forEachIndexed { index, _ ->
-                    requirementCard("- $index")
+                    RequirementCard("- $index")
                 }
             } else {
                 Text(
@@ -146,7 +145,7 @@ fun projectInformationSections(detailDTO: ProjectDetailDTO?) {
 }
 
 @Composable
-fun requirementCard(text: String) {
+fun RequirementCard(text: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,7 +165,7 @@ fun requirementCard(text: String) {
 }
 
 @Composable
-fun projectParticipants(participants: List<ProjectParticipantDTO>) {
+fun ProjectParticipants(participants: List<ProjectParticipantDTO>) {
     NotEditableCardComponent(title = "Project Participants", height = 280.dp) {
         participants.forEach {
             RowBasedCardComponent(title = it.full_name, value = it.username)
@@ -192,7 +191,7 @@ fun TagComponent(text: String) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun projectTags(projectTags: List<ProjectTag>) {
+fun ProjectTags(projectTags: List<ProjectTag>) {
 
 
     NotEditableCardComponent(title = "Tags", height = 250.dp) {

@@ -1,6 +1,5 @@
 package callofproject.dev.adroid.app.view
 
-import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -22,15 +21,13 @@ import callofproject.dev.adroid.app.R
 import callofproject.dev.adroid.app.util.MAIN_PAGE
 import callofproject.dev.adroid.app.util.PROJECT_DETAILS_PAGE
 import callofproject.dev.adroid.app.util.PROJECT_OVERVIEW_PAGE
-import java.util.UUID
 
 private const val PROJECT_OVERVIEW_TAB = "Project Overview"
 private const val PROJECT_DETAILS_TAB = "Project Details"
 private val TOP_NAVIGATION_ITEMS = arrayOf(PROJECT_OVERVIEW_TAB, PROJECT_DETAILS_TAB)
 
 @Composable
-fun topNavigationBar(navController: NavController, projectId: String?) {
-    Log.v("PROJECT_ID", if(projectId == null) "NUL ID" else projectId)
+fun TopNavigationBar(navController: NavController, projectId: String?) {
     val selectedItem = remember { mutableStateOf(0) }
 
     val onBackPressedCallback = remember {

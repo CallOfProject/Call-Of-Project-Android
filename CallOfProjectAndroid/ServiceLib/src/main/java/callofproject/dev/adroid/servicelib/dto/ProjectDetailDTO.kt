@@ -1,27 +1,53 @@
 package callofproject.dev.adroid.servicelib.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class ProjectDetailDTO(
-    val project_id: String,
-    val project_image_path: String,
-    val project_title: String,
-    val project_summary: String,
-    val project_aim: String,
-    val project_description: String,
-    val application_deadline: String,
-    val expected_completion_date: String,
-    val start_date: String,
-    val max_participant: Int,
-    val technical_requirements: List<String>,
-    val special_requirements: List<String>,
-    val project_profession_level: String,
-    val project_sector: String,
-    val project_degree: String,
-    val project_level: String,
-    val interview_type: String,
-    val project_owner_name: String,
-    val feedback_time_range: String,
-    val project_status: String,
-    val project_tags: List<ProjectTag>,
-    val admin_note: String,
-    val project_participants: List<ProjectParticipantDTO>
+
+    @SerializedName("project_id")
+    val projectId: String,
+    @SerializedName("project_image_path")
+    val projectImagePath: String,
+    @SerializedName("project_title")
+    val projectTitle: String,
+    @SerializedName("project_summary")
+    val projectSummary: String,
+    @SerializedName("project_aim")
+    val projectAim: String,
+    @SerializedName("project_description")
+    val projectDescription: String,
+    @SerializedName("application_deadline")
+    val applicationDeadline: String,
+    @SerializedName("expected_completion_date")
+    val expectedCompletionDate: String,
+    @SerializedName("start_date")
+    val startDate: String,
+    @SerializedName("max_participant")
+    val maxParticipant: Int,
+    @SerializedName("technical_requirements")
+    val technicalRequirements: List<String>,
+    @SerializedName("special_requirements")
+    val specialRequirements: List<String>,
+    @SerializedName("project_profession_level")
+    val projectProfessionLevel: String,
+    @SerializedName("project_sector")
+    val projectSector: String,
+    @SerializedName("project_degree")
+    val projectDegree: String,
+    @SerializedName("project_level")
+    val projectLevel: String,
+    @SerializedName("interview_type")
+    val interviewType: String,
+    @SerializedName("project_owner_name")
+    val projectOwnerName: String,
+    @SerializedName("feedback_time_range")
+    val feedbackTimeRange: String,
+    @SerializedName("project_status")
+    val projectStatus: String,
+    @SerializedName("project_tags")
+    val projectTags: List<ProjectTag>,
+    @SerializedName("admin_note")
+    val adminNote: String,
+    @SerializedName("project_participants")
+    val projectParticipants: List<ProjectParticipantDTO>
 )

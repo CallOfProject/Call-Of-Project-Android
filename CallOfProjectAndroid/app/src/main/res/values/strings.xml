@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CallOfProjectAndroid</string>
+    <string name="birth_date">Birth Date</string>
 </resources>

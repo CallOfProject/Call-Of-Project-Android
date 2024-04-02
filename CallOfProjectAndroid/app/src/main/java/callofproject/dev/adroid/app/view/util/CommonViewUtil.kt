@@ -79,7 +79,8 @@ fun PasswordTextField(
     onValueChange: (String) -> Unit,
     focusedBorderColor: Long = 0xFF295a8c,
     textStyle: TextStyle = TextStyle.Default,
-    unFocusedBorderColor: Color = Color.Gray
+    unFocusedBorderColor: Color = Color.Gray,
+    leadingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         value = value,
@@ -94,7 +95,8 @@ fun PasswordTextField(
             focusedBorderColor = Color(focusedBorderColor),
             unfocusedBorderColor = unFocusedBorderColor
         ),
-        textStyle = textStyle
+        textStyle = textStyle,
+        leadingIcon = leadingIcon
     )
 }
 

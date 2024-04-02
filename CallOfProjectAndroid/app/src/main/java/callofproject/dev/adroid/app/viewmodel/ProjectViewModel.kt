@@ -82,7 +82,7 @@ class ProjectViewModel @Inject constructor(
             executeApiCall(
                 callOfProjectService.findProjectDetailsById(
                     id,
-                    fromString("e584e8e4-c286-4aa3-8545-707cd5bdfdbc")
+                    fromString("4f3afef8-32d4-4853-8f92-ce555fe5f71f")
                 )
             ) { response ->
                 when (response) {

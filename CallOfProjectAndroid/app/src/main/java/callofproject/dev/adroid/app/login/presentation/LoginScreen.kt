@@ -1,11 +1,7 @@
-package callofproject.dev.adroid.app.view
+package callofproject.dev.adroid.app.login.presentation
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,14 +13,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,17 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import callofproject.dev.adroid.app.R
+import callofproject.dev.adroid.app.login.presentation.LoginEvent.OnLoginButtonClick
 import callofproject.dev.adroid.app.util.MAIN_PAGE
 import callofproject.dev.adroid.app.util.REGISTER_PAGE
 import callofproject.dev.adroid.app.view.util.NormalTextField
 import callofproject.dev.adroid.app.view.util.PasswordTextField
-import callofproject.dev.adroid.app.viewmodel.AuthenticationViewModel
 import callofproject.dev.adroid.servicelib.dto.UserLoginDTO
 
 
@@ -56,13 +45,15 @@ fun ObserveLoginOperation(
     context: Context
 ) {
 
-    val loginResult by viewModel.loginResult.collectAsState(initial = null)
+    val loginResult = viewModel.state
+
     LaunchedEffect(loginResult) {
-        loginResult?.let { result ->
-            if (result) {
+        loginResult.let { result ->
+            if (result.isClickedLogin && result.isSuccess) {
                 Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                 navController.navigate(MAIN_PAGE)
-            } else {
+            }
+            if (result.isClickedLogin && !result.isSuccess) {
                 Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
             }
         }
@@ -70,7 +61,6 @@ fun ObserveLoginOperation(
 }
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -84,7 +74,7 @@ fun LoginScreen(
 
     val context = LocalContext.current
 
-    BackPressHandler(context)
+    //BackPressHandler(context)
     ObserveLoginOperation(viewModel, navController, context)
 
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -93,6 +83,7 @@ fun LoginScreen(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+
             Image(
                 painter = painterResource(id = R.drawable.cop_logo),
                 contentDescription = "Logo",
@@ -105,9 +96,10 @@ fun LoginScreen(
             NormalTextField("Username", username, { username = it.trim() })
             PasswordTextField("Password", password, { password = it.trim() })
 
-            //handleClickLoginButton(username, password, viewModel)
             Button(
-                onClick = { handleClickLoginButton(username, password, viewModel) },
+                onClick = {
+                    viewModel.onEvent(OnLoginButtonClick(UserLoginDTO(username, password)))
+                },
                 modifier = Modifier
                     .width(250.dp)
                     .align(Alignment.CenterHorizontally),
@@ -125,28 +117,4 @@ fun LoginScreen(
             }
         }
     }
-}
-
-@Composable
-fun BackPressHandler(context: Context) {
-
-    val onBackPressedCallback = remember {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (context is Activity) context.finish()
-            }
-        }
-    }
-
-    BackHandler(onBack = onBackPressedCallback::handleOnBackPressed)
-}
-
-fun handleClickLoginButton(username: String, password: String, viewModel: AuthenticationViewModel) {
-    viewModel.login(UserLoginDTO(username, password))
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginPreview() {
-    LoginScreen(rememberNavController())
 }

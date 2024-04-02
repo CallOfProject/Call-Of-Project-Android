@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,7 +47,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import callofproject.dev.adroid.app.R
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
-import callofproject.dev.adroid.app.util.*
+import callofproject.dev.adroid.app.util.MAIN_PAGE
+import callofproject.dev.adroid.app.util.MY_PROJECTS_PAGE
+import callofproject.dev.adroid.app.util.NOTIFICATION_PAGE
+import callofproject.dev.adroid.app.util.PROFILE_PAGE
+import callofproject.dev.adroid.app.util.PROJECT_OVERVIEW_PAGE
 import callofproject.dev.adroid.app.viewmodel.ProjectViewModel
 import callofproject.dev.adroid.servicelib.dto.ProjectDiscoveryDTO
 import coil.compose.rememberAsyncImagePainter
