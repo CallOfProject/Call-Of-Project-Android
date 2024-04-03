@@ -87,14 +87,14 @@ class ProjectViewModel @Inject constructor(
             ) { response ->
                 when (response) {
                     is ApiResponse.Success -> {
-                        Log.v("DETAIL_P", "IN SUCCESS")
+                        Log.i("COP:PROJECT_DETAIL_SUCCESS", "SUCCESS")
                         _details.value = response.data.`object`
                         isLoading.value = false
                         Log.v("DETAIL_P", response.data.`object`.toString())
                     }
 
                     is ApiResponse.Error -> {
-                        Log.v("DETAIL_P", "PROJECT FAIL!")
+                        Log.e("DETAIL_P", "PROJECT FAIL!")
                     }
                 }
             }

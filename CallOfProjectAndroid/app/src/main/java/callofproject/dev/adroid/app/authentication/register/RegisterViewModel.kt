@@ -1,4 +1,4 @@
-package callofproject.dev.adroid.app.login.presentation
+package callofproject.dev.adroid.app.authentication.register
 
 
 import android.util.Log
@@ -21,37 +21,35 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthenticationViewModel @Inject constructor(
-    private val callOfProjectService: ICallOfProjectService,
+class RegisterViewModel @Inject constructor(
+    private val callOfProjectService: ICallOfProjectService
 ) : ViewModel() {
-
-    var state by mutableStateOf(LoginState())
+    var state by mutableStateOf(RegisterState())
+        private set
+    var registerDto by mutableStateOf(UserRegisterDTO())
         private set
 
-    fun onEvent(event: LoginEvent) = when (event) {
-        is LoginEvent.OnLoginButtonClick -> login(event.loginDTO)
+    fun onEvent(event: RegisterEvent) = when (event) {
+        is RegisterEvent.OnClickRegisterBtn -> register(event.userRegisterDTO)
 
-        is LoginEvent.OnRegisterButtonClick -> {
-            //....
+        is RegisterEvent.OnRegisterDtoChange -> {
+            state.userRegisterDto.first_name = event.userRegisterDTO.first_name
+            state.userRegisterDto.middle_name = event.userRegisterDTO.middle_name
+            state.userRegisterDto.last_name = event.userRegisterDTO.last_name
         }
     }
 
-    fun login(userLoginDTO: UserLoginDTO) {
+
+    private fun register(registerDTO: UserRegisterDTO) {
         viewModelScope.launch {
-            executeApiCall(callOfProjectService.login(userLoginDTO)) { response ->
+            executeApiCall(callOfProjectService.register(registerDTO)) { response ->
                 state = when (response) {
                     is ApiResponse.Success -> {
-                        Log.v("RegisterViewModel", response.data.toString())
-                        state.copy(
-                            isClickedLogin = true,
-                            isSuccess = true,
-                            authResponse = response.data
-                        )
+                        state.copy(isSuccess = true, isClickedBtn = true)
                     }
 
                     is ApiResponse.Error -> {
-                        Log.v("RegisterViewModel", "Register FAIL!")
-                        state.copy(isSuccess = false, isClickedLogin = true)
+                        state.copy(isClickedBtn = true)
                     }
                 }
             }

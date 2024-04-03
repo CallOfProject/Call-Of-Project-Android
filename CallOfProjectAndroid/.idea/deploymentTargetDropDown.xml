@@ -5,6 +5,9 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="showDatePicker">
+        <State />
+      </entry>
     </value>
   </component>
 </project>

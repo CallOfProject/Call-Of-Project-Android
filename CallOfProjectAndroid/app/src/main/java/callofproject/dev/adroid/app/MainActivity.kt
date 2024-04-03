@@ -22,7 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import callofproject.dev.adroid.app.login.presentation.LoginScreen
+import callofproject.dev.adroid.app.authentication.login.presentation.LoginScreen
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
 import callofproject.dev.adroid.app.util.LOGIN_PAGE
 import callofproject.dev.adroid.app.util.MAIN_PAGE
@@ -46,7 +46,7 @@ import callofproject.dev.adroid.app.view.ProfileScreenComponent
 import callofproject.dev.adroid.app.view.ProjectDetailsScreen
 import callofproject.dev.adroid.app.view.ProjectDiscoveryScreen
 import callofproject.dev.adroid.app.view.ProjectOverviewScreen
-import callofproject.dev.adroid.app.register.RegisterScreen
+import callofproject.dev.adroid.app.authentication.register.RegisterScreen
 import callofproject.dev.adroid.app.view.UserAboutMeEditComponent
 import callofproject.dev.adroid.app.view.UserCourseEditComponent
 import callofproject.dev.adroid.app.view.UserEducationEditComponent

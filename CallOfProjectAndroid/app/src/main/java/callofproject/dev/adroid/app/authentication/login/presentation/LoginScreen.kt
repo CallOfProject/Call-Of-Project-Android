@@ -1,4 +1,4 @@
-package callofproject.dev.adroid.app.login.presentation
+package callofproject.dev.adroid.app.authentication.login.presentation
 
 import android.content.Context
 import android.widget.Toast
@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import callofproject.dev.adroid.app.R
-import callofproject.dev.adroid.app.login.presentation.LoginEvent.OnLoginButtonClick
+import callofproject.dev.adroid.app.authentication.login.presentation.LoginEvent.OnLoginButtonClick
 import callofproject.dev.adroid.app.util.MAIN_PAGE
 import callofproject.dev.adroid.app.util.REGISTER_PAGE
 import callofproject.dev.adroid.app.view.util.NormalTextField
@@ -74,7 +74,6 @@ fun LoginScreen(
 
     val context = LocalContext.current
 
-    //BackPressHandler(context)
     ObserveLoginOperation(viewModel, navController, context)
 
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {

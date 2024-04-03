@@ -1,4 +1,4 @@
-package callofproject.dev.adroid.app.login.presentation
+package callofproject.dev.adroid.app.authentication.login.presentation
 
 import callofproject.dev.adroid.servicelib.dto.AuthenticationResponse
 

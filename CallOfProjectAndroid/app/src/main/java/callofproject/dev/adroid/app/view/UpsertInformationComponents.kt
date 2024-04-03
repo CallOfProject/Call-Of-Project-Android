@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import callofproject.dev.adroid.app.register.CustomDatePicker
+import callofproject.dev.adroid.app.authentication.register.CustomDatePicker
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
 import callofproject.dev.adroid.app.view.util.NormalTextField
 import callofproject.dev.adroid.app.view.util.NotEditableCardComponent

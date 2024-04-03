@@ -1,4 +1,4 @@
-package callofproject.dev.adroid.app.register
+package callofproject.dev.adroid.app.authentication.register
 
 import android.content.Context
 import android.widget.Toast
@@ -32,7 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import callofproject.dev.adroid.app.R
-import callofproject.dev.adroid.app.login.presentation.AuthenticationViewModel
+import callofproject.dev.adroid.app.authentication.login.presentation.AuthenticationViewModel
 import callofproject.dev.adroid.app.ui.theme.CallOfProjectAndroidTheme
 import callofproject.dev.adroid.app.util.LOGIN_PAGE
 import callofproject.dev.adroid.app.view.util.BoxAndColumnComponent
@@ -53,7 +53,7 @@ fun CustomDatePicker(
 ) {
     if (isOpenDateDialog) {
 
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val formatter = DateTimeFormatter.ofPattern(stringResource(R.string.date_format))
         val datePickerState = rememberDatePickerState()
         val confirmEnabled = remember {
             derivedStateOf { datePickerState.selectedDateMillis != null }
@@ -81,7 +81,13 @@ fun CustomDatePicker(
     }
 }
 
+@Composable
+@Preview(showBackground = true)
+fun showDatePicker(){
+    CustomDatePicker(isOpenDateDialog = true, onDateSelected = {}) {
 
+    }
+}
 @Composable
 fun ObserveRegisterOperation(
     viewModel: RegisterViewModel,
@@ -93,7 +99,11 @@ fun ObserveRegisterOperation(
     LaunchedEffect(loginResult) {
         loginResult.let { result ->
             if (result.isClickedBtn && result.isSuccess) {
-                Toast.makeText(context, "Please check the email for verification", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Please check the email for verification",
+                    Toast.LENGTH_SHORT
+                ).show()
                 navController.navigate(LOGIN_PAGE)
             }
             if (result.isClickedBtn && !result.isSuccess) {
@@ -114,6 +124,7 @@ fun RegisterScreen(
 
     val context = LocalContext.current
     ObserveRegisterOperation(viewModel, navController, context)
+
     BoxAndColumnComponent {
         NormalTextField(
             "First Name",
@@ -148,7 +159,6 @@ fun RegisterScreen(
 
             // if (mConfirmPassword != viewModel.registerDto.password)
 
-
         })
 
         OutlinedButton(
@@ -165,6 +175,8 @@ fun RegisterScreen(
                 },
                 onDismiss = { mIsOpenDateDialog = false })
         }
+
+
         Button(
             onClick = { viewModel.onEvent(RegisterEvent.OnClickRegisterBtn(viewModel.registerDto)) },
             modifier = Modifier

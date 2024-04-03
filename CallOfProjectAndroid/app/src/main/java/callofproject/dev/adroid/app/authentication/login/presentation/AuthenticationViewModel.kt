@@ -1,4 +1,4 @@
-package callofproject.dev.adroid.app.register
+package callofproject.dev.adroid.app.authentication.login.presentation
 
 
 import android.util.Log
@@ -21,38 +21,37 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(
+class AuthenticationViewModel @Inject constructor(
     private val callOfProjectService: ICallOfProjectService,
 ) : ViewModel() {
 
-    var state by mutableStateOf(RegisterState())
+    var state by mutableStateOf(LoginState())
         private set
 
-    var registerDto by mutableStateOf(UserRegisterDTO())
-        private set
+    fun onEvent(event: LoginEvent) = when (event) {
+        is LoginEvent.OnLoginButtonClick -> login(event.loginDTO)
 
-    fun onEvent(event: RegisterEvent) = when (event) {
-        is RegisterEvent.OnClickRegisterBtn -> register(event.userRegisterDTO)
-
-        else -> throw UnsupportedOperationException("Unsupported Operation!")
+        is LoginEvent.OnRegisterButtonClick -> {
+            //....
+        }
     }
 
-
-    private fun register(registerDTO: UserRegisterDTO) {
+    fun login(userLoginDTO: UserLoginDTO) {
         viewModelScope.launch {
-            executeApiCall(callOfProjectService.register(registerDTO)) { response ->
-                when (response) {
+            executeApiCall(callOfProjectService.login(userLoginDTO)) { response ->
+                state = when (response) {
                     is ApiResponse.Success -> {
-                        state = state.copy(
+                        Log.v("RegisterViewModel", response.data.toString())
+                        state.copy(
+                            isClickedLogin = true,
                             isSuccess = true,
-                            isClickedBtn = true
+                            authResponse = response.data
                         )
                     }
 
                     is ApiResponse.Error -> {
-                        state = state.copy(
-                            isClickedBtn = true
-                        )
+                        Log.v("RegisterViewModel", "Register FAIL!")
+                        state.copy(isSuccess = false, isClickedLogin = true)
                     }
                 }
             }
