@@ -28,8 +28,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import callofproject.dev.adroid.app.authentication.register.CustomDatePicker
 import callofproject.dev.adroid.app.view.util.NormalTextField
+import callofproject.dev.android.authentication.components.CustomDatePicker
 
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -41,13 +41,14 @@ import callofproject.dev.adroid.app.viewmodel.ProjectViewModel
 import callofproject.dev.adroid.servicelib.dto.ProjectDetailDTO
 import callofproject.dev.adroid.servicelib.dto.ProjectParticipantDTO
 import callofproject.dev.adroid.servicelib.dto.ProjectTag
+import callofproject.dev.core.util.UiEvent
 import coil.compose.rememberAsyncImagePainter
 import java.util.UUID
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProjectDetailsScreen(
-    navController: NavController,
+    onNavigate: (UiEvent.Navigate) -> Unit,
     projectId: String,
     viewModel: ProjectViewModel = hiltViewModel()
 ) {
@@ -68,8 +69,8 @@ fun ProjectDetailsScreen(
         CircularProgressIndicator()
     else
         Scaffold(
-            topBar = { TopNavigationBar(navController, projectId) },
-            bottomBar = { BottomBarComponent(navController = navController) }
+            /*topBar = { TopNavigationBar(navController, projectId) },
+            bottomBar = { BottomBarComponent(navController = navController) }*/
         ) {
             Box(
                 modifier = Modifier

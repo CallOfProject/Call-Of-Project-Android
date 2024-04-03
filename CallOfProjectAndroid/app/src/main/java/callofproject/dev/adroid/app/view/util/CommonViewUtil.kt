@@ -72,51 +72,6 @@ fun NormalTextField(
     )
 }
 
-@Composable
-fun PasswordTextField(
-    text: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    focusedBorderColor: Long = 0xFF295a8c,
-    textStyle: TextStyle = TextStyle.Default,
-    unFocusedBorderColor: Color = Color.Gray,
-    leadingIcon: @Composable (() -> Unit)? = null
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onValueChange(it) },
-        label = { Text(text, color = Color.Gray) },
-        modifier = Modifier
-            .width(300.dp)
-            .padding(bottom = 8.dp),
-        visualTransformation = PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color(focusedBorderColor),
-            unfocusedBorderColor = unFocusedBorderColor
-        ),
-        textStyle = textStyle,
-        leadingIcon = leadingIcon
-    )
-}
-
-
-@Composable
-fun BoxAndColumnComponent(
-    alignment: Alignment = Alignment.Center,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Box(contentAlignment = alignment, modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            content()
-        }
-    }
-}
-
 
 @Composable
 fun EditableCardComponent(

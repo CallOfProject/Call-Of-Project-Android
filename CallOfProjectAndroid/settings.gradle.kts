@@ -19,3 +19,5 @@ rootProject.name = "CallOfProjectAndroid"
 include(":app")
 include(":ServiceLib")
 include(":RepositoryLib")
+include(":authentication")
+include(":core")

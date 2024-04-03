@@ -12,6 +12,8 @@
             <option value="$PROJECT_DIR$/RepositoryLib" />
             <option value="$PROJECT_DIR$/ServiceLib" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/authentication" />
+            <option value="$PROJECT_DIR$/core" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

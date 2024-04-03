@@ -59,8 +59,9 @@ android {
 
 dependencies {
 
+    implementation(project(path = ":authentication"))
     implementation(project(path = ":ServiceLib"))
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    implementation(project(path = ":core"))
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
@@ -76,9 +77,11 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //Desugar
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     //Hilt
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-
     implementation("com.google.dagger:hilt-android:2.50")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
     kapt("com.google.dagger:hilt-compiler:2.50")
@@ -103,7 +106,6 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation("io.coil-kt:coil-compose:2.6.0")
-
 
 
 }
