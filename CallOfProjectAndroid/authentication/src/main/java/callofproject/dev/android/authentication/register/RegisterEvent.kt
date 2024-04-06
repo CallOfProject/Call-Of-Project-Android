@@ -1,4 +1,4 @@
-package callofproject.dev.adroid.app.authentication.register
+package callofproject.dev.android.authentication.register
 
 import callofproject.dev.adroid.servicelib.dto.UserRegisterDTO
 

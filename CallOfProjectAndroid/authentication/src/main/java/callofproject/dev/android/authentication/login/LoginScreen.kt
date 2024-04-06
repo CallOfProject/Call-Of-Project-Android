@@ -94,7 +94,7 @@ fun LoginScreen(
                     .align(Alignment.CenterHorizontally)
             )
             {
-                Text(stringResource(R.string.login_btn))
+                Text(stringResource(R.string.btn_login))
             }
 
             Button(
@@ -103,7 +103,7 @@ fun LoginScreen(
                     .width(250.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
-                Text(stringResource(R.string.register_btn))
+                Text(stringResource(R.string.btn_register))
             }
         }
     }

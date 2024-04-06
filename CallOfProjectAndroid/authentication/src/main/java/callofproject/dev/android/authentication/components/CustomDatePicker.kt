@@ -44,7 +44,7 @@ fun CustomDatePicker(
             }
         }, dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.btn_cancel))
             }
         }) {
             DatePicker(state = datePickerState)

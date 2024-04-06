@@ -28,7 +28,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import callofproject.dev.adroid.app.authentication.register.RegisterEvent
 import callofproject.dev.android.authentication.components.CustomDatePicker
 import callofproject.dev.android.authentication.components.NormalTextField
 import callofproject.dev.android.authentication.components.PasswordTextField
@@ -45,7 +44,7 @@ fun ObserveRegisterOperation(
 
     LaunchedEffect(loginResult) {
         loginResult.let { result ->
-            if (result.isClickedBtn && result.isSuccess) {
+            /*if (result.isClickedBtn && result.isSuccess) {
                 Toast.makeText(
                     context,
                     "Please check the email for verification",
@@ -56,9 +55,11 @@ fun ObserveRegisterOperation(
             if (result.isClickedBtn && !result.isSuccess) {
                 Toast.makeText(context, "Register failed", Toast.LENGTH_SHORT).show()
             }
+        }*/
         }
     }
 }
+
 
 
 @Composable
@@ -72,7 +73,7 @@ fun RegisterScreen(
     val context = LocalContext.current
     ObserveRegisterOperation(viewModel, navController, context)
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier
                 .padding(16.dp)

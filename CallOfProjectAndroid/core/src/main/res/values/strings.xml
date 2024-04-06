@@ -4,7 +4,8 @@
     <string name="date_format">dd/MM/yyyy</string>
     <string name="username_text_field">Username</string>
     <string name="password_text_field">Password</string>
-    <string name="login_btn">Login</string>
-    <string name="register_btn">Register</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_cancel">Cancel</string>
 
 </resources>

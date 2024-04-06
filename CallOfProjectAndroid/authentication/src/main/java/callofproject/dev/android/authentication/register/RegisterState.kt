@@ -3,7 +3,11 @@ package callofproject.dev.adroid.app.authentication.register
 import callofproject.dev.adroid.servicelib.dto.UserRegisterDTO
 
 data class RegisterState(
-    val isSuccess: Boolean = false,
-    val isClickedBtn: Boolean = false,
-    var userRegisterDto: UserRegisterDTO = UserRegisterDTO()
+    val firstName: String = "",
+    val middleName: String = "",
+    val lastName: String = "",
+    val username: String = "",
+    val password: String = "",
+    val birthDate: String = ""
+
 )

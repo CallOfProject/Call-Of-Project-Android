@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import callofproject.dev.adroid.app.authentication.register.RegisterEvent
 import callofproject.dev.adroid.app.authentication.register.RegisterState
 import callofproject.dev.adroid.servicelib.di.ICallOfProjectService
 import callofproject.dev.adroid.servicelib.dto.ApiResponse
@@ -31,9 +30,7 @@ class RegisterViewModel @Inject constructor(
         is RegisterEvent.OnClickRegisterBtn -> register(event.userRegisterDTO)
 
         is RegisterEvent.OnRegisterDtoChange -> {
-            state.userRegisterDto.first_name = event.userRegisterDTO.first_name
-            state.userRegisterDto.middle_name = event.userRegisterDTO.middle_name
-            state.userRegisterDto.last_name = event.userRegisterDTO.last_name
+
         }
 
         else -> {}
@@ -43,13 +40,13 @@ class RegisterViewModel @Inject constructor(
     private fun register(registerDTO: UserRegisterDTO) {
         viewModelScope.launch {
             executeApiCall(callOfProjectService.register(registerDTO)) { response ->
-                state = when (response) {
+                when (response) {
                     is ApiResponse.Success -> {
-                        state.copy(isSuccess = true, isClickedBtn = true)
+
                     }
 
                     is ApiResponse.Error -> {
-                        state.copy(isClickedBtn = true)
+
                     }
                 }
             }
