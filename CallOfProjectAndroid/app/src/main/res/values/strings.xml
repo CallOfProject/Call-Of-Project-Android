@@ -1,5 +1,83 @@
 <resources>
-    <string name="app_name">CallOfProjectAndroid</string>
-    <string name="birth_date">Birth Date</string>
+    <string name="app_name">Call-of-Project-Android</string>
+    <string name="local_datetime_formatter">dd/MM/yyyy kk:mm:ss</string>
+    <string name="local_date_formatter">dd/MM/yyyy</string>
+    <string name="shared_pref_name">shared_pref</string>
+    <string name="text_username">Username</string>
+    <string name="text_password">Password</string>
+    <string name="text_login">Login</string>
+    <string name="text_register">Register</string>
+    <string name="default_image_description">image</string>
+    <string name="text_firstName">First Name</string>
+    <string name="text_middleName">Middle Name</string>
+    <string name="text_lastName">Last Name</string>
+    <string name="text_email">Email</string>
+    <string name="btn_cancel">Cancel</string>
     <string name="date_format">dd/MM/yyyy</string>
+    <string name="text_birthDate">Birth Date</string>
+    <string name="text_confirmPassword">Confirm Password</string>
+    <string name="text_successRegister">Register operation is successful! Please check your email.</string>
+    <string name="text_invalidOperation">Invalid Operation</string>
+    <string name="text_ok">Ok</string>
+    <string name="text_projectStatus">Project Status</string>
+    <string name="text_feedbackTimeRange">Feedback Time Range</string>
+    <string name="text_degree">Degree</string>
+    <string name="text_projectLevel">Project Level</string>
+    <string name="text_professionLevels">Profession Level</string>
+    <string name="text_interviewType">Interview Type</string>
+    <string name="text_applyFilters">Apply Filters</string>
+    <string name="btn_startDate">Start Date</string>
+    <string name="btn_completionDate">Completion Date</string>
+    <string name="msg_loginSuccess">Welcome to Call-of-Project</string>
+    <string name="msg_loginInvalidUsernameOrPassword">Invalid username or password</string>
+    <string name="msg_project_discovery_fail">Fail Project Discovery</string>
+    <string name="msg_notOwnerOfProject">You are not owner or participant of this project!</string>
+    <string name="title_upsert_education">Upsert Education</string>
+    <string name="btn_save">Save</string>
+    <string name="title_graduateStatus">Finish/Continue</string>
+    <string name="title_gpa">GPA</string>
+    <string name="title_departmentName">Department Name</string>
+    <string name="title_schoolName">School Name</string>
+    <string name="title_upsert_experience">Upsert Experience</string>
+    <string name="title_companyName">Company</string>
+    <string name="title_positionName">Position</string>
+
+    <string-array name="array_projectStatus">
+        <item>NOT_STARTED</item>
+        <item>IN_PROGRESS</item>
+        <item>FINISHED</item>
+    </string-array>
+
+
+    <string-array name="array_interviewType">
+        <item>CODING</item>
+        <item>TEST</item>
+        <item>NO_INTERVIEW</item>
+    </string-array>
+
+    <string-array name="array_feedbackTimeRanges">
+        <item>ONE_WEEK</item>
+        <item>TWO_WEEKS</item>
+        <item>ONE_MONTH</item>
+    </string-array>
+
+
+    <string-array name="array_degrees">
+        <item>BACHELOR</item>
+        <item>MASTER</item>
+        <item>PHD</item>
+    </string-array>
+
+    <string-array name="array_projectLevels">
+        <item>ENTRY_LEVEL</item>
+        <item>INTERMEDIATE</item>
+        <item>EXPERT</item>
+    </string-array>
+
+
+    <string-array name="array_professionLevels">
+        <item>ENTRY_LEVEL</item>
+        <item>INTERMEDIATE</item>
+        <item>EXPERT</item>
+    </string-array>
 </resources>
