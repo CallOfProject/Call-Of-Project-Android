@@ -29,22 +29,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import callofproject.dev.androidapp.R
-import callofproject.dev.androidapp.domain.dto.ExperienceDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
 import callofproject.dev.androidapp.presentation.components.CustomDatePicker
 
 @Composable
 fun UserExperienceEditComponent(
     onDismissRequest: () -> Unit,
     experienceDTO: ExperienceDTO = ExperienceDTO(),
-    confirmEvent: () -> Unit
+    confirmEvent: (ExperienceDTO) -> Unit
 ) {
     var isOpenStartDateDialog by remember { mutableStateOf(false) }
     var isOpenFinishDateDialog by remember { mutableStateOf(false) }
-    var company by remember { mutableStateOf("") }
-    var position by remember { mutableStateOf("") }
+    var company by remember { mutableStateOf(experienceDTO.companyName) }
+    var position by remember { mutableStateOf(experienceDTO.position) }
     var description by remember { mutableStateOf(experienceDTO.description) }
-    var startDate by remember { mutableStateOf("Start Date") }
-    var finishDate by remember { mutableStateOf("Finish Date") }
+    var companyWebsiteLink by remember { mutableStateOf(experienceDTO.companyWebsiteLink) }
+    var startDate by remember { mutableStateOf(experienceDTO.startDate) }
+    var finishDate by remember { mutableStateOf(experienceDTO.finishDate) }
 
     Dialog(onDismissRequest = onDismissRequest) {
         Card(modifier = Modifier.fillMaxWidth()) {
@@ -77,7 +78,17 @@ fun UserExperienceEditComponent(
                         .fillMaxWidth()
                         .padding(10.dp)
                 )
+
+                OutlinedTextField(
+                    value = companyWebsiteLink,
+                    onValueChange = { companyWebsiteLink = it },
+                    label = { Text(stringResource(R.string.title_websiteLink)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                )
                 TextField(
+                    label = { Text(stringResource(R.string.title_description)) },
                     value = description,
                     onValueChange = { description = it },
                     modifier = Modifier
@@ -129,7 +140,16 @@ fun UserExperienceEditComponent(
 
                     Button(onClick = {
                         confirmEvent(
-
+                            experienceDTO.copy(
+                                companyName = company,
+                                position = position,
+                                description = description,
+                                companyWebsiteLink = companyWebsiteLink,
+                                startDate = startDate,
+                                finishDate = finishDate,
+                                isContinue = false,
+                                experienceId = experienceDTO.experienceId
+                            )
                         )
                         onDismissRequest()
                     }) {

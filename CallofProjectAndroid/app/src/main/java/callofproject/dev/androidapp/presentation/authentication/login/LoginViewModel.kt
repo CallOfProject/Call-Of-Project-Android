@@ -54,7 +54,7 @@ class LoginViewModel @Inject constructor(
 
 
     private fun login() {
-        useCases.loginUseCase(state.userLoginDTO).onEach { result ->
+        useCases.login(state.userLoginDTO).onEach { result ->
             when (result) {
                 is Resource.Error -> {
                     state = state.copy(

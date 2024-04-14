@@ -1,20 +1,20 @@
-package callofproject.dev.androidapp.domain.dto
+package callofproject.dev.androidapp.domain.dto.user_profile.course
 
 import com.google.gson.annotations.SerializedName
 import java.util.UUID
 
 data class CourseDTO(
     @SerializedName("course_id")
-    val courseId: UUID,
+    val courseId: String = "",
     @SerializedName("organization")
-    val organization: String,
+    val organization: String = "",
     @SerializedName("course_name")
-    val courseName: String,
+    val courseName: String = "",
     @SerializedName("start_date")
-    val startDate: String,
+    val startDate: String = "",
     @SerializedName("finish_date")
-    val finishDate: String,
+    val finishDate: String = "",
     @SerializedName("is_continue")
-    val isContinue: Boolean,
-    val description: String
+    val isContinue: Boolean = false,
+    val description: String = ""
 )

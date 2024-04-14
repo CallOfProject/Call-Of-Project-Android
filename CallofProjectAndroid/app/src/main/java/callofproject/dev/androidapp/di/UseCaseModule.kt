@@ -8,7 +8,15 @@ import callofproject.dev.androidapp.domain.use_cases.LoginUseCase
 import callofproject.dev.androidapp.domain.use_cases.ProjectDetailsUseCase
 import callofproject.dev.androidapp.domain.use_cases.ProjectDiscoveryUseCase
 import callofproject.dev.androidapp.domain.use_cases.RegisterUseCase
-import callofproject.dev.androidapp.domain.use_cases.UpsertEducationUseCase
+import callofproject.dev.androidapp.domain.use_cases.SaveCourseUseCase
+import callofproject.dev.androidapp.domain.use_cases.SaveEducationUseCase
+import callofproject.dev.androidapp.domain.use_cases.SaveExperienceUseCase
+import callofproject.dev.androidapp.domain.use_cases.SaveLinkUseCase
+import callofproject.dev.androidapp.domain.use_cases.UpdateCourseUseCase
+import callofproject.dev.androidapp.domain.use_cases.UpdateEducationUseCase
+import callofproject.dev.androidapp.domain.use_cases.UpdateExperienceUseCase
+import callofproject.dev.androidapp.domain.use_cases.UpdateLinkUseCase
+import callofproject.dev.androidapp.domain.use_cases.UpdateUserProfileUseCase
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import dagger.Module
 import dagger.Provides
@@ -29,12 +37,20 @@ object UseCaseModule {
         preferences: IPreferences
     ): UseCaseFacade {
         return UseCaseFacade(
-            loginUseCase = LoginUseCase(service, context),
-            registerUseCase = RegisterUseCase(service),
-            projectDiscoveryUseCase = ProjectDiscoveryUseCase(service, preferences = preferences),
-            projectDetailsUseCase = ProjectDetailsUseCase(service, preferences = preferences),
-            findUserProfileUseCase = FindUserProfileUseCase(service, preferences = preferences),
-            upsertEducationUseCase = UpsertEducationUseCase(service, preferences = preferences),
+            login = LoginUseCase(service, context),
+            register = RegisterUseCase(service),
+            projectDiscovery = ProjectDiscoveryUseCase(service, preferences = preferences),
+            projectDetails = ProjectDetailsUseCase(service, preferences = preferences),
+            findUserProfile = FindUserProfileUseCase(service, preferences = preferences),
+            saveEducation = SaveEducationUseCase(service, preferences = preferences),
+            updateEducation = UpdateEducationUseCase(service, preferences = preferences),
+            saveExperience = SaveExperienceUseCase(service, preferences = preferences),
+            updateExperience = UpdateExperienceUseCase(service, preferences = preferences),
+            saveCourse = SaveCourseUseCase(service, preferences = preferences),
+            updateCourse = UpdateCourseUseCase(service, preferences = preferences),
+            saveLink = SaveLinkUseCase(service, preferences = preferences),
+            updateLink = UpdateLinkUseCase(service, preferences = preferences),
+            updateProfile = UpdateUserProfileUseCase(service, preferences = preferences)
         )
     }
 }

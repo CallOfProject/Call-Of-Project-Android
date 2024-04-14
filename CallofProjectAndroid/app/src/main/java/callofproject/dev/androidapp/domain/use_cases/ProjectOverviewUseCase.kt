@@ -1,7 +1,7 @@
 package callofproject.dev.androidapp.domain.use_cases
 
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
-import callofproject.dev.androidapp.domain.dto.ProjectOverviewDTO
+import callofproject.dev.androidapp.domain.dto.project.ProjectOverviewDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.util.Resource
 import java.util.UUID

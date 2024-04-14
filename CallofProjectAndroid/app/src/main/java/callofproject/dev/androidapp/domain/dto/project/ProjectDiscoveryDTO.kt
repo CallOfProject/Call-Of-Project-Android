@@ -1,4 +1,4 @@
-package callofproject.dev.androidapp.domain.dto
+package callofproject.dev.androidapp.domain.dto.project
 
 import com.google.gson.annotations.SerializedName
 import java.util.UUID

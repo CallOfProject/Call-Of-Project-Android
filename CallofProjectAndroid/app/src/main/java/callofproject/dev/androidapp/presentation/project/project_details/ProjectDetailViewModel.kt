@@ -32,7 +32,7 @@ class ProjectDetailViewModel @Inject constructor(
 
     fun findProjectDetails(projectId: String) {
         viewModelScope.launch {
-            useCases.projectDetailsUseCase(projectId).let { result ->
+            useCases.projectDetails(projectId).let { result ->
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(

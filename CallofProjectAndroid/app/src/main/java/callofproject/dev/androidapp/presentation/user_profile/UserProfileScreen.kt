@@ -44,11 +44,15 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
-import callofproject.dev.androidapp.domain.dto.EducationDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.components.NotEditableCardComponent
+import callofproject.dev.androidapp.presentation.user_profile.edit.UserAboutMeEditComponent
+import callofproject.dev.androidapp.presentation.user_profile.edit.UserCourseEditComponent
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserEducationEditComponent
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserExperienceEditComponent
+import callofproject.dev.androidapp.presentation.user_profile.edit.UserLinkEditComponent
 import callofproject.dev.androidapp.util.route.UiEvent
 import coil.compose.rememberAsyncImagePainter
 
@@ -84,11 +88,11 @@ fun UserProfileScreen(
             ) {
                 UserProfileTopComponent(state, viewModel)
                 UserRatingComponent(state, viewModel)
-                UserAboutMeComponent(state)
+                UserAboutMeComponent(state, viewModel)
                 UserEducationComponent(state, viewModel)
-                UserExperienceComponent(state)
-                UserCoursesComponent(state)
-                UserLinksComponent(state)
+                UserExperienceComponent(state, viewModel)
+                UserCoursesComponent(state, viewModel)
+                UserLinksComponent(state, viewModel)
             }
 
 
@@ -101,6 +105,7 @@ private fun UserEducationComponent(state: UserProfileState, viewModel: UserProfi
     var expandedUpsertEducation by remember { mutableStateOf(false) }
     var expandedAddEducation by remember { mutableStateOf(false) }
     var selectedEducationIndex by remember { mutableIntStateOf(-1) }
+
     EditableCardComponent(
         "Education",
         400.dp,
@@ -125,14 +130,15 @@ private fun UserEducationComponent(state: UserProfileState, viewModel: UserProfi
         UserEducationEditComponent(
             onDismissRequest = { expandedUpsertEducation = false },
             educationDTO = state.userProfileDTO.profile.educations[selectedEducationIndex],
-            confirmEvent = { }
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateEducation(it)) }
         )
     }
 
     if (expandedAddEducation) {
         UserEducationEditComponent(
             onDismissRequest = { expandedAddEducation = false },
-            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpsertEducation(it)) }
+            educationDTO = EducationDTO(),
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateEducation(it)) }
         )
     }
 }
@@ -160,10 +166,11 @@ private fun EducationDetails(education: EducationDTO) {
 }
 
 @Composable
-private fun UserExperienceComponent(state: UserProfileState) {
+private fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
     var expandedUpsertExperience by remember { mutableStateOf(false) }
     var expandedAddExperience by remember { mutableStateOf(false) }
     var selectedExperienceIndex by remember { mutableIntStateOf(-1) }
+
     EditableCardComponent("Experience",
         400.dp,
         imageVector = Icons.Filled.Add,
@@ -204,18 +211,133 @@ private fun UserExperienceComponent(state: UserProfileState) {
         UserExperienceEditComponent(
             onDismissRequest = { expandedUpsertExperience = false },
             experienceDTO = state.userProfileDTO.profile.experiences[selectedExperienceIndex],
-            confirmEvent = { }
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateExperience(it)) }
         )
     }
 
     if (expandedAddExperience) {
         UserExperienceEditComponent(
             onDismissRequest = { expandedAddExperience = false },
-            confirmEvent = { }
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateExperience(it)) }
         )
     }
 }
 
+
+@Composable
+private fun UserCoursesComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
+    var expandedUpdateCourse by remember { mutableStateOf(false) }
+    var expandedAddCourse by remember { mutableStateOf(false) }
+    var selectedCourseIndex by remember { mutableIntStateOf(-1) }
+
+    EditableCardComponent("Courses",
+        490.dp,
+        imageVector = Icons.Filled.Add,
+        imageDescription = "Add",
+        onIconClick = { expandedAddCourse = true }) {
+        LazyColumn {
+            items(state.userProfileDTO.profile.courses.size) { index ->
+                val course = state.userProfileDTO.profile.courses[index]
+                EditableCardComponent(
+                    title = course.courseName,
+                    onIconClick = {
+                        expandedUpdateCourse = true;
+                        selectedCourseIndex = index
+                    }) {
+                    Text(
+                        text = "Organizator: ${course.organization}",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Date: ${course.startDate} - ${course.finishDate}",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Description: ${course.description}",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                }
+            }
+        }
+    }
+
+    if (expandedUpdateCourse) {
+        UserCourseEditComponent(
+            onDismissRequest = { expandedUpdateCourse = false },
+            courseDTO = state.userProfileDTO.profile.courses[selectedCourseIndex],
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateCourse(it)) }
+        )
+    }
+
+    if (expandedAddCourse) {
+        UserCourseEditComponent(
+            onDismissRequest = { expandedAddCourse = false },
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateCourse(it)) }
+        )
+    }
+}
+
+
+@Composable
+private fun UserLinksComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
+    val context = LocalContext.current
+    var expandedUpdateLink by remember { mutableStateOf(false) }
+    var expandedAddLink by remember { mutableStateOf(false) }
+    var selectedLinkIndex by remember { mutableIntStateOf(-1) }
+
+    EditableCardComponent(
+        title = "Links",
+        height = 400.dp,
+        imageVector = Icons.Filled.Add,
+        imageDescription = "Add",
+        onIconClick = { expandedAddLink = true }
+    ) {
+        LazyColumn {
+            items(state.userProfileDTO.profile.links.size) { index ->
+                val link = state.userProfileDTO.profile.links[index]
+                EditableCardComponent(
+                    height = 100.dp,
+                    title = link.linkTitle,
+                    onIconClick = { expandedUpdateLink = true; selectedLinkIndex = index }) {
+                    Text(
+                        text = link.link,
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Normal
+                        ),
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .clickable {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.link))
+                                startActivity(context, intent, null)
+                            }
+                    )
+                }
+            }
+        }
+    }
+
+    if (expandedUpdateLink) {
+        UserLinkEditComponent(
+            onDismissRequest = { expandedUpdateLink = false },
+            linkDTO = state.userProfileDTO.profile.links[selectedLinkIndex],
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateLink(it)) }
+        )
+    }
+
+    if (expandedAddLink) {
+        UserLinkEditComponent(
+            onDismissRequest = { expandedAddLink = false },
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateLink(it)) }
+        )
+    }
+}
 
 @Composable
 private fun UserRatingComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
@@ -296,10 +418,11 @@ private fun UserProfileTopComponent(state: UserProfileState, viewModel: UserProf
 }
 
 @Composable
-private fun UserAboutMeComponent(state: UserProfileState) {
+private fun UserAboutMeComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
+    var expandedUpsertAboutMe by remember { mutableStateOf(false) }
     EditableCardComponent(
         title = "About me",
-        onIconClick = { }) {
+        onIconClick = { expandedUpsertAboutMe = true }) {
         Text(
             text = state.userProfileDTO.profile.aboutMe ?: "",
             fontSize = 15.sp,
@@ -307,74 +430,13 @@ private fun UserAboutMeComponent(state: UserProfileState) {
             modifier = Modifier.padding(5.dp)
         )
     }
-}
 
-
-@Composable
-private fun UserCoursesComponent(state: UserProfileState) {
-    EditableCardComponent("Courses",
-        490.dp,
-        imageVector = Icons.Filled.Add,
-        imageDescription = "Add",
-        onIconClick = { }) {
-        LazyColumn {
-            items(state.userProfileDTO.profile.courses.size) { index ->
-                val course = state.userProfileDTO.profile.courses[index]
-                EditableCardComponent(
-                    title = course.courseName,
-                    onIconClick = { }) {
-                    Text(
-                        text = "Organizator: ${course.organization}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                    Text(
-                        text = "Date: ${course.startDate} - ${course.finishDate}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                    Text(
-                        text = "Description: ${course.description}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                }
-            }
-        }
+    if (expandedUpsertAboutMe) {
+        UserAboutMeEditComponent(
+            onDismissRequest = { expandedUpsertAboutMe = false },
+            defaultAboutMe = state.userProfileDTO.profile.aboutMe ?: "",
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateAboutMe(it)) }
+        )
     }
 }
 
-
-@Composable
-private fun UserLinksComponent(state: UserProfileState) {
-    val context = LocalContext.current
-    NotEditableCardComponent("Links", 400.dp) {
-        LazyColumn {
-            items(state.userProfileDTO.profile.links.size) { index ->
-                val link = state.userProfileDTO.profile.links[index]
-                EditableCardComponent(
-                    height = 100.dp,
-                    title = link.linkTitle,
-                    onIconClick = { }) {
-                    Text(
-                        text = link.link,
-                        style = TextStyle(
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Normal
-                        ),
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.link))
-                                startActivity(context, intent, null)
-                            }
-                    )
-                }
-            }
-        }
-
-    }
-}

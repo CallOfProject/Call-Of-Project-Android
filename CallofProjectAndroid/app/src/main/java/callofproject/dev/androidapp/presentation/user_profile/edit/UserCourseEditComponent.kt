@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -26,41 +27,44 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import callofproject.dev.androidapp.R
+import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.presentation.components.CustomDatePicker
 import callofproject.dev.androidapp.presentation.components.NotEditableCardComponent
 
 @Composable
-fun UserCourseEditComponent(title: String = "Edit Education") {
-    val context = LocalContext.current
+fun UserCourseEditComponent(
+    onDismissRequest: () -> Unit,
+    courseDTO: CourseDTO = CourseDTO(),
+    confirmEvent: (CourseDTO) -> Unit
+) {
     var isOpenStartDateDialog by remember { mutableStateOf(false) }
     var isOpenFinishDateDialog by remember { mutableStateOf(false) }
-    var firm by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var courseName by remember { mutableStateOf("") }
-    var startDate by remember { mutableStateOf("Start Date") }
-    var finishDate by remember { mutableStateOf("Finish Date") }
+    var firm by remember { mutableStateOf(courseDTO.organization) }
+    var description by remember { mutableStateOf(courseDTO.description) }
+    var courseName by remember { mutableStateOf(courseDTO.courseName) }
+    var startDate by remember { mutableStateOf(courseDTO.startDate) }
+    var finishDate by remember { mutableStateOf(courseDTO.finishDate) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.secondary), contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            NotEditableCardComponent(
-                title = title,
-                modifier = Modifier.fillMaxWidth(),
-                height = 500.dp
+    Dialog(onDismissRequest = onDismissRequest) {
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(10.dp)
             ) {
+                Text(
+                    text = stringResource(R.string.title_upsert_course),
+                    style = MaterialTheme.typography.headlineSmall
+                )
 
                 OutlinedTextField(
                     value = firm,
                     onValueChange = { firm = it },
-                    label = { Text("Company Name") },
+                    label = { Text(stringResource(R.string.title_companyName)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
@@ -69,7 +73,7 @@ fun UserCourseEditComponent(title: String = "Edit Education") {
                 OutlinedTextField(
                     value = courseName,
                     onValueChange = { courseName = it },
-                    label = { Text("Course Name") },
+                    label = { Text(stringResource(R.string.title_courseName)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
@@ -88,60 +92,66 @@ fun UserCourseEditComponent(title: String = "Edit Education") {
                         ),
                     placeholder = { Text(text = "Description") })
 
+
+
+                OutlinedButton(
+                    onClick = { isOpenStartDateDialog = true }, modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .width(150.dp)
+                ) {
+                    Text(startDate)
+
+                    CustomDatePicker(
+                        isOpenDateDialog = isOpenStartDateDialog,
+                        onDateSelected = { selectedDate ->
+                            startDate = selectedDate
+                        },
+                        onDismiss = { isOpenStartDateDialog = false })
+                }
+                OutlinedButton(
+                    onClick = { isOpenFinishDateDialog = true }, modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .width(150.dp)
+                ) {
+                    Text(finishDate)
+
+                    CustomDatePicker(
+                        isOpenDateDialog = isOpenFinishDateDialog,
+                        onDateSelected = { selectedDate ->
+                            finishDate = selectedDate
+                        },
+                        onDismiss = { isOpenFinishDateDialog = false })
+                }
+
+
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    OutlinedButton(
-                        onClick = { isOpenStartDateDialog = true }, modifier = Modifier
-                            .width(150.dp)
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Text(startDate)
-
-                        CustomDatePicker(
-                            isOpenDateDialog = isOpenStartDateDialog,
-                            onDateSelected = { selectedDate ->
-                                startDate = selectedDate
-                            },
-                            onDismiss = { isOpenStartDateDialog = false })
+                    Button(onClick = { onDismissRequest() }) {
+                        Text(text = stringResource(R.string.btn_cancel))
                     }
 
-                    OutlinedButton(
-                        onClick = { isOpenFinishDateDialog = true }, modifier = Modifier
-                            .width(150.dp)
-                            .align(Alignment.CenterVertically)
-                    ) {
-                        Text(finishDate)
-
-                        CustomDatePicker(
-                            isOpenDateDialog = isOpenFinishDateDialog,
-                            onDateSelected = { selectedDate ->
-                                finishDate = selectedDate
-                            },
-                            onDismiss = { isOpenFinishDateDialog = false })
+                    Button(onClick = {
+                        confirmEvent(
+                            courseDTO.copy(
+                                courseId = courseDTO.courseId,
+                                organization = firm,
+                                courseName = courseName,
+                                description = description,
+                                startDate = startDate,
+                                finishDate = finishDate,
+                                isContinue = courseDTO.isContinue
+                            )
+                        )
+                        onDismissRequest()
+                    }) {
+                        Text(text = stringResource(R.string.btn_save))
                     }
-                }
-
-                Button(
-                    onClick = { }, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Text(text = "Save")
-                }
-
-                Button(
-                    onClick = { }, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Text(text = "Close")
                 }
             }
         }
-    }
 
+    }
 }

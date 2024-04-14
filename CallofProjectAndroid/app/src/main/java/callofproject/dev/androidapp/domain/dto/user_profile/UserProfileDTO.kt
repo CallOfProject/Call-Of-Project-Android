@@ -1,5 +1,9 @@
-package callofproject.dev.androidapp.domain.dto
+package callofproject.dev.androidapp.domain.dto.user_profile
 
+import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import com.google.gson.annotations.SerializedName
 
 data class UserProfileDTO(

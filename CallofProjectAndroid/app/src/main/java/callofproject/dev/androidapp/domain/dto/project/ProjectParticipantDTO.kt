@@ -1,4 +1,4 @@
-package callofproject.dev.androidapp.domain.dto;
+package callofproject.dev.androidapp.domain.dto.project;
 
 data class ProjectParticipantDTO(
     val project_id: String = "",

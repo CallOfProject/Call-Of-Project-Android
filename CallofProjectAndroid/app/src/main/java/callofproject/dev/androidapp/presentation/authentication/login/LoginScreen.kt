@@ -70,23 +70,19 @@ fun LoginScreen(
                 contentScale = ContentScale.FillWidth
             )
 
-
-            state.userLoginDTO.username
             OutlinedTextField(
-                value = "cop_admin",
+                value = state.userLoginDTO.username,
                 maxLines = 1,
-                onValueChange = { viewModel.onEvent(LoginEvent.OnUsernameChange("cop_admin")) },
+                onValueChange = { viewModel.onEvent(LoginEvent.OnUsernameChange(it)) },
                 label = { Text(text = stringResource(R.string.text_username)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
-
-            //state.userLoginDTO.password
             OutlinedTextField(
-                value = "cop123",
+                value = state.userLoginDTO.password,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                onValueChange = { viewModel.onEvent(LoginEvent.OnPasswordChange("cop123")) },
+                onValueChange = { viewModel.onEvent(LoginEvent.OnPasswordChange(it)) },
                 maxLines = 1,
                 label = { Text(text = stringResource(R.string.text_password)) },
             )

@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import callofproject.dev.androidapp.R
-import callofproject.dev.androidapp.domain.dto.EducationDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.presentation.components.CustomDatePicker
 
 @Composable
@@ -168,7 +168,7 @@ fun UserEducationEditComponent(
                                 isContinue = isContinue
                             )
                         )
-                        onDismissRequest()
+                        //onDismissRequest()
                     }) {
                         Text(text = stringResource(R.string.btn_save))
                     }

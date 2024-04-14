@@ -41,6 +41,12 @@
     <string name="title_upsert_experience">Upsert Experience</string>
     <string name="title_companyName">Company</string>
     <string name="title_positionName">Position</string>
+    <string name="title_description">Description</string>
+    <string name="title_websiteLink">Website Link</string>
+    <string name="title_upsert_course">Upsert Course</string>
+    <string name="title_courseName">Course Name</string>
+    <string name="title_upsert_link">Upsert Link</string>
+    <string name="title_aboutMe">About Me</string>
 
     <string-array name="array_projectStatus">
         <item>NOT_STARTED</item>

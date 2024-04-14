@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.domain.dto
 
+import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileDTO
 import com.google.gson.annotations.SerializedName
 
 data class UserWithProfileDTO(
