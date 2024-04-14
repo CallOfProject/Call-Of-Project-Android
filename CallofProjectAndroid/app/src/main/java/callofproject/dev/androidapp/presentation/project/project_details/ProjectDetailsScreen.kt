@@ -102,7 +102,10 @@ fun ProjectDetailsScreen(
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                     )
 
-                    NotEditableCardComponent(title = "Project Summary", height = 270.dp) {
+                    NotEditableCardComponent(
+                        title = stringResource(R.string.title_projectSummary),
+                        height = 270.dp
+                    ) {
                         Text(
                             text = state.projectDetailsDTO.projectSummary.trimIndent(),
                             fontSize = 15.sp,
@@ -111,7 +114,10 @@ fun ProjectDetailsScreen(
                         )
                     }
 
-                    NotEditableCardComponent(title = "Project Aim", height = 270.dp) {
+                    NotEditableCardComponent(
+                        title = stringResource(R.string.title_projectAim),
+                        height = 270.dp
+                    ) {
                         Text(
                             text = state.projectDetailsDTO.projectAim.trimIndent(),
                             fontSize = 15.sp,
@@ -120,7 +126,10 @@ fun ProjectDetailsScreen(
                         )
                     }
 
-                    NotEditableCardComponent(title = "Project Description", height = 270.dp) {
+                    NotEditableCardComponent(
+                        title = stringResource(R.string.title_projectDescription),
+                        height = 270.dp
+                    ) {
                         Text(
                             text = state.projectDetailsDTO.projectDescription.trimIndent(),
                             fontSize = 15.sp,
@@ -130,7 +139,7 @@ fun ProjectDetailsScreen(
                     }
 
                     NotEditableCardComponent(
-                        title = "Technical Requirements",
+                        title = stringResource(R.string.title_projectTechRequirements),
                         height = 270.dp
                     ) {
                         (0..tech.size - 1).forEachIndexed { index, _ ->
@@ -139,10 +148,7 @@ fun ProjectDetailsScreen(
                                     .fillMaxWidth()
                                     .padding(5.dp)
                                     .border(
-                                        BorderStroke(
-                                            1.dp,
-                                            MaterialTheme.colorScheme.primary
-                                        ),
+                                        BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                                         shape = RoundedCornerShape(5.dp)
                                     )
                             ) {
@@ -157,7 +163,7 @@ fun ProjectDetailsScreen(
                     }
 
                     NotEditableCardComponent(
-                        title = "Specific Requirements",
+                        title = stringResource(R.string.title_projectSpecRequirements),
                         height = 270.dp
                     ) {
                         LazyColumn {
@@ -174,55 +180,55 @@ fun ProjectDetailsScreen(
 
 
                     NotEditableCardComponent(
-                        title = "Project Date Information",
+                        title = stringResource(R.string.title_projectDateInformation),
                         height = 270.dp
                     ) {
                         RowBasedCardComponent(
-                            title = "Start Date",
+                            title = stringResource(R.string.title_projectStartDate),
                             value = state.projectDetailsDTO.startDate
                         )
                         RowBasedCardComponent(
-                            title = "Expected Completion Date",
+                            title = stringResource(R.string.title_projectExpectedCompletionDate),
                             value = state.projectDetailsDTO.expectedCompletionDate
                         )
                         RowBasedCardComponent(
-                            title = "Application Deadline",
+                            title = stringResource(R.string.title_projectApplicationDeadline),
                             value = state.projectDetailsDTO.applicationDeadline
                         )
                         RowBasedCardComponent(
-                            title = "Feedback Time Range",
+                            title = stringResource(R.string.title_projectFeedbackTimeRange),
                             value = state.projectDetailsDTO.feedbackTimeRange
                         )
                     }
 
                     NotEditableCardComponent(
-                        title = "Project Information",
+                        title = stringResource(R.string.title_projectInformation),
                         height = 280.dp
                     ) {
                         RowBasedCardComponent(
-                            title = "Max Participant",
+                            title = stringResource(R.string.title_projectMaxParticipant),
                             value = state.projectDetailsDTO.maxParticipant.toString()
                         )
                         RowBasedCardComponent(
-                            title = "Profession Level",
+                            title = stringResource(R.string.title_projectProfessionLevel),
                             value = state.projectDetailsDTO.projectProfessionLevel
                         )
                         RowBasedCardComponent(
-                            title = "Project Level",
+                            title = stringResource(R.string.title_projectLevel),
                             value = state.projectDetailsDTO.projectLevel
                         )
                         RowBasedCardComponent(
-                            title = "Interview Type",
+                            title = stringResource(R.string.title_projectInterviewType),
                             value = state.projectDetailsDTO.interviewType
                         )
                         RowBasedCardComponent(
-                            title = "Project Status",
+                            title = stringResource(R.string.title_projectStatus),
                             value = state.projectDetailsDTO.projectStatus
                         )
                     }
 
                     NotEditableCardComponent(
-                        title = "Admin Notes",
+                        title = stringResource(R.string.title_projectAdminNotes),
                         height = 270.dp
                     ) {
                         Text(
@@ -234,7 +240,7 @@ fun ProjectDetailsScreen(
                     }
 
 
-                    NotEditableCardComponent("Tags", 250.dp) {
+                    NotEditableCardComponent(stringResource(R.string.title_projectTags), 250.dp) {
                         FlowRow(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -246,7 +252,10 @@ fun ProjectDetailsScreen(
                         }
                     }
 
-                    NotEditableCardComponent(title = "Project Participants", height = 280.dp) {
+                    NotEditableCardComponent(
+                        title = stringResource(R.string.title_projectParticipants),
+                        height = 280.dp
+                    ) {
                         state.projectDetailsDTO.projectParticipants.forEach {
                             RowBasedCardComponent(title = it.full_name, value = it.username)
                         }
@@ -266,7 +275,7 @@ fun ProjectDetailsScreen(
                         //colorFilter = ColorFilter.tint(Color.Red)
                     )
                     Text(
-                        text = "You are not allowed to view this project",
+                        text = stringResource(R.string.warning_projectViewNotAllowed),
                         modifier = Modifier.padding(5.dp),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,

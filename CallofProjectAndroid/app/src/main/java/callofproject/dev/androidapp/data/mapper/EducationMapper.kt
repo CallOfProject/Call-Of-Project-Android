@@ -1,8 +1,8 @@
 package callofproject.dev.androidapp.data.mapper
 
 import callofproject.dev.androidapp.domain.dto.user_profile.education.Education
-import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationCreateDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationUpdateDTO
 
 

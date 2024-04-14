@@ -1,24 +1,23 @@
 package callofproject.dev.androidapp.data.remote
 
 import callofproject.dev.androidapp.domain.dto.AuthenticationResponse
-import callofproject.dev.androidapp.domain.dto.user_profile.education.Education
-import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationCreateDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationUpdateDTO
 import callofproject.dev.androidapp.domain.dto.MultipleResponseMessagePageable
+import callofproject.dev.androidapp.domain.dto.ResponseMessage
+import callofproject.dev.androidapp.domain.dto.UserLoginDTO
+import callofproject.dev.androidapp.domain.dto.UserRegisterDTO
+import callofproject.dev.androidapp.domain.dto.UserWithProfileDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectOverviewDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDiscoveryDTO
-import callofproject.dev.androidapp.domain.dto.ResponseMessage
-import callofproject.dev.androidapp.domain.dto.UserLoginDTO
-import callofproject.dev.androidapp.domain.dto.UserProfileUpdateDTO
-import callofproject.dev.androidapp.domain.dto.UserRegisterDTO
-import callofproject.dev.androidapp.domain.dto.UserWithProfileDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.Course
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseUpdateDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.Education
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationCreateDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationUpdateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.Experience
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
@@ -27,14 +26,11 @@ import callofproject.dev.androidapp.domain.dto.user_profile.link.Link
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkUpdateDTO
-import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
-import retrofit2.http.Part
 import retrofit2.http.Query
 import java.util.UUID
 

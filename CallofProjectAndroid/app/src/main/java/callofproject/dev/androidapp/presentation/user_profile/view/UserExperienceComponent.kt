@@ -1,0 +1,80 @@
+package callofproject.dev.androidapp.presentation.user_profile.view
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import callofproject.dev.androidapp.presentation.components.EditableCardComponent
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModel
+import callofproject.dev.androidapp.presentation.user_profile.edit.UserExperienceEditComponent
+
+@Composable
+fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
+    var expandedUpsertExperience by remember { mutableStateOf(false) }
+    var expandedAddExperience by remember { mutableStateOf(false) }
+    var selectedExperienceIndex by remember { mutableIntStateOf(-1) }
+
+    EditableCardComponent("Experience",
+        400.dp,
+        imageVector = Icons.Filled.Add,
+        imageDescription = "Add",
+        onIconClick = { expandedAddExperience = true }) {
+        LazyColumn {
+            items(state.userProfileDTO.profile.experiences.size) { index ->
+                val experience = state.userProfileDTO.profile.experiences[index]
+                EditableCardComponent(
+                    title = experience.companyName,
+                    onIconClick = {
+                        expandedUpsertExperience = true; selectedExperienceIndex = index
+                    }) {
+                    Text(
+                        text = "Position: ${experience.position}",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Date: ${experience.startDate} - ${experience.finishDate}",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                    Text(
+                        text = "Description: ${experience.description}",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                }
+            }
+        }
+    }
+
+    if (expandedUpsertExperience) {
+        UserExperienceEditComponent(
+            onDismissRequest = { expandedUpsertExperience = false },
+            experienceDTO = state.userProfileDTO.profile.experiences[selectedExperienceIndex],
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateExperience(it)) }
+        )
+    }
+
+    if (expandedAddExperience) {
+        UserExperienceEditComponent(
+            onDismissRequest = { expandedAddExperience = false },
+            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateExperience(it)) }
+        )
+    }
+}

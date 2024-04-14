@@ -1,13 +1,10 @@
 package callofproject.dev.androidapp.domain.use_cases
 
-import android.util.Log
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.dto.UserProfileUpdateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.util.Resource
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import java.util.UUID
 import javax.inject.Inject
 

@@ -3,8 +3,8 @@ package callofproject.dev.androidapp.domain.use_cases
 import android.util.Log
 import callofproject.dev.androidapp.data.mapper.toEducationDTO
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
-import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationCreateDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.util.Resource
 import javax.inject.Inject

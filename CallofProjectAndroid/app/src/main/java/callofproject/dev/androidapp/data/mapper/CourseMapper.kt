@@ -4,10 +4,6 @@ import callofproject.dev.androidapp.domain.dto.user_profile.course.Course
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseUpdateDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.experience.Experience
-import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceCreateDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceUpdateDTO
 
 fun Course.toCourseDTO(): CourseDTO {
     return CourseDTO(

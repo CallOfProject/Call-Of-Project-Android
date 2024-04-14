@@ -2,12 +2,9 @@ package callofproject.dev.androidapp.domain.use_cases
 
 import android.util.Log
 import callofproject.dev.androidapp.data.mapper.toCourseDTO
-import callofproject.dev.androidapp.data.mapper.toExperienceDTO
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceCreateDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.util.Resource
 import javax.inject.Inject

@@ -65,19 +65,17 @@ fun UserEducationEditComponent(
                     value = school,
                     onValueChange = { school = it },
                     label = { Text(stringResource(R.string.title_schoolName)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
+                    modifier = Modifier.fillMaxWidth().padding(10.dp)
                 )
 
                 OutlinedTextField(
                     value = department,
                     onValueChange = { department = it },
                     label = { Text(stringResource(R.string.title_departmentName)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
+                    modifier = Modifier.fillMaxWidth().padding(10.dp)
                 )
+
+
                 TextField(
                     value = description,
                     onValueChange = { description = it },
@@ -90,6 +88,9 @@ fun UserEducationEditComponent(
                             shape = RoundedCornerShape(8.dp)
                         )
                 )
+
+
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -100,9 +101,7 @@ fun UserEducationEditComponent(
                         onValueChange = { gpa = it },
                         label = { Text(stringResource(R.string.title_gpa)) },
                         maxLines = 1,
-                        modifier = Modifier
-                            .width(180.dp)
-                            .padding(10.dp),
+                        modifier = Modifier.width(180.dp).padding(10.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                     )
 
@@ -112,49 +111,45 @@ fun UserEducationEditComponent(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(text = stringResource(R.string.title_graduateStatus))
-                        Switch(checked = isContinue, onCheckedChange = {
-                            isContinue = it
-                        })
+                        Switch(checked = isContinue, onCheckedChange = { isContinue = it })
                     }
                 }
 
+
                 OutlinedButton(
-                    onClick = { isOpenStartDateDialog = true }, modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .width(150.dp)
+                    onClick = { isOpenStartDateDialog = true },
+                    modifier = Modifier.align(Alignment.CenterHorizontally).width(150.dp)
                 ) {
                     Text(startDate)
 
                     CustomDatePicker(
                         isOpenDateDialog = isOpenStartDateDialog,
-                        onDateSelected = { selectedDate ->
-                            startDate = selectedDate
-                        },
-                        onDismiss = { isOpenStartDateDialog = false })
+                        onDateSelected = { selectedDate -> startDate = selectedDate },
+                        onDismiss = { isOpenStartDateDialog = false }
+                    )
                 }
+
+
                 OutlinedButton(
-                    onClick = { isOpenFinishDateDialog = true }, modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .width(150.dp)
+                    onClick = { isOpenFinishDateDialog = true },
+                    modifier = Modifier.align(Alignment.CenterHorizontally).width(150.dp)
                 ) {
                     Text(finishDate)
 
                     CustomDatePicker(
                         isOpenDateDialog = isOpenFinishDateDialog,
-                        onDateSelected = { selectedDate ->
-                            finishDate = selectedDate
-                        },
-                        onDismiss = { isOpenFinishDateDialog = false })
+                        onDateSelected = { selectedDate -> finishDate = selectedDate },
+                        onDismiss = { isOpenFinishDateDialog = false }
+                    )
                 }
+
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Button(onClick = { onDismissRequest() }) {
-                        Text(text = stringResource(R.string.btn_cancel))
-                    }
+                    Button(onClick = { onDismissRequest() }) { Text(text = stringResource(R.string.btn_cancel)) }
 
                     Button(onClick = {
                         confirmEvent(
@@ -168,14 +163,10 @@ fun UserEducationEditComponent(
                                 isContinue = isContinue
                             )
                         )
-                        //onDismissRequest()
-                    }) {
-                        Text(text = stringResource(R.string.btn_save))
-                    }
+                        onDismissRequest()
+                    }) { Text(text = stringResource(R.string.btn_save)) }
                 }
             }
         }
     }
-
 }
-

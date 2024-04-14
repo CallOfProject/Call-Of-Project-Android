@@ -30,10 +30,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.NotEditableCardComponent
 import callofproject.dev.androidapp.presentation.components.RowBasedCardComponent
 import callofproject.dev.androidapp.presentation.components.TagComponent
@@ -100,7 +102,10 @@ fun ProjectOverviewScreen(
 
 
 
-                    NotEditableCardComponent(title = "Project Summary", height = 270.dp) {
+                    NotEditableCardComponent(
+                        title = stringResource(R.string.title_projectSummary),
+                        height = 270.dp
+                    ) {
                         Text(
                             text = state.projectOverviewDTO.projectSummary.trimIndent(),
                             fontSize = 15.sp,
@@ -109,7 +114,10 @@ fun ProjectOverviewScreen(
                         )
                     }
 
-                    NotEditableCardComponent(title = "Project Aim", height = 270.dp) {
+                    NotEditableCardComponent(
+                        title = stringResource(R.string.title_projectAim),
+                        height = 270.dp
+                    ) {
                         Text(
                             text = state.projectOverviewDTO.projectAim.trimIndent(),
                             fontSize = 15.sp,
@@ -122,7 +130,7 @@ fun ProjectOverviewScreen(
 
 
                     NotEditableCardComponent(
-                        title = "Technical Requirements",
+                        title = stringResource(R.string.title_projectTechRequirements),
                         height = 270.dp
                     ) {
                         (0..tech.size - 1).forEachIndexed { index, _ ->
@@ -149,7 +157,7 @@ fun ProjectOverviewScreen(
                     }
 
                     NotEditableCardComponent(
-                        title = "Specific Requirements",
+                        title = stringResource(R.string.title_projectSpecRequirements),
                         height = 270.dp
                     ) {
                         LazyColumn {
@@ -167,55 +175,55 @@ fun ProjectOverviewScreen(
 
 
                     NotEditableCardComponent(
-                        title = "Project Date Information",
+                        title = stringResource(R.string.title_projectDateInformation),
                         height = 270.dp
                     ) {
                         RowBasedCardComponent(
-                            title = "Start Date",
+                            title = stringResource(R.string.title_projectStartDate),
                             value = state.projectOverviewDTO.startDate
                         )
                         RowBasedCardComponent(
-                            title = "Expected Completion Date",
+                            title = stringResource(R.string.title_projectExpectedCompletionDate),
                             value = state.projectOverviewDTO.expectedCompletionDate
                         )
                         RowBasedCardComponent(
-                            title = "Application Deadline",
+                            title = stringResource(R.string.title_projectApplicationDeadline),
                             value = state.projectOverviewDTO.applicationDeadline
                         )
                         RowBasedCardComponent(
-                            title = "Feedback Time Range",
+                            title = stringResource(R.string.title_projectFeedbackTimeRange),
                             value = state.projectOverviewDTO.feedbackTimeRange
                         )
                     }
 
 
                     NotEditableCardComponent(
-                        title = "Project Information",
+                        title = stringResource(R.string.title_projectInformation),
                         height = 280.dp
                     ) {
                         RowBasedCardComponent(
-                            title = "Max Participant",
+                            title = stringResource(R.string.title_projectMaxParticipant),
                             value = state.projectOverviewDTO.maxParticipant.toString()
                         )
                         RowBasedCardComponent(
-                            title = "Profession Level",
+                            title = stringResource(R.string.title_projectProfessionLevel),
                             value = state.projectOverviewDTO.professionLevel
                         )
                         RowBasedCardComponent(
-                            title = "Project Level",
+                            title = stringResource(R.string.title_projectLevel),
                             value = state.projectOverviewDTO.projectLevel
                         )
                         RowBasedCardComponent(
-                            title = "Interview Type",
+                            title = stringResource(R.string.title_projectInterviewType),
                             value = state.projectOverviewDTO.interviewType
                         )
                         RowBasedCardComponent(
-                            title = "Project Status",
+                            title = stringResource(R.string.title_projectStatus),
                             value = state.projectOverviewDTO.projectStatus
                         )
                     }
 
-                    NotEditableCardComponent("Tags", 250.dp) {
+                    NotEditableCardComponent(stringResource(R.string.title_projectTags), 250.dp) {
                         FlowRow(
                             modifier = Modifier
                                 .fillMaxWidth()

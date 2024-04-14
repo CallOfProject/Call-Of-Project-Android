@@ -47,15 +47,18 @@ fun UserExperienceEditComponent(
     var startDate by remember { mutableStateOf(experienceDTO.startDate) }
     var finishDate by remember { mutableStateOf(experienceDTO.finishDate) }
 
-    Dialog(onDismissRequest = onDismissRequest) {
-        Card(modifier = Modifier.fillMaxWidth()) {
+    Dialog(onDismissRequest = onDismissRequest)
+    {
+        Card(modifier = Modifier.fillMaxWidth())
+        {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
                 horizontalAlignment = CenterHorizontally,
                 verticalArrangement = Arrangement.Center
-            ) {
+            )
+            {
                 Text(
                     text = stringResource(R.string.title_upsert_experience),
                     style = MaterialTheme.typography.headlineSmall
@@ -102,41 +105,39 @@ fun UserExperienceEditComponent(
                 )
 
                 OutlinedButton(
-                    onClick = { isOpenStartDateDialog = true }, modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .width(150.dp)
+                    onClick = { isOpenStartDateDialog = true },
+                    modifier = Modifier.align(CenterHorizontally).width(150.dp)
                 ) {
                     Text(startDate)
-
                     CustomDatePicker(
                         isOpenDateDialog = isOpenStartDateDialog,
-                        onDateSelected = { selectedDate ->
-                            startDate = selectedDate
-                        },
-                        onDismiss = { isOpenStartDateDialog = false })
+                        onDateSelected = { selectedDate -> startDate = selectedDate },
+                        onDismiss = { isOpenStartDateDialog = false }
+                    )
                 }
+
+
                 OutlinedButton(
-                    onClick = { isOpenFinishDateDialog = true }, modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .width(150.dp)
+                    onClick = { isOpenFinishDateDialog = true },
+                    modifier = Modifier.align(CenterHorizontally).width(150.dp)
                 ) {
                     Text(finishDate)
 
                     CustomDatePicker(
                         isOpenDateDialog = isOpenFinishDateDialog,
-                        onDateSelected = { selectedDate ->
-                            finishDate = selectedDate
-                        },
-                        onDismiss = { isOpenFinishDateDialog = false })
+                        onDateSelected = { selectedDate -> finishDate = selectedDate },
+                        onDismiss = { isOpenFinishDateDialog = false }
+                    )
                 }
+
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Button(onClick = { onDismissRequest() }) {
-                        Text(text = stringResource(R.string.btn_cancel))
-                    }
+
+                    Button(onClick = { onDismissRequest() }) { Text(text = stringResource(R.string.btn_cancel)) }
 
                     Button(onClick = {
                         confirmEvent(

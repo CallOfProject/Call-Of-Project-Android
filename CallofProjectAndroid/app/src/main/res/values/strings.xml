@@ -47,6 +47,28 @@
     <string name="title_courseName">Course Name</string>
     <string name="title_upsert_link">Upsert Link</string>
     <string name="title_aboutMe">About Me</string>
+    <string name="title_projectSummary">Project Summary</string>
+    <string name="title_projectAim">Project Aim</string>
+    <string name="title_projectTechRequirements">Technical Requirements</string>
+    <string name="title_projectSpecRequirements">Specific Requirements</string>
+    <string name="title_projectDateInformation">Project Date Information</string>
+    <string name="title_projectStartDate">Start Date</string>
+    <string name="title_projectExpectedCompletionDate">Expected Completion Date</string>
+    <string name="title_projectApplicationDeadline">Application Deadline</string>
+    <string name="title_projectFeedbackTimeRange">Feedback Time Range</string>
+    <string name="title_projectInformation">Project Information</string>
+    <string name="title_projectMaxParticipant">Max Participant</string>
+    <string name="title_projectProfessionLevel">Profession Level</string>
+    <string name="title_projectLevel">Project Level</string>
+    <string name="title_projectInterviewType">Interview Type</string>
+    <string name="title_projectStatus">Project Status</string>
+    <string name="title_projectTags">Tags</string>
+    <string name="title_projectDescription">Project Description</string>
+    <string name="title_projectAdminNotes">Admin Note</string>
+    <string name="title_projectParticipants">Project Participants</string>
+    <string name="warning_projectViewNotAllowed">You are not allowed to view this project</string>
+    <string name="title_profileLinkName">Link Name</string>
+    <string name="title_profileLink">Link</string>
 
     <string-array name="array_projectStatus">
         <item>NOT_STARTED</item>

@@ -1,8 +1,6 @@
 package callofproject.dev.androidapp.domain.use_cases
 
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
-import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationUpdateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkUpdateDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences

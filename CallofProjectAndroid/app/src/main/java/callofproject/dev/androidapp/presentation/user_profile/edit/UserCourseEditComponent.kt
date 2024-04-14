@@ -1,12 +1,9 @@
 package callofproject.dev.androidapp.presentation.user_profile.edit
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,15 +23,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.presentation.components.CustomDatePicker
-import callofproject.dev.androidapp.presentation.components.NotEditableCardComponent
 
 @Composable
 fun UserCourseEditComponent(
@@ -74,10 +68,9 @@ fun UserCourseEditComponent(
                     value = courseName,
                     onValueChange = { courseName = it },
                     label = { Text(stringResource(R.string.title_courseName)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
+                    modifier = Modifier.fillMaxWidth().padding(10.dp)
                 )
+
 
                 OutlinedTextField(value = description,
                     onValueChange = { description = it },
@@ -90,12 +83,13 @@ fun UserCourseEditComponent(
                             color = Color.Black,
                             shape = RoundedCornerShape(8.dp)
                         ),
-                    placeholder = { Text(text = "Description") })
+                    placeholder = { Text(text = stringResource(R.string.title_description)) })
 
 
 
                 OutlinedButton(
-                    onClick = { isOpenStartDateDialog = true }, modifier = Modifier
+                    onClick = { isOpenStartDateDialog = true },
+                    modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .width(150.dp)
                 ) {
@@ -103,13 +97,12 @@ fun UserCourseEditComponent(
 
                     CustomDatePicker(
                         isOpenDateDialog = isOpenStartDateDialog,
-                        onDateSelected = { selectedDate ->
-                            startDate = selectedDate
-                        },
+                        onDateSelected = { selectedDate -> startDate = selectedDate },
                         onDismiss = { isOpenStartDateDialog = false })
                 }
                 OutlinedButton(
-                    onClick = { isOpenFinishDateDialog = true }, modifier = Modifier
+                    onClick = { isOpenFinishDateDialog = true },
+                    modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .width(150.dp)
                 ) {
@@ -117,9 +110,7 @@ fun UserCourseEditComponent(
 
                     CustomDatePicker(
                         isOpenDateDialog = isOpenFinishDateDialog,
-                        onDateSelected = { selectedDate ->
-                            finishDate = selectedDate
-                        },
+                        onDateSelected = { selectedDate -> finishDate = selectedDate },
                         onDismiss = { isOpenFinishDateDialog = false })
                 }
 
@@ -129,9 +120,7 @@ fun UserCourseEditComponent(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Button(onClick = { onDismissRequest() }) {
-                        Text(text = stringResource(R.string.btn_cancel))
-                    }
+                    Button(onClick = { onDismissRequest() }) { Text(text = stringResource(R.string.btn_cancel)) }
 
                     Button(onClick = {
                         confirmEvent(
@@ -146,9 +135,7 @@ fun UserCourseEditComponent(
                             )
                         )
                         onDismissRequest()
-                    }) {
-                        Text(text = stringResource(R.string.btn_save))
-                    }
+                    }) { Text(text = stringResource(R.string.btn_save)) }
                 }
             }
         }

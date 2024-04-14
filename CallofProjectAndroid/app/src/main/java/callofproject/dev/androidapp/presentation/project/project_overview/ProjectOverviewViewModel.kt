@@ -32,9 +32,7 @@ class ProjectOverviewViewModel @Inject constructor(
             projectOverviewUseCase(projectId).let { result ->
                 when (result) {
                     is Resource.Success -> {
-                        state = state.copy(
-                            projectOverviewDTO = result.data!!
-                        )
+                        state = state.copy(projectOverviewDTO = result.data!!)
                     }
 
                     is Resource.Error -> {
@@ -48,5 +46,4 @@ class ProjectOverviewViewModel @Inject constructor(
             }
         }
     }
-
 }

@@ -1,7 +1,6 @@
 package callofproject.dev.androidapp.domain.dto.user_profile.course
 
 import com.google.gson.annotations.SerializedName
-import java.util.UUID
 
 data class CourseDTO(
     @SerializedName("course_id")

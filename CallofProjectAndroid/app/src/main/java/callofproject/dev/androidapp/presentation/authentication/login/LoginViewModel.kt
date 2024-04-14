@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
+import callofproject.dev.androidapp.domain.dto.AuthenticationResponse
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
@@ -13,7 +14,10 @@ import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.Route.SIGN_UP
 import callofproject.dev.androidapp.util.route.UiEvent
 import callofproject.dev.androidapp.util.route.UiEvent.Navigate
-import callofproject.dev.androidapp.util.route.UiText
+import callofproject.dev.androidapp.util.route.UiEvent.ShowSnackbar
+import callofproject.dev.androidapp.util.route.UiEvent.ShowToastMessage
+import callofproject.dev.androidapp.util.route.UiText.DynamicString
+import callofproject.dev.androidapp.util.route.UiText.StringResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
@@ -34,7 +38,6 @@ class LoginViewModel @Inject constructor(
     var state by mutableStateOf(LoginState())
         private set
 
-
     fun onEvent(event: LoginEvent) = when (event) {
         is LoginEvent.OnLoginButtonClick -> login()
 
@@ -47,42 +50,33 @@ class LoginViewModel @Inject constructor(
             state.copy(userLoginDTO = state.userLoginDTO.copy(password = event.password))
     }
 
+    private suspend fun loginCallback(result: Resource<AuthenticationResponse>) = when (result) {
+        is Resource.Error -> {
+            val message = result.message ?: "An unexpected error occurred"
+            state = state.copy(isLoading = false, error = message)
+            _uiEvent.send(ShowSnackbar(DynamicString(message)))
+        }
 
-    private fun onRegisterClick() {
-        viewModelScope.launch { _uiEvent.send(Navigate(SIGN_UP)) }
+        is Resource.Success -> {
+            state = state.copy(isLoading = false)
+            _uiEvent.send(ShowToastMessage(StringResource(R.string.msg_loginSuccess)))
+            preferences.saveUsername(state.userLoginDTO.username)
+            preferences.saveToken(result.data!!.accessToken)
+            preferences.saveUserId(result.data.user_id.toString())
+            _uiEvent.send(Navigate(Route.MAIN_PAGE))
+        }
+
+        is Resource.Loading -> {
+            state = state.copy(isLoading = true)
+        }
     }
 
 
     private fun login() {
-        useCases.login(state.userLoginDTO).onEach { result ->
-            when (result) {
-                is Resource.Error -> {
-                    state = state.copy(
-                        isLoading = false,
-                        error = result.message ?: "An unexpected error occurred"
-                    )
-                    _uiEvent.send(
-                        UiEvent.ShowSnackbar(
-                            UiText.DynamicString(
-                                result.message ?: "An unexpected error occurred"
-                            )
-                        )
-                    )
-                }
+        useCases.login(state.userLoginDTO).onEach { loginCallback(it) }.launchIn(viewModelScope)
+    }
 
-                is Resource.Success -> {
-                    state = state.copy(isLoading = false)
-                    _uiEvent.send(UiEvent.ShowToastMessage(UiText.StringResource(R.string.msg_loginSuccess)))
-                    preferences.saveUsername(state.userLoginDTO.username)
-                    preferences.saveToken(result.data!!.accessToken)
-                    preferences.saveUserId(result.data.user_id.toString())
-                    _uiEvent.send(Navigate(Route.MAIN_PAGE))
-                }
-
-                is Resource.Loading -> {
-                    state = state.copy(isLoading = true)
-                }
-            }
-        }.launchIn(viewModelScope)
+    private fun onRegisterClick() {
+        viewModelScope.launch { _uiEvent.send(Navigate(SIGN_UP)) }
     }
 }

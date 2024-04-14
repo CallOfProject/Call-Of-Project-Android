@@ -125,7 +125,6 @@ class MainActivity : ComponentActivity() {
                             UserProfileScreen(
                                 userId = userId!!,
                                 scaffoldState = scaffoldState,
-                                onNavigate = navController::navigate,
                                 topBar = { TopAppBarComponent() },
                                 bottomBar = {
                                     BottomBarComponent(

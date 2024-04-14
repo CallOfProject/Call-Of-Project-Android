@@ -7,7 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
-import callofproject.dev.androidapp.domain.use_cases.RegisterUseCase
+import callofproject.dev.androidapp.domain.dto.AuthenticationResponse
+import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.Route.LOGIN
 import callofproject.dev.androidapp.util.route.UiEvent
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val registerUseCase: RegisterUseCase
+    private val useCases: UseCaseFacade
 ) : ViewModel() {
     var state by mutableStateOf(RegisterState())
         private set
@@ -55,25 +56,26 @@ class RegisterViewModel @Inject constructor(
             state.copy(userRegisterDTO = state.userRegisterDTO.copy(email = event.email))
     }
 
+    private suspend fun registerCallback(resource: Resource<AuthenticationResponse>) {
+        when (resource) {
+            is Resource.Success -> {
+                _uiEvent.send(ShowSnackbar(StringResource(R.string.text_successRegister)))
+                _uiEvent.send(UiEvent.Navigate(LOGIN))
+            }
+
+            is Resource.Error -> {
+                _uiEvent.send(ShowSnackbar(UiText.DynamicString(resource.message!!)))
+            }
+
+            is Resource.Loading -> {
+                //_uiEvent.send(ShowSnackbar(StringResource(R.string.text_loadingRegister)))
+            }
+        }
+    }
 
     private fun register() {
         viewModelScope.launch {
-            registerUseCase(state.userRegisterDTO).collect { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        _uiEvent.send(ShowSnackbar(StringResource(R.string.text_successRegister)))
-                        _uiEvent.send(UiEvent.Navigate(LOGIN))
-                    }
-
-                    is Resource.Error -> {
-                        _uiEvent.send(ShowSnackbar(UiText.DynamicString(resource.message!!)))
-                    }
-
-                    is Resource.Loading -> {
-                        //_uiEvent.send(ShowSnackbar(StringResource(R.string.text_loadingRegister)))
-                    }
-                }
-            }
+            useCases.register(state.userRegisterDTO).collect { registerCallback(it) }
         }
     }
 }

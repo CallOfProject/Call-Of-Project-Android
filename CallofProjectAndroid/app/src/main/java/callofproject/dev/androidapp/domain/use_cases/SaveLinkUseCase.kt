@@ -1,10 +1,7 @@
 package callofproject.dev.androidapp.domain.use_cases
 
-import callofproject.dev.androidapp.data.mapper.toExperienceDTO
 import callofproject.dev.androidapp.data.mapper.toLinkDTO
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
-import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceCreateDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences

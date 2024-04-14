@@ -14,7 +14,6 @@ import callofproject.dev.androidapp.data.mapper.toExperienceUpdateDTO
 import callofproject.dev.androidapp.data.mapper.toLinkCreateDTO
 import callofproject.dev.androidapp.data.mapper.toLinkUpdateDTO
 import callofproject.dev.androidapp.data.mapper.toUserProfileUpdateDTO
-import callofproject.dev.androidapp.domain.dto.UserProfileUpdateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
