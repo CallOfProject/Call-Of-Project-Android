@@ -57,7 +57,6 @@ import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun UserProfileScreen(
-    userId: String,
     scaffoldState: SnackbarHostState,
     viewModel: UserProfileViewModel = hiltViewModel(),
     topBar: @Composable () -> Unit,
@@ -79,18 +78,18 @@ fun UserProfileScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) { viewModel.findUserProfileByUserId(userId) }
+    LaunchedEffect(key1 = true) { viewModel.findUserProfileByUserId() }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
         topBar = topBar,
-        bottomBar = bottomBar
+        bottomBar = bottomBar,
     )
     {
         Box(
-            contentAlignment = Alignment.TopCenter, modifier = Modifier
+            contentAlignment = Alignment.TopCenter,
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
+                .padding(it),
         )
         {
             Column(

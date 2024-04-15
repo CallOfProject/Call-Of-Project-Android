@@ -118,15 +118,8 @@ class MainActivity : ComponentActivity() {
 
 
 
-                        composable(
-                            "$PROFILE/{userId}", arguments =
-                            listOf(navArgument("userId") {
-                                type = NavType.StringType
-                            })
-                        ) {
-                            val userId = it.arguments?.getString("userId")
+                        composable(PROFILE) {
                             UserProfileScreen(
-                                userId = userId!!,
                                 scaffoldState = scaffoldState,
                                 topBar = { TopAppBarComponent() },
                                 bottomBar = {

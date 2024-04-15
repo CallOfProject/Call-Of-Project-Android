@@ -201,8 +201,9 @@ class UserProfileUseCase @Inject constructor(
         }
     }
 
-    suspend fun findUserProfile(userId: String): Resource<UserWithProfileDTO> {
+    suspend fun findUserProfile(): Resource<UserWithProfileDTO> {
         val token = preferences.getToken()!!
+        val userId = preferences.getUserId()!!
         return try {
             val responseMessage = service.findUserProfileByUserId(
                 userId = UUID.fromString(userId),

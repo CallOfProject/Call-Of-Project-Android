@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.presentation.components.bottom_bar
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -11,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -20,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.util.route.Route.MAIN_PAGE
 import callofproject.dev.androidapp.util.route.Route.NOTIFICATIONS
+import callofproject.dev.androidapp.util.route.Route.PROFILE
 import callofproject.dev.androidapp.util.route.Route.PROJECTS
 import callofproject.dev.androidapp.util.route.UiEvent
 
@@ -34,16 +37,29 @@ fun BottomBarComponent(
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: BottomBarViewModel = hiltViewModel(),
 ) {
-    val isSelectedMainPage by remember { mutableStateOf(true) }
-    val isSelectedProfile by remember { mutableStateOf(false) }
-    val isSelectedProject by remember { mutableStateOf(false) }
-    val isSelectedNotification by remember { mutableStateOf(false) }
+
+    var isSelectedMainPage by remember { mutableStateOf(true) }
+    var isSelectedProfile by remember { mutableStateOf(false) }
+    var isSelectedProjects by remember { mutableStateOf(false) }
+    var isSelectedNotifications by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
+
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Navigate -> onNavigate(event)
+
+                is UiEvent.ShowSnackbar -> {
+                    scaffoldState.showSnackbar(message = event.msg.asString(context))
+                }
+
+                is UiEvent.ShowToastMessage -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT)
+                        .show()
+                }
+
                 else -> Unit
             }
         }
@@ -66,7 +82,7 @@ fun BottomBarComponent(
 
         NavigationBarItem(
             selected = isSelectedProfile,
-            onClick = { viewModel.onEvent(BottomBarEvent.NavigateToUserProfile) },
+            onClick = { viewModel.onEvent(BottomBarEvent.Navigate(PROFILE)) },
             label = { Text(text = BOTTOM_NAVBAR_PROFILE) },
             icon = {
                 Icon(
@@ -78,7 +94,7 @@ fun BottomBarComponent(
         )
 
         NavigationBarItem(
-            selected = isSelectedProject,
+            selected = isSelectedProjects,
             onClick = { viewModel.onEvent(BottomBarEvent.Navigate(PROJECTS)) },
             label = { Text(text = BOTTOM_NAVBAR_PROJECT) },
             icon = {
@@ -91,12 +107,9 @@ fun BottomBarComponent(
         )
 
         NavigationBarItem(
-            selected = isSelectedNotification,
-
+            selected = isSelectedNotifications,
             onClick = { viewModel.onEvent(BottomBarEvent.Navigate(NOTIFICATIONS)) },
-
             label = { Text(text = BOTTOM_NAVBAR_NOTIFICATION) },
-
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.notification_icon),
