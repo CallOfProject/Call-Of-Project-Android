@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -28,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -137,27 +139,32 @@ fun ProjectDetailsScreen(
                             modifier = Modifier.padding(5.dp)
                         )
                     }
-
                     NotEditableCardComponent(
                         title = stringResource(R.string.title_projectTechRequirements),
                         height = 270.dp
                     ) {
-                        (0..tech.size - 1).forEachIndexed { index, _ ->
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(5.dp)
-                                    .border(
-                                        BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                                        shape = RoundedCornerShape(5.dp)
+                        LazyColumn {
+                            items(tech.size){index ->
+                                Card(
+                                    colors = CardColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                        contentColor = MaterialTheme.colorScheme.primary,
+                                        disabledContainerColor = Color.Transparent,
+                                        disabledContentColor = Color.Transparent
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp)
+                                        .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                                            shape = RoundedCornerShape(5.dp))
+                                ) {
+                                    Text(
+                                        text = tech[index],
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        modifier = Modifier.padding(5.dp)
                                     )
-                            ) {
-                                Text(
-                                    text = tech[index],
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    modifier = Modifier.padding(5.dp)
-                                )
+                                }
                             }
                         }
                     }
@@ -168,12 +175,28 @@ fun ProjectDetailsScreen(
                     ) {
                         LazyColumn {
                             items(spec.size) { index ->
-                                Text(
-                                    text = spec[index],
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Normal,
-                                    modifier = Modifier.padding(5.dp)
-                                )
+                                Card(
+                                    colors = CardColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                        contentColor = MaterialTheme.colorScheme.primary,
+                                        disabledContainerColor = Color.Transparent,
+                                        disabledContentColor = Color.Transparent
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp)
+                                        .border(
+                                            BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                                            shape = RoundedCornerShape(5.dp)
+                                        )
+                                ) {
+                                    Text(
+                                        text = spec[index],
+                                        fontSize = 15.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        modifier = Modifier.padding(5.dp)
+                                    )
+                                }
                             }
                         }
                     }
@@ -227,6 +250,16 @@ fun ProjectDetailsScreen(
                         )
                     }
 
+
+                    NotEditableCardComponent(
+                        title = stringResource(R.string.title_projectParticipants),
+                        height = 280.dp
+                    ) {
+                        state.projectDetailsDTO.projectParticipants.forEach {
+                            RowBasedCardComponent(title = it.full_name, value = it.username)
+                        }
+                    }
+
                     NotEditableCardComponent(
                         title = stringResource(R.string.title_projectAdminNotes),
                         height = 270.dp
@@ -252,14 +285,6 @@ fun ProjectDetailsScreen(
                         }
                     }
 
-                    NotEditableCardComponent(
-                        title = stringResource(R.string.title_projectParticipants),
-                        height = 280.dp
-                    ) {
-                        state.projectDetailsDTO.projectParticipants.forEach {
-                            RowBasedCardComponent(title = it.full_name, value = it.username)
-                        }
-                    }
                 }
             else {
                 Column(

@@ -25,8 +25,10 @@ data class ProjectDetailDTO(
     val startDate: String = "",
     @SerializedName("max_participant")
     val maxParticipant: Int = 0,
-    @SerializedName("technical_requirements") val technicalRequirements: String = "",
-    @SerializedName("special_requirements") val specialRequirements: String = "",
+    @SerializedName("techinical_requirements")
+    val technicalRequirements: String = "",
+    @SerializedName("special_requirements")
+    val specialRequirements: String = "",
     @SerializedName("project_profession_level")
     val projectProfessionLevel: String = "",
     @SerializedName("project_sector")

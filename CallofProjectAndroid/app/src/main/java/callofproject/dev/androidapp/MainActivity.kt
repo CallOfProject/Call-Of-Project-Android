@@ -11,6 +11,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -73,7 +74,12 @@ class MainActivity : ComponentActivity() {
 
                         composable(MAIN_PAGE) {
                             MainScreen(
-                                topBar = { TopAppBarComponent() },
+                                topBar = {
+                                    TopAppBarComponent(
+                                        title = stringResource(R.string.title_mainPage),
+                                        onNavigate = navController::navigate
+                                    )
+                                },
                                 bottomBar = {
                                     BottomBarComponent(
                                         scaffoldState = scaffoldState,
@@ -121,7 +127,12 @@ class MainActivity : ComponentActivity() {
                         composable(PROFILE) {
                             UserProfileScreen(
                                 scaffoldState = scaffoldState,
-                                topBar = { TopAppBarComponent() },
+                                topBar = {
+                                    TopAppBarComponent(
+                                        title = stringResource(R.string.title_profile),
+                                        onNavigate = navController::navigate
+                                    )
+                                },
                                 bottomBar = {
                                     BottomBarComponent(
                                         scaffoldState = scaffoldState,
@@ -137,7 +148,12 @@ class MainActivity : ComponentActivity() {
                             NotificationScreen(
                                 scaffoldState = scaffoldState,
                                 onNavigate = navController::navigate,
-                                topBar = { TopAppBarComponent() },
+                                topBar = {
+                                    TopAppBarComponent(
+                                        title = stringResource(R.string.title_notification),
+                                        onNavigate = navController::navigate
+                                    )
+                                },
                                 bottomBar = {
                                     BottomBarComponent(
                                         scaffoldState = scaffoldState,
@@ -151,7 +167,12 @@ class MainActivity : ComponentActivity() {
                         composable(Route.PROJECTS) {
                             MyProjectsScreen(
                                 scaffoldState = scaffoldState,
-                                topBar = { TopAppBarComponent() },
+                                topBar = {
+                                    TopAppBarComponent(
+                                        onNavigate = navController::navigate,
+                                        title = stringResource(R.string.title_myProjects)
+                                    )
+                                },
                                 onNavigate = navController::navigate,
                                 bottomBar = {
                                     BottomBarComponent(

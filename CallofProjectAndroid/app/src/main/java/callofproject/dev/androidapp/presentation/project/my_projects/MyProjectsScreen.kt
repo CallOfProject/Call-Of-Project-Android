@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -76,7 +77,7 @@ fun MyProjectsScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = topBar,
         bottomBar = bottomBar,
         snackbarHost = { SnackbarHost(scaffoldState) }) {
@@ -89,7 +90,7 @@ fun MyProjectsScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                CircularProgressIndicator(color = Color.Black, strokeWidth = 2.dp)
+                CircularProgressIndicator(strokeWidth = 2.dp)
             }
         if (!state.isLoading && state.myProjects.isEmpty()) {
             Column(
@@ -126,6 +127,12 @@ fun MyProjectsScreen(
 @Composable
 fun MyProjectCardComponent(viewModel: ProjectViewModel, project: ProjectDetailDTO) {
     Card(
+        colors = CardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = Color.Transparent
+        ),
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
             .clickable { viewModel.onEvent(MyProjectsEvent.OnClickProject(project.projectId)) }

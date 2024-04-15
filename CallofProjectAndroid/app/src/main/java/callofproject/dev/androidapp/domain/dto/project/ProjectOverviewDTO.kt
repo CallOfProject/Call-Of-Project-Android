@@ -12,7 +12,7 @@ data class ProjectOverviewDTO(
     @SerializedName("expected_completion_date") val expectedCompletionDate: String = "",
     @SerializedName("start_date") val startDate: String = "",
     @SerializedName("max_participant") val maxParticipant: Int = 0,
-    @SerializedName("technical_requirements") val technicalRequirements: String = "",
+    @SerializedName("techinical_requirements") val technicalRequirements: String = "",
     @SerializedName("special_requirements") val specialRequirements: String = "",
     @SerializedName("project_profession_level") val professionLevel: String = "",
     @SerializedName("project_degree") val degree: String = "",

@@ -1,9 +1,12 @@
 package callofproject.dev.androidapp.presentation.authentication.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -11,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -54,10 +58,15 @@ fun LoginScreen(
         }
     }
 
-    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+    ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(15.dp)
                 .verticalScroll(rememberScrollState())
         ) {
 
@@ -87,6 +96,7 @@ fun LoginScreen(
                 label = { Text(text = stringResource(R.string.text_password)) },
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = { viewModel.onEvent(OnLoginButtonClick) },
                 modifier = Modifier
@@ -95,7 +105,7 @@ fun LoginScreen(
             ) {
                 Text(text = stringResource(R.string.text_login))
             }
-
+            Spacer(modifier = Modifier.height(5.dp))
             Button(
                 onClick = { viewModel.onEvent(OnRegisterButtonClick) },
                 modifier = Modifier

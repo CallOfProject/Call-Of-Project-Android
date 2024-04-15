@@ -77,6 +77,10 @@
     <string name="msg_profile_photo_upload_fail">Profile photo not uploaded!</string>
     <string name="msg_cv_uploaded">Cv Uploaded Successfully!</string>
     <string name="msg_cv_upload_fail">CV not uploaded!</string>
+    <string name="title_myProjects">My Projects</string>
+    <string name="title_notification">Notifications</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_mainPage">Main Page</string>
 
     <string-array name="array_projectStatus">
         <item>NOT_STARTED</item>

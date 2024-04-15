@@ -2,9 +2,12 @@ package callofproject.dev.androidapp.presentation.authentication.signup
 
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -12,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHostState
@@ -82,7 +86,12 @@ fun RegisterScreen(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        contentAlignment = Alignment.Center
+    ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
@@ -183,7 +192,7 @@ fun RegisterScreen(
                     .align(Alignment.CenterHorizontally)
             )
 
-
+            Spacer(modifier = Modifier.height(10.dp))
             OutlinedButton(
                 onClick = { mIsOpenDateDialog = true }, modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -197,7 +206,7 @@ fun RegisterScreen(
                     onDateSelected = { date -> viewModel.onEvent(OnBirthDateChange(date)) },
                     onDismiss = { mIsOpenDateDialog = false })
             }
-
+            Spacer(modifier = Modifier.height(10.dp))
 
             Button(
                 onClick = { viewModel.onEvent(OnClickRegisterBtn) },

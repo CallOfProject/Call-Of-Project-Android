@@ -23,7 +23,7 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
 fun UserRatingComponent(state: UserProfileState) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.presentation.components.LoadingComponent
@@ -55,7 +57,7 @@ fun MainScreen(
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = { topBar() },
         bottomBar = { bottomBar() },
         snackbarHost = { SnackbarHost(scaffoldState) }) { it ->
@@ -70,6 +72,12 @@ fun MainScreen(
         ) {
             items(state.projectDiscoveryList.size) {
                 Card(
+                    colors = CardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        contentColor = MaterialTheme.colorScheme.onSurface,
+                        disabledContainerColor = Color.Transparent,
+                        disabledContentColor = Color.Transparent
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp), shape = RoundedCornerShape(10.dp)
@@ -80,6 +88,7 @@ fun MainScreen(
                         },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
+
                         content = {
                             Image(
                                 painter = rememberAsyncImagePainter(state.projectDiscoveryList[it].projectImagePath),
