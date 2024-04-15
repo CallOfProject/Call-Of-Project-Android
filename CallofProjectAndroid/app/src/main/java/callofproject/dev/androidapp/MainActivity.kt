@@ -21,10 +21,13 @@ import callofproject.dev.androidapp.presentation.authentication.signup.RegisterS
 import callofproject.dev.androidapp.presentation.components.TopAppBarComponent
 import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarComponent
 import callofproject.dev.androidapp.presentation.main_page.MainScreen
+import callofproject.dev.androidapp.presentation.notifications.NotificationScreen
+import callofproject.dev.androidapp.presentation.project.my_projects.MyProjectsScreen
 import callofproject.dev.androidapp.presentation.project.project_details.ProjectDetailsScreen
 import callofproject.dev.androidapp.presentation.project.project_overview.ProjectOverviewScreen
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileScreen
 import callofproject.dev.androidapp.ui.theme.CallofProjectAndroidTheme
+import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.Route.LOGIN
 import callofproject.dev.androidapp.util.route.Route.MAIN_PAGE
 import callofproject.dev.androidapp.util.route.Route.PROFILE
@@ -126,6 +129,37 @@ class MainActivity : ComponentActivity() {
                                 userId = userId!!,
                                 scaffoldState = scaffoldState,
                                 topBar = { TopAppBarComponent() },
+                                bottomBar = {
+                                    BottomBarComponent(
+                                        scaffoldState = scaffoldState,
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                            )
+
+                        }
+
+
+                        composable(Route.NOTIFICATIONS) {
+                            NotificationScreen(
+                                scaffoldState = scaffoldState,
+                                onNavigate = navController::navigate,
+                                topBar = { TopAppBarComponent() },
+                                bottomBar = {
+                                    BottomBarComponent(
+                                        scaffoldState = scaffoldState,
+                                        onNavigate = navController::navigate
+                                    )
+                                }
+                            )
+                        }
+
+
+                        composable(Route.PROJECTS) {
+                            MyProjectsScreen(
+                                scaffoldState = scaffoldState,
+                                topBar = { TopAppBarComponent() },
+                                onNavigate = navController::navigate,
                                 bottomBar = {
                                     BottomBarComponent(
                                         scaffoldState = scaffoldState,

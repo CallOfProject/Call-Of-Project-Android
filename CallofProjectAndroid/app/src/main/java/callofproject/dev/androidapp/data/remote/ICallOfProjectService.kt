@@ -5,11 +5,12 @@ import callofproject.dev.androidapp.domain.dto.MultipleResponseMessagePageable
 import callofproject.dev.androidapp.domain.dto.ResponseMessage
 import callofproject.dev.androidapp.domain.dto.UserLoginDTO
 import callofproject.dev.androidapp.domain.dto.UserRegisterDTO
-import callofproject.dev.androidapp.domain.dto.UserWithProfileDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectOverviewDTO
+import callofproject.dev.androidapp.domain.dto.project.ProjectsDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDiscoveryDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.UserWithProfileDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.Course
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
@@ -26,11 +27,14 @@ import callofproject.dev.androidapp.domain.dto.user_profile.link.Link
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkUpdateDTO
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Query
 import java.util.UUID
 
@@ -55,6 +59,13 @@ interface ICallOfProjectService {
         @Query("pid") projectId: UUID,
         @Header("Authorization") token: String? = "TOKEN"
     ): ResponseMessage<ProjectOverviewDTO>
+
+    @GET("/api/project/project/find/all/owner-id")
+    suspend fun findOwnerOfProjects(
+        @Query("uid") projectId: UUID,
+        @Query("p") page: Int,
+        @Header("Authorization") token: String? = "TOKEN"
+    ): MultipleResponseMessagePageable<ProjectsDetailDTO>
 
     @GET("/api/project/project/find/project-detail")
     suspend fun findProjectDetailsById(
@@ -127,4 +138,21 @@ interface ICallOfProjectService {
         @Query("about_me") aboutMe: String,
         @Header("Authorization") token: String
     ): ResponseMessage<UserProfileDTO>
+
+
+    @Multipart
+    @POST("/api/auth/users/upload/profile-photo")
+    suspend fun uploadProfilePhoto(
+        @Query("uid") userId: UUID,
+        @Part file: MultipartBody.Part,
+        @Header("Authorization") token: String
+    ): ResponseMessage<String>
+
+    @Multipart
+    @POST("/api/auth/users/upload/cv")
+    suspend fun uploadUserCV(
+        @Query("uid") userId: UUID,
+        @Part file: MultipartBody.Part,
+        @Header("Authorization") token: String
+    ): ResponseMessage<String>
 }

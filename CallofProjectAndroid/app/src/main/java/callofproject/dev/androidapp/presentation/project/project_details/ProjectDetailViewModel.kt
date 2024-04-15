@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
-import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.UiEvent
@@ -19,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProjectDetailViewModel @Inject constructor(
-    private val useCases: UseCaseFacade,
-    private val preferences: IPreferences
+    private val useCases: UseCaseFacade
 ) : ViewModel() {
 
     private val _uiEvent = Channel<UiEvent>()
@@ -32,7 +30,7 @@ class ProjectDetailViewModel @Inject constructor(
 
     fun findProjectDetails(projectId: String) {
         viewModelScope.launch {
-            useCases.projectDetails(projectId).let { result ->
+            useCases.project.findProjectDetails(projectId).let { result ->
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(

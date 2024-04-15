@@ -75,7 +75,7 @@ class RegisterViewModel @Inject constructor(
 
     private fun register() {
         viewModelScope.launch {
-            useCases.register(state.userRegisterDTO).collect { registerCallback(it) }
+            useCases.authentication.register(state.userRegisterDTO).collect { registerCallback(it) }
         }
     }
 }

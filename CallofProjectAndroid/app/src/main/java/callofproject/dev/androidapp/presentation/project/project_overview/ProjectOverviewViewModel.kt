@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import callofproject.dev.androidapp.domain.use_cases.ProjectOverviewUseCase
+import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProjectOverviewViewModel @Inject constructor(
-    private val projectOverviewUseCase: ProjectOverviewUseCase
+    private val projectUseCase: UseCaseFacade
 ) : ViewModel() {
 
 
@@ -29,7 +29,7 @@ class ProjectOverviewViewModel @Inject constructor(
 
     fun findProjectOverview(projectId: String) {
         viewModelScope.launch {
-            projectOverviewUseCase(projectId).let { result ->
+            projectUseCase.project.findProjectOverview(projectId).let { result ->
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(projectOverviewDTO = result.data!!)

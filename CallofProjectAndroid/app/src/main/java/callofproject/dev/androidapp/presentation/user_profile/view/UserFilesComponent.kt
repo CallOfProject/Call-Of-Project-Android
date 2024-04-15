@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,10 +21,10 @@ import callofproject.dev.androidapp.R.string.title_feedback
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
 
 @Composable
-fun UserRatingComponent(state: UserProfileState) {
+fun UserFilesComponent(state: UserProfileState) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
@@ -34,18 +35,14 @@ fun UserRatingComponent(state: UserProfileState) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth(0.2f)
         ) {
-            Text(text = stringResource(R.string.title_user), fontSize = 15.sp, fontWeight = FontWeight.Bold)
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.star_icon),
-                    contentDescription = stringResource(R.string.default_image_description)
-                )
+            Text(
+                text = stringResource(R.string.title_user),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )
+            OutlinedButton(onClick = { /*TODO*/ }) {
                 Text(
-                    text = state.userProfileDTO.profile.userRate.toString(),
+                    text = "Upload Photo",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Normal
                 )
@@ -58,7 +55,11 @@ fun UserRatingComponent(state: UserProfileState) {
             modifier = Modifier.fillMaxWidth(0.4f)
         ) {
 
-            Text(text = stringResource(title_feedback), fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(title_feedback),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,

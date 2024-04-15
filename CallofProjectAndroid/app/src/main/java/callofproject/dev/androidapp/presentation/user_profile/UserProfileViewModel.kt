@@ -1,10 +1,12 @@
 package callofproject.dev.androidapp.presentation.user_profile
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.data.mapper.toCourseCreateDTO
 import callofproject.dev.androidapp.data.mapper.toCourseUpdateDTO
 import callofproject.dev.androidapp.data.mapper.toEducationUpdateDTO
@@ -21,7 +23,17 @@ import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
+import callofproject.dev.androidapp.util.route.UiEvent
+import callofproject.dev.androidapp.util.route.UiEvent.ShowSnackbar
+import callofproject.dev.androidapp.util.route.UiText.StringResource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +45,11 @@ class UserProfileViewModel @Inject constructor(
 
     var state by mutableStateOf(UserProfileState())
         private set
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
+
+    private var uploadImageJob: Job? = null
+    private var uploadCVJob: Job? = null
 
 
     fun onEvent(event: UserProfileEvent) = when (event) {
@@ -45,14 +62,77 @@ class UserProfileViewModel @Inject constructor(
         is UserProfileEvent.OnCreateLink -> saveLink(event.linkDTO)
         is UserProfileEvent.OnUpdateLink -> updateLink(event.linkDTO)
         is UserProfileEvent.OnUpdateAboutMe -> updateAboutMe(event.aboutMe)
+        is UserProfileEvent.OnUploadProfilePhoto -> uploadProfilePhoto(event.pp)
+        is UserProfileEvent.OnUploadCv -> uploadCv(event.file)
+    }
+
+    private fun uploadCv(file: Uri) {
+        uploadCVJob?.cancel()
+        uploadCVJob = viewModelScope.launch {
+            useCaseFacade.uploadFile.uploadCv(file)
+                .onStart { delay(500L) }
+                .onEach { uploadCvCallback(it) }.launchIn(this)
+        }
+    }
+
+    private suspend fun uploadCvCallback(resource: Resource<String>) = when (resource) {
+        is Resource.Success -> uploadCvSuccessCallback(resource.data!!)
+        is Resource.Error -> uploadCvErrorCallback()
+        is Resource.Loading -> state = state.copy(isCvLoading = true, isPhotoLoading = false)
+    }
+
+    private suspend fun uploadCvSuccessCallback(data: String) {
+        state = state.copy(
+            userProfileDTO = state.userProfileDTO
+                .copy(profile = state.userProfileDTO.profile.copy(cv = data)),
+            isCvLoading = false
+        )
+        _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_cv_uploaded)))
+    }
+
+    private suspend fun uploadCvErrorCallback() {
+        state = state.copy(isCvLoading = false)
+        _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_cv_upload_fail)))
+    }
+
+
+    private fun uploadProfilePhoto(file: Uri) {
+        uploadImageJob?.cancel()
+        uploadImageJob = viewModelScope.launch {
+            useCaseFacade.uploadFile.uploadProfilePhoto(file)
+                .onStart { delay(1000) }
+                .onEach { uploadPhotoCallback(it) }
+                .launchIn(this)
+        }
+    }
+
+    private suspend fun uploadPhotoCallback(resource: Resource<String>) = when (resource) {
+        is Resource.Success -> uploadPhotoSuccessCallback(resource.data!!)
+        is Resource.Error -> uploadPhotoErrorCallback()
+        is Resource.Loading -> state = state.copy(isPhotoLoading = true)
+    }
+
+    private suspend fun uploadPhotoSuccessCallback(data: String) {
+        state = state.copy(
+            userProfileDTO = state.userProfileDTO.copy(
+                profile = state.userProfileDTO.profile.copy(profilePhoto = data)
+            ),
+            isPhotoLoading = false
+        )
+        _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_profile_photo_uploaded)))
+    }
+
+    private suspend fun uploadPhotoErrorCallback() {
+        state = state.copy(isPhotoLoading = false)
+        _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_profile_photo_upload_fail)))
     }
 
     private fun updateAboutMe(aboutMe: String) {
         viewModelScope.launch {
             val userId = preferences.getUserId()!!
-            useCaseFacade.updateProfile(
+            val profileUpdateDTO =
                 state.userProfileDTO.profile.copy(aboutMe = aboutMe).toUserProfileUpdateDTO(userId)
-            ).let { result ->
+            useCaseFacade.userProfile.updateUserProfile(profileUpdateDTO).let { result ->
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(
@@ -77,7 +157,7 @@ class UserProfileViewModel @Inject constructor(
 
     private fun updateLink(linkDTO: LinkDTO) {
         viewModelScope.launch {
-            useCaseFacade.updateLink(linkDTO.toLinkUpdateDTO(preferences.getUserId()!!))
+            useCaseFacade.userProfile.updateLink(linkDTO.toLinkUpdateDTO(preferences.getUserId()!!))
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -106,7 +186,7 @@ class UserProfileViewModel @Inject constructor(
     private fun saveLink(linkDTO: LinkDTO) {
         viewModelScope.launch {
             val userId = preferences.getUserId()!!
-            useCaseFacade.saveLink(linkDTO.toLinkCreateDTO(userId))
+            useCaseFacade.userProfile.saveLink(linkDTO.toLinkCreateDTO(userId))
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -134,7 +214,7 @@ class UserProfileViewModel @Inject constructor(
 
     private fun updateCourse(courseDTO: CourseDTO) {
         viewModelScope.launch {
-            useCaseFacade.updateCourse(courseDTO.toCourseUpdateDTO(preferences.getUserId()!!))
+            useCaseFacade.userProfile.updateCourse(courseDTO.toCourseUpdateDTO(preferences.getUserId()!!))
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -163,7 +243,7 @@ class UserProfileViewModel @Inject constructor(
     private fun saveCourse(courseDTO: CourseDTO) {
         viewModelScope.launch {
             val userId = preferences.getUserId()!!
-            useCaseFacade.saveCourse(courseDTO.toCourseCreateDTO(userId))
+            useCaseFacade.userProfile.saveCourse(courseDTO.toCourseCreateDTO(userId))
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -190,7 +270,11 @@ class UserProfileViewModel @Inject constructor(
 
     private fun updateExperience(experienceDTO: ExperienceDTO) {
         viewModelScope.launch {
-            useCaseFacade.updateExperience(experienceDTO.toExperienceUpdateDTO(preferences.getUserId()!!))
+            useCaseFacade.userProfile.updateExperience(
+                experienceDTO.toExperienceUpdateDTO(
+                    preferences.getUserId()!!
+                )
+            )
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -219,7 +303,7 @@ class UserProfileViewModel @Inject constructor(
     private fun saveExperience(experienceDTO: ExperienceDTO) {
         viewModelScope.launch {
             val userId = preferences.getUserId()!!
-            useCaseFacade.saveExperience(experienceDTO.toExperienceCreateDTO(userId))
+            useCaseFacade.userProfile.saveExperience(experienceDTO.toExperienceCreateDTO(userId))
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -246,7 +330,7 @@ class UserProfileViewModel @Inject constructor(
 
     private fun updateEducation(educationDTO: EducationDTO) {
         viewModelScope.launch {
-            useCaseFacade.updateEducation(educationDTO.toEducationUpdateDTO(preferences.getUserId()!!))
+            useCaseFacade.userProfile.updateEducation(educationDTO.toEducationUpdateDTO(preferences.getUserId()!!))
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -276,7 +360,7 @@ class UserProfileViewModel @Inject constructor(
     private fun saveEducation(educationDTO: EducationDTO) {
         viewModelScope.launch {
             val userId = preferences.getUserId()!!
-            useCaseFacade.saveEducation(educationDTO.toEducationUpsertDTO(userId))
+            useCaseFacade.userProfile.saveEducation(educationDTO.toEducationUpsertDTO(userId))
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
@@ -304,7 +388,7 @@ class UserProfileViewModel @Inject constructor(
 
     fun findUserProfileByUserId(userId: String) {
         viewModelScope.launch {
-            useCaseFacade.findUserProfile(userId).let { result ->
+            useCaseFacade.userProfile.findUserProfile(userId).let { result ->
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(

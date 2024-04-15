@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.presentation.user_profile.view
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
@@ -16,13 +17,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import callofproject.dev.androidapp.R
+import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
-import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnCreateLink
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnUpdateLink
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModel
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserLinkEditComponent
@@ -35,7 +40,7 @@ fun UserLinksComponent(state: UserProfileState, viewModel: UserProfileViewModel)
     var selectedLinkIndex by remember { mutableIntStateOf(-1) }
 
     EditableCardComponent(
-        title = "Links",
+        title = stringResource(R.string.title_links),
         height = 400.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = "Add",
@@ -43,41 +48,47 @@ fun UserLinksComponent(state: UserProfileState, viewModel: UserProfileViewModel)
     ) {
         LazyColumn {
             items(state.userProfileDTO.profile.links.size) { index ->
+
                 val link = state.userProfileDTO.profile.links[index]
+
                 EditableCardComponent(
                     height = 100.dp,
                     title = link.linkTitle,
-                    onIconClick = { expandedUpdateLink = true; selectedLinkIndex = index }) {
-                    Text(
-                        text = link.link,
-                        style = TextStyle(
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Normal
-                        ),
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .clickable {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link.link))
-                                ContextCompat.startActivity(context, intent, null)
-                            }
-                    )
+                    onIconClick = { expandedUpdateLink = true; selectedLinkIndex = index }
+                )
+                {
+                    LinkDetails(link, context)
                 }
             }
         }
     }
 
-    if (expandedUpdateLink) {
+
+
+    if (expandedAddLink)
+        UserLinkEditComponent(
+            onDismissRequest = { expandedAddLink = false },
+            confirmEvent = { viewModel.onEvent(OnCreateLink(it)) }
+        )
+
+    if (expandedUpdateLink)
         UserLinkEditComponent(
             onDismissRequest = { expandedUpdateLink = false },
             linkDTO = state.userProfileDTO.profile.links[selectedLinkIndex],
-            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateLink(it)) }
+            confirmEvent = { viewModel.onEvent(OnUpdateLink(it)) }
         )
-    }
+}
 
-    if (expandedAddLink) {
-        UserLinkEditComponent(
-            onDismissRequest = { expandedAddLink = false },
-            confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateLink(it)) }
-        )
-    }
+@Composable
+fun LinkDetails(link: LinkDTO, context: Context) {
+    Text(
+        text = link.link,
+        style = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Normal),
+        modifier = Modifier.padding(5.dp).clickable { handleLinkClick(context, link) }
+    )
+}
+
+
+private fun handleLinkClick(context: Context, link: LinkDTO) {
+    ContextCompat.startActivity(context, Intent(Intent.ACTION_VIEW, Uri.parse(link.link)), null)
 }

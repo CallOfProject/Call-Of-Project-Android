@@ -73,7 +73,7 @@ class LoginViewModel @Inject constructor(
 
 
     private fun login() {
-        useCases.login(state.userLoginDTO).onEach { loginCallback(it) }.launchIn(viewModelScope)
+        useCases.authentication.login(state.userLoginDTO).onEach { loginCallback(it) }.launchIn(viewModelScope)
     }
 
     private fun onRegisterClick() {

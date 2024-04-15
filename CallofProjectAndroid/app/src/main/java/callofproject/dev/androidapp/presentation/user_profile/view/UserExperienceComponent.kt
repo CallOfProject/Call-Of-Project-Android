@@ -12,9 +12,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
@@ -30,28 +32,30 @@ fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewM
     EditableCardComponent("Experience",
         400.dp,
         imageVector = Icons.Filled.Add,
-        imageDescription = "Add",
+        imageDescription = stringResource(R.string.default_image_description),
         onIconClick = { expandedAddExperience = true }) {
         LazyColumn {
             items(state.userProfileDTO.profile.experiences.size) { index ->
                 val experience = state.userProfileDTO.profile.experiences[index]
                 EditableCardComponent(
                     title = experience.companyName,
-                    onIconClick = {
-                        expandedUpsertExperience = true; selectedExperienceIndex = index
-                    }) {
+                    onIconClick = { expandedUpsertExperience = true; selectedExperienceIndex = index }
+                )
+                {
                     Text(
                         text = "Position: ${experience.position}",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(5.dp)
                     )
+
                     Text(
                         text = "Date: ${experience.startDate} - ${experience.finishDate}",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(5.dp)
                     )
+
                     Text(
                         text = "Description: ${experience.description}",
                         fontSize = 15.sp,
@@ -63,18 +67,16 @@ fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewM
         }
     }
 
-    if (expandedUpsertExperience) {
+    if (expandedUpsertExperience)
         UserExperienceEditComponent(
             onDismissRequest = { expandedUpsertExperience = false },
             experienceDTO = state.userProfileDTO.profile.experiences[selectedExperienceIndex],
             confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateExperience(it)) }
         )
-    }
 
-    if (expandedAddExperience) {
+    if (expandedAddExperience)
         UserExperienceEditComponent(
             onDismissRequest = { expandedAddExperience = false },
             confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateExperience(it)) }
         )
-    }
 }

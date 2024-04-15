@@ -44,12 +44,16 @@ fun UserCourseEditComponent(
     var startDate by remember { mutableStateOf(courseDTO.startDate) }
     var finishDate by remember { mutableStateOf(courseDTO.finishDate) }
 
-    Dialog(onDismissRequest = onDismissRequest) {
-        Card(modifier = Modifier.fillMaxWidth()) {
+    Dialog(onDismissRequest = onDismissRequest)
+    {
+        Card(modifier = Modifier.fillMaxWidth())
+        {
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(10.dp)
             ) {
+
                 Text(
                     text = stringResource(R.string.title_upsert_course),
                     style = MaterialTheme.typography.headlineSmall
@@ -100,6 +104,9 @@ fun UserCourseEditComponent(
                         onDateSelected = { selectedDate -> startDate = selectedDate },
                         onDismiss = { isOpenStartDateDialog = false })
                 }
+
+
+
                 OutlinedButton(
                     onClick = { isOpenFinishDateDialog = true },
                     modifier = Modifier

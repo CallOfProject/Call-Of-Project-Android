@@ -69,6 +69,14 @@
     <string name="warning_projectViewNotAllowed">You are not allowed to view this project</string>
     <string name="title_profileLinkName">Link Name</string>
     <string name="title_profileLink">Link</string>
+    <string name="title_links">Links</string>
+    <string name="title_feedback">Feedback</string>
+    <string name="title_user">User</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="msg_profile_photo_uploaded">Profile Photo uploaded successfully!</string>
+    <string name="msg_profile_photo_upload_fail">Profile photo not uploaded!</string>
+    <string name="msg_cv_uploaded">Cv Uploaded Successfully!</string>
+    <string name="msg_cv_upload_fail">CV not uploaded!</string>
 
     <string-array name="array_projectStatus">
         <item>NOT_STARTED</item>

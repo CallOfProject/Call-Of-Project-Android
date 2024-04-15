@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.presentation.user_profile
 
+import android.net.Uri
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
@@ -15,4 +16,6 @@ sealed class UserProfileEvent {
     data class OnCreateLink(val linkDTO: LinkDTO) : UserProfileEvent()
     data class OnUpdateLink(val linkDTO: LinkDTO) : UserProfileEvent()
     data class OnUpdateAboutMe(val aboutMe: String) : UserProfileEvent()
+    data class OnUploadProfilePhoto(val pp: Uri) : UserProfileEvent()
+    data class OnUploadCv(val file: Uri) : UserProfileEvent()
 }

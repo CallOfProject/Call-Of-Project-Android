@@ -31,28 +31,34 @@ fun UserCoursesComponent(state: UserProfileState, viewModel: UserProfileViewMode
         490.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = "Add",
-        onIconClick = { expandedAddCourse = true }) {
+        onIconClick = { expandedAddCourse = true })
+    {
         LazyColumn {
             items(state.userProfileDTO.profile.courses.size) { index ->
+
                 val course = state.userProfileDTO.profile.courses[index]
+
                 EditableCardComponent(
                     title = course.courseName,
                     onIconClick = {
                         expandedUpdateCourse = true;
                         selectedCourseIndex = index
-                    }) {
+                    })
+                {
                     Text(
                         text = "Organizator: ${course.organization}",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(5.dp)
                     )
+
                     Text(
                         text = "Date: ${course.startDate} - ${course.finishDate}",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(5.dp)
                     )
+
                     Text(
                         text = "Description: ${course.description}",
                         fontSize = 15.sp,
@@ -64,18 +70,16 @@ fun UserCoursesComponent(state: UserProfileState, viewModel: UserProfileViewMode
         }
     }
 
-    if (expandedUpdateCourse) {
+    if (expandedUpdateCourse)
         UserCourseEditComponent(
             onDismissRequest = { expandedUpdateCourse = false },
             courseDTO = state.userProfileDTO.profile.courses[selectedCourseIndex],
             confirmEvent = { viewModel.onEvent(UserProfileEvent.OnUpdateCourse(it)) }
         )
-    }
 
-    if (expandedAddCourse) {
+    if (expandedAddCourse)
         UserCourseEditComponent(
             onDismissRequest = { expandedAddCourse = false },
             confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateCourse(it)) }
         )
-    }
 }

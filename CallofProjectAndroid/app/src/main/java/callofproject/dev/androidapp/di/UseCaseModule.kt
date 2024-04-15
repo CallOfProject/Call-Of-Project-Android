@@ -3,21 +3,11 @@ package callofproject.dev.androidapp.di
 import android.content.Context
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.preferences.IPreferences
-import callofproject.dev.androidapp.domain.use_cases.FindUserProfileUseCase
-import callofproject.dev.androidapp.domain.use_cases.LoginUseCase
-import callofproject.dev.androidapp.domain.use_cases.ProjectDetailsUseCase
-import callofproject.dev.androidapp.domain.use_cases.ProjectDiscoveryUseCase
-import callofproject.dev.androidapp.domain.use_cases.RegisterUseCase
-import callofproject.dev.androidapp.domain.use_cases.SaveCourseUseCase
-import callofproject.dev.androidapp.domain.use_cases.SaveEducationUseCase
-import callofproject.dev.androidapp.domain.use_cases.SaveExperienceUseCase
-import callofproject.dev.androidapp.domain.use_cases.SaveLinkUseCase
-import callofproject.dev.androidapp.domain.use_cases.UpdateCourseUseCase
-import callofproject.dev.androidapp.domain.use_cases.UpdateEducationUseCase
-import callofproject.dev.androidapp.domain.use_cases.UpdateExperienceUseCase
-import callofproject.dev.androidapp.domain.use_cases.UpdateLinkUseCase
-import callofproject.dev.androidapp.domain.use_cases.UpdateUserProfileUseCase
+import callofproject.dev.androidapp.domain.use_cases.AuthenticationUseCase
+import callofproject.dev.androidapp.domain.use_cases.ProjectUseCase
+import callofproject.dev.androidapp.domain.use_cases.UploadFileUseCase
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
+import callofproject.dev.androidapp.domain.use_cases.UserProfileUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,20 +27,10 @@ object UseCaseModule {
         preferences: IPreferences
     ): UseCaseFacade {
         return UseCaseFacade(
-            login = LoginUseCase(service, context),
-            register = RegisterUseCase(service),
-            projectDiscovery = ProjectDiscoveryUseCase(service, preferences = preferences),
-            projectDetails = ProjectDetailsUseCase(service, preferences = preferences),
-            findUserProfile = FindUserProfileUseCase(service, preferences = preferences),
-            saveEducation = SaveEducationUseCase(service, preferences = preferences),
-            updateEducation = UpdateEducationUseCase(service, preferences = preferences),
-            saveExperience = SaveExperienceUseCase(service, preferences = preferences),
-            updateExperience = UpdateExperienceUseCase(service, preferences = preferences),
-            saveCourse = SaveCourseUseCase(service, preferences = preferences),
-            updateCourse = UpdateCourseUseCase(service, preferences = preferences),
-            saveLink = SaveLinkUseCase(service, preferences = preferences),
-            updateLink = UpdateLinkUseCase(service, preferences = preferences),
-            updateProfile = UpdateUserProfileUseCase(service, preferences = preferences)
+            authentication = AuthenticationUseCase(service, context),
+            uploadFile = UploadFileUseCase(service, preferences, context),
+            project = ProjectUseCase(service, preferences),
+            userProfile = UserProfileUseCase(service, preferences),
         )
     }
 }

@@ -40,7 +40,7 @@ class MainPageViewModel @Inject constructor(private val useCases: UseCaseFacade)
         findAllJob?.cancel()
         state = state.copy(isLoading = true)
         findAllJob = viewModelScope.launch {
-            useCases.projectDiscovery(1)
+            useCases.project.findProjectDiscovery(1)
                 .onStart { delay(200L) }
                 .onEach { result ->
                     when (result) {

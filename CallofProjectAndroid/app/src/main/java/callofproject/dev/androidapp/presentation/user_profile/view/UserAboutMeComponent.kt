@@ -8,9 +8,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
@@ -18,11 +20,15 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewMod
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserAboutMeEditComponent
 
 @Composable
-fun UserAboutMeComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
+fun UserAboutMeComponent(state: UserProfileState, viewModel: UserProfileViewModel)
+{
     var expandedUpsertAboutMe by remember { mutableStateOf(false) }
+
     EditableCardComponent(
-        title = "About me",
-        onIconClick = { expandedUpsertAboutMe = true }) {
+        title = stringResource(R.string.title_aboutMe),
+        onIconClick = { expandedUpsertAboutMe = true }
+    )
+    {
         Text(
             text = state.userProfileDTO.profile.aboutMe ?: "",
             fontSize = 15.sp,
@@ -39,4 +45,3 @@ fun UserAboutMeComponent(state: UserProfileState, viewModel: UserProfileViewMode
         )
     }
 }
-

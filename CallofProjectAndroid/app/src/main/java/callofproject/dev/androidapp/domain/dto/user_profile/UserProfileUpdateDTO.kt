@@ -1,4 +1,4 @@
-package callofproject.dev.androidapp.domain.dto
+package callofproject.dev.androidapp.domain.dto.user_profile
 
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable

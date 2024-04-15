@@ -1,6 +1,5 @@
 package callofproject.dev.androidapp.presentation.components.bottom_bar
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -45,15 +44,6 @@ fun BottomBarComponent(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Navigate -> onNavigate(event)
-                is UiEvent.ShowSnackbar -> {
-                    scaffoldState.showSnackbar(message = event.msg.asString(context))
-                }
-
-                is UiEvent.ShowToastMessage -> {
-                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT)
-                        .show()
-                }
-
                 else -> Unit
             }
         }
