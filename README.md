@@ -1,5 +1,7 @@
 # Call-Of-Project-Android
 
+### Not completed yet.
+
 ## Images
 <p float="left">
 <img width="240" src="./images/theme/dark/login.png">
