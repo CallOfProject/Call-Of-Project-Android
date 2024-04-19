@@ -55,10 +55,7 @@ fun UserLinksComponent(state: UserProfileState, viewModel: UserProfileViewModel)
                     height = 100.dp,
                     title = link.linkTitle,
                     onIconClick = { expandedUpdateLink = true; selectedLinkIndex = index }
-                )
-                {
-                    LinkDetails(link, context)
-                }
+                ) { LinkDetails(link, context) }
             }
         }
     }
@@ -84,7 +81,9 @@ fun LinkDetails(link: LinkDTO, context: Context) {
     Text(
         text = link.link,
         style = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Normal),
-        modifier = Modifier.padding(5.dp).clickable { handleLinkClick(context, link) }
+        modifier = Modifier
+            .padding(5.dp)
+            .clickable { handleLinkClick(context, link) }
     )
 }
 

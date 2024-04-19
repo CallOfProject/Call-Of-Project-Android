@@ -10,9 +10,9 @@ data class CourseDTO(
     @SerializedName("course_name")
     val courseName: String = "",
     @SerializedName("start_date")
-    val startDate: String = "",
+    val startDate: String = "Start Date",
     @SerializedName("finish_date")
-    val finishDate: String = "",
+    val finishDate: String = "Finish Date",
     @SerializedName("is_continue")
     val isContinue: Boolean = false,
     val description: String = ""

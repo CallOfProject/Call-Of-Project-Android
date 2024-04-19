@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import callofproject.dev.androidapp.R
+import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
@@ -29,40 +30,25 @@ fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewM
     var expandedAddExperience by remember { mutableStateOf(false) }
     var selectedExperienceIndex by remember { mutableIntStateOf(-1) }
 
-    EditableCardComponent("Experience",
+    EditableCardComponent(
+        stringResource(R.string.title_experience),
         400.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = stringResource(R.string.default_image_description),
         onIconClick = { expandedAddExperience = true }) {
+
         LazyColumn {
+
             items(state.userProfileDTO.profile.experiences.size) { index ->
+
                 val experience = state.userProfileDTO.profile.experiences[index]
+
                 EditableCardComponent(
                     title = experience.companyName,
-                    onIconClick = { expandedUpsertExperience = true; selectedExperienceIndex = index }
-                )
-                {
-                    Text(
-                        text = "Position: ${experience.position}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-
-                    Text(
-                        text = "Date: ${experience.startDate} - ${experience.finishDate}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-
-                    Text(
-                        text = "Description: ${experience.description}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                }
+                    onIconClick = {
+                        expandedUpsertExperience = true; selectedExperienceIndex = index
+                    }
+                ) { ExperienceDetails(experience = experience) }
             }
         }
     }
@@ -79,4 +65,29 @@ fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewM
             onDismissRequest = { expandedAddExperience = false },
             confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateExperience(it)) }
         )
+}
+
+
+@Composable
+private fun ExperienceDetails(experience: ExperienceDTO) {
+    Text(
+        text = "Position: ${experience.position}",
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Normal,
+        modifier = Modifier.padding(5.dp)
+    )
+
+    Text(
+        text = "Date: ${experience.startDate} - ${experience.finishDate}",
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Normal,
+        modifier = Modifier.padding(5.dp)
+    )
+
+    Text(
+        text = "Description: ${experience.description}",
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Normal,
+        modifier = Modifier.padding(5.dp)
+    )
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -35,11 +36,27 @@ fun UserAboutMeEditComponent(
     var aboutMe by remember { mutableStateOf(defaultAboutMe) }
     Dialog(onDismissRequest = onDismissRequest)
     {
-        Card(modifier = Modifier.fillMaxWidth())
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+            colors = CardColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.primary,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent
+            ),
+        )
         {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(10.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(10.dp)
+            )
             {
-                Text(text = stringResource(R.string.title_aboutMe), style = MaterialTheme.typography.headlineSmall)
+                Text(
+                    text = stringResource(R.string.title_aboutMe),
+                    style = MaterialTheme.typography.headlineSmall
+                )
 
                 TextField(
                     value = aboutMe,

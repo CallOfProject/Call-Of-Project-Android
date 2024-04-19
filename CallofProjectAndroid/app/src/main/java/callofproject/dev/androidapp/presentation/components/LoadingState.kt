@@ -9,7 +9,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -21,6 +20,6 @@ fun LoadingComponent(paddingValues: PaddingValues = PaddingValues(10.dp)) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        CircularProgressIndicator(color = Color.Black, strokeWidth = 2.dp)
+        CircularProgressIndicator(strokeWidth = 2.dp)
     }
 }

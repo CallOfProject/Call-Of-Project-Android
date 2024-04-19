@@ -25,6 +25,7 @@ import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.UiEvent
 import callofproject.dev.androidapp.util.route.UiEvent.ShowSnackbar
+import callofproject.dev.androidapp.util.route.UiText.DynamicString
 import callofproject.dev.androidapp.util.route.UiText.StringResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -50,7 +51,6 @@ class UserProfileViewModel @Inject constructor(
 
     private var uploadImageJob: Job? = null
     private var uploadCVJob: Job? = null
-
 
     fun onEvent(event: UserProfileEvent) = when (event) {
         is UserProfileEvent.OnCreateEducation -> saveEducation(event.educationDTO)
@@ -116,8 +116,7 @@ class UserProfileViewModel @Inject constructor(
         state = state.copy(
             userProfileDTO = state.userProfileDTO.copy(
                 profile = state.userProfileDTO.profile.copy(profilePhoto = data)
-            ),
-            isPhotoLoading = false
+            ), isPhotoLoading = false
         )
         _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_profile_photo_uploaded)))
     }
@@ -130,8 +129,10 @@ class UserProfileViewModel @Inject constructor(
     private fun updateAboutMe(aboutMe: String) {
         viewModelScope.launch {
             val userId = preferences.getUserId()!!
+
             val profileUpdateDTO =
                 state.userProfileDTO.profile.copy(aboutMe = aboutMe).toUserProfileUpdateDTO(userId)
+
             useCaseFacade.userProfile.updateUserProfile(profileUpdateDTO).let { result ->
                 when (result) {
                     is Resource.Success -> {
@@ -143,12 +144,10 @@ class UserProfileViewModel @Inject constructor(
                     }
 
                     is Resource.Error -> {
-                        //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
+                        _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
                     }
 
-                    is Resource.Loading -> {
-                        //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                    }
+                    is Resource.Loading -> {}
                 }
             }
         }
@@ -172,12 +171,10 @@ class UserProfileViewModel @Inject constructor(
                         }
 
                         is Resource.Error -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
+                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
                         }
 
-                        is Resource.Loading -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                        }
+                        is Resource.Loading -> {}
                     }
                 }
         }
@@ -200,12 +197,10 @@ class UserProfileViewModel @Inject constructor(
                         }
 
                         is Resource.Error -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
+                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
                         }
 
-                        is Resource.Loading -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                        }
+                        is Resource.Loading -> {}
                     }
                 }
         }

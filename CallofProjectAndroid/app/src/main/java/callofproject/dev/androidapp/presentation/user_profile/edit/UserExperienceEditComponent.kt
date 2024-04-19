@@ -8,14 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +48,17 @@ fun UserExperienceEditComponent(
 
     Dialog(onDismissRequest = onDismissRequest)
     {
-        Card(modifier = Modifier.fillMaxWidth())
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+            colors = CardColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.primary,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent
+            ),
+        )
         {
             Column(
                 modifier = Modifier
@@ -90,7 +99,7 @@ fun UserExperienceEditComponent(
                         .fillMaxWidth()
                         .padding(10.dp)
                 )
-                TextField(
+                OutlinedTextField(
                     label = { Text(stringResource(R.string.title_description)) },
                     value = description,
                     onValueChange = { description = it },
@@ -98,15 +107,13 @@ fun UserExperienceEditComponent(
                         .fillMaxWidth()
                         .height(150.dp)
                         .padding(10.dp)
-                        .border(
-                            width = 1.dp, color = Color.Black,
-                            shape = RoundedCornerShape(8.dp)
-                        )
                 )
 
                 OutlinedButton(
                     onClick = { isOpenStartDateDialog = true },
-                    modifier = Modifier.align(CenterHorizontally).width(150.dp)
+                    modifier = Modifier
+                        .align(CenterHorizontally)
+                        .width(150.dp)
                 ) {
                     Text(startDate)
                     CustomDatePicker(
@@ -119,7 +126,9 @@ fun UserExperienceEditComponent(
 
                 OutlinedButton(
                     onClick = { isOpenFinishDateDialog = true },
-                    modifier = Modifier.align(CenterHorizontally).width(150.dp)
+                    modifier = Modifier
+                        .align(CenterHorizontally)
+                        .width(150.dp)
                 ) {
                     Text(finishDate)
 

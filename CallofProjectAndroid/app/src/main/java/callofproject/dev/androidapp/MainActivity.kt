@@ -28,10 +28,11 @@ import callofproject.dev.androidapp.presentation.project.project_details.Project
 import callofproject.dev.androidapp.presentation.project.project_overview.ProjectOverviewScreen
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileScreen
 import callofproject.dev.androidapp.ui.theme.CallofProjectAndroidTheme
-import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.Route.LOGIN
 import callofproject.dev.androidapp.util.route.Route.MAIN_PAGE
+import callofproject.dev.androidapp.util.route.Route.NOTIFICATIONS
 import callofproject.dev.androidapp.util.route.Route.PROFILE
+import callofproject.dev.androidapp.util.route.Route.PROJECTS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_DETAILS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_OVERVIEW
 import callofproject.dev.androidapp.util.route.Route.SIGN_UP
@@ -69,14 +70,12 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-
                         composable(SIGN_UP) {
                             RegisterScreen(
                                 scaffoldState = scaffoldState,
                                 onNavigate = navController::navigate
                             )
                         }
-
 
                         composable(MAIN_PAGE) {
                             MainScreen(
@@ -112,8 +111,6 @@ class MainActivity : ComponentActivity() {
 
                         }
 
-
-
                         composable(
                             "$PROJECT_DETAILS/{projectId}", arguments =
                             listOf(navArgument("projectId") {
@@ -127,8 +124,6 @@ class MainActivity : ComponentActivity() {
                                 onNavigate = navController::navigate
                             )
                         }
-
-
 
                         composable(PROFILE) {
                             UserProfileScreen(
@@ -149,8 +144,7 @@ class MainActivity : ComponentActivity() {
 
                         }
 
-
-                        composable(Route.NOTIFICATIONS) {
+                        composable(NOTIFICATIONS) {
                             NotificationScreen(
                                 scaffoldState = scaffoldState,
                                 onNavigate = navController::navigate,
@@ -169,8 +163,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-
-                        composable(Route.PROJECTS) {
+                        composable(PROJECTS) {
                             MyProjectsScreen(
                                 scaffoldState = scaffoldState,
                                 topBar = {

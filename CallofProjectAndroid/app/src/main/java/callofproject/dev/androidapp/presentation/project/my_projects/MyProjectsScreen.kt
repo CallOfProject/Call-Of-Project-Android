@@ -162,7 +162,5 @@ fun MyProjectCardComponent(viewModel: ProjectViewModel, project: ProjectDetailDT
                 maxLines = 2
             )
         }
-
     }
-
 }

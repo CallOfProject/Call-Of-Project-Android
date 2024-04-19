@@ -20,14 +20,12 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewMod
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserAboutMeEditComponent
 
 @Composable
-fun UserAboutMeComponent(state: UserProfileState, viewModel: UserProfileViewModel)
-{
+fun UserAboutMeComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
     var expandedUpsertAboutMe by remember { mutableStateOf(false) }
 
     EditableCardComponent(
         title = stringResource(R.string.title_aboutMe),
-        onIconClick = { expandedUpsertAboutMe = true }
-    )
+        onIconClick = { expandedUpsertAboutMe = true })
     {
         Text(
             text = state.userProfileDTO.profile.aboutMe ?: "",

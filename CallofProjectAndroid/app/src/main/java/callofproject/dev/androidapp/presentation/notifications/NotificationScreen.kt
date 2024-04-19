@@ -14,57 +14,117 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
-import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModel
+import callofproject.dev.androidapp.domain.dto.NotificationDataType.PROJECT_JOIN_REQUEST
 import callofproject.dev.androidapp.util.route.UiEvent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NotificationScreen(
     scaffoldState: SnackbarHostState,
-    viewModel: UserProfileViewModel = hiltViewModel(),
+    viewModel: NotificationViewModel = hiltViewModel(),
     onNavigate: (UiEvent.Navigate) -> Unit,
     topBar: @Composable () -> Unit,
     bottomBar: @Composable () -> Unit
 ) {
+
+    val state = viewModel.state
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Navigate -> onNavigate(event)
+
+                is UiEvent.ShowSnackbar -> {
+                    scaffoldState.showSnackbar(message = event.msg.asString(context))
+                }
+
+                else -> Unit
+            }
+        }
+    }
     Scaffold(
         topBar = topBar,
-        bottomBar = bottomBar,
-        snackbarHost = { SnackbarHost(scaffoldState) }) {
+        bottomBar = bottomBar
+    ) {
         Box(
             contentAlignment = Alignment.TopCenter, modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
         ) {
-            Column(
+
+            if (state.isLoading)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) { CircularProgressIndicator(strokeWidth = 2.dp) }
+            else LazyColumn(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
-                modifier = Modifier.verticalScroll(rememberScrollState())
+                modifier = if (state.notifications.isEmpty()) Modifier.fillMaxSize() else Modifier
             ) {
+                if (state.notifications.isEmpty()) {
+                    item {
+                        Text(
+                            text = stringResource(R.string.msg_notificationNotFound),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(10.dp),
+                            textAlign = TextAlign.Center,
+                        )
 
-                (0..10).forEach { _ ->
-                    NotificationCardDialog("Ömer ERTAş senin \"Call-Of-Project\" isimli projene katılmak için istek gönderdi.")
+                        Icon(
+                            painter = painterResource(id = R.drawable.clear),
+                            contentDescription = ""
+                        )
+                    }
+                } else items(state.notifications.size) { index ->
+                    val notification = state.notifications[index]
+                    if (notification.notificationDataType == PROJECT_JOIN_REQUEST)
+                        NotificationCardDialog(
+                            msg = state.notifications[index].message!!,
+                            onAccept = {
+                                viewModel.onEvent(
+                                    NotificationEvent.OnAcceptProjectJoinRequest(
+                                        notification
+                                    )
+                                )
+                            },
+                            onReject = {
+                                viewModel.onEvent(
+                                    NotificationEvent.OnRejectProjectJoinRequest(
+                                        notification
+                                    )
+                                )
+                            }
+                        )
+                    else NotificationCard(state.notifications[index].message!!)
                 }
             }
         }
@@ -89,7 +149,7 @@ private fun NotificationCard(msg: String) {
                 painter = painterResource(id = R.drawable.notification_icon),
                 contentDescription = "project",
                 modifier = Modifier
-                    .size(60.dp)
+                    .size(50.dp)
                     .align(Alignment.CenterVertically),
                 alignment = Alignment.Center
             )
@@ -105,7 +165,7 @@ private fun NotificationCard(msg: String) {
 }
 
 @Composable
-private fun NotificationCardDialog(msg: String) {
+private fun NotificationCardDialog(msg: String, onAccept: () -> Unit, onReject: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,7 +181,9 @@ private fun NotificationCardDialog(msg: String) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Absolute.Left,
-                modifier = Modifier.fillMaxWidth().padding(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
             ) {
                 Image(
                     painter = painterResource(R.drawable.notification_icon),
@@ -147,21 +209,14 @@ private fun NotificationCardDialog(msg: String) {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = onAccept) {
                     Icon(Icons.Filled.Done, contentDescription = "")
                 }
                 Spacer(modifier = Modifier.width(20.dp))
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = onReject) {
                     Icon(Icons.Filled.Clear, contentDescription = "")
                 }
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun NotificationScreenPreview() {
-    NotificationCardDialog(msg = "Are you sure you want to delete this project?")
 }

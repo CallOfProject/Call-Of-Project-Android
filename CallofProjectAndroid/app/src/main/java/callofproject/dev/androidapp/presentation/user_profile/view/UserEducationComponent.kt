@@ -38,12 +38,11 @@ fun UserEducationComponent(state: UserProfileState, viewModel: UserProfileViewMo
         LazyColumn {
 
             items(state.userProfileDTO.profile.educations.size) { idx ->
+
                 EditableCardComponent(
                     title = state.userProfileDTO.profile.educations[idx].schoolName,
                     onIconClick = { expandedUpsertEducation = true; selectedEducationIndex = idx }
-                ) {
-                    EducationDetails(state.userProfileDTO.profile.educations[idx])
-                }
+                ) { EducationDetails(state.userProfileDTO.profile.educations[idx]) }
             }
         }
     }

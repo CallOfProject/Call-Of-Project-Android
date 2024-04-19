@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -46,7 +46,17 @@ fun UserCourseEditComponent(
 
     Dialog(onDismissRequest = onDismissRequest)
     {
-        Card(modifier = Modifier.fillMaxWidth())
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+            colors = CardColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.primary,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent
+            ),
+        )
         {
 
             Column(
@@ -72,23 +82,22 @@ fun UserCourseEditComponent(
                     value = courseName,
                     onValueChange = { courseName = it },
                     label = { Text(stringResource(R.string.title_courseName)) },
-                    modifier = Modifier.fillMaxWidth().padding(10.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
                 )
 
 
-                OutlinedTextField(value = description,
+
+                OutlinedTextField(
+                    value = description,
                     onValueChange = { description = it },
+                    label = { Text(stringResource(R.string.title_description)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                         .padding(10.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color.Black,
-                            shape = RoundedCornerShape(8.dp)
-                        ),
-                    placeholder = { Text(text = stringResource(R.string.title_description)) })
-
+                )
 
 
                 OutlinedButton(

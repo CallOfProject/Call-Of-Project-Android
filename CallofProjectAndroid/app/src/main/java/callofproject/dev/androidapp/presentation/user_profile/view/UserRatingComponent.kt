@@ -34,16 +34,24 @@ fun UserRatingComponent(state: UserProfileState) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth(0.2f)
         ) {
-            Text(text = stringResource(R.string.title_user), fontSize = 15.sp, fontWeight = FontWeight.Bold)
+
+            Text(
+                text = stringResource(R.string.title_user),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
-            ) {
+            )
+            {
                 Icon(
                     painter = painterResource(id = R.drawable.star_icon),
                     contentDescription = stringResource(R.string.default_image_description)
                 )
+
                 Text(
                     text = state.userProfileDTO.profile.userRate.toString(),
                     fontSize = 15.sp,
@@ -58,16 +66,22 @@ fun UserRatingComponent(state: UserProfileState) {
             modifier = Modifier.fillMaxWidth(0.4f)
         ) {
 
-            Text(text = stringResource(title_feedback), fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(title_feedback),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
+                modifier = Modifier.fillMaxWidth())
+            {
                 Icon(
                     painter = painterResource(id = R.drawable.star_icon),
                     contentDescription = stringResource(R.string.default_image_description)
                 )
+
                 Text(
                     text = state.userProfileDTO.profile.userFeedbackRate.toString(),
                     fontSize = 15.sp,

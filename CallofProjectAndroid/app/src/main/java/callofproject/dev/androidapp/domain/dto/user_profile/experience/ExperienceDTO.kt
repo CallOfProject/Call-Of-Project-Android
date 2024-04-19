@@ -15,10 +15,10 @@ data class ExperienceDTO(
     val companyWebsiteLink: String = "",
 
     @SerializedName("start_date")
-    val startDate: String = "",
+    val startDate: String = "Start Date",
 
     @SerializedName("finish_date")
-    val finishDate: String = "",
+    val finishDate: String = "Finish Date",
 
     @SerializedName("is_continue")
     val isContinue: Boolean = false,

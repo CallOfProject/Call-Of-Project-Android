@@ -8,16 +8,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +50,17 @@ fun UserEducationEditComponent(
     var isContinue by remember { mutableStateOf(educationDTO.isContinue) }
 
     Dialog(onDismissRequest = onDismissRequest) {
-        Card(modifier = Modifier.fillMaxWidth()) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+            colors = CardColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.primary,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent
+            ),
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(10.dp)
@@ -65,28 +74,30 @@ fun UserEducationEditComponent(
                     value = school,
                     onValueChange = { school = it },
                     label = { Text(stringResource(R.string.title_schoolName)) },
-                    modifier = Modifier.fillMaxWidth().padding(10.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
                 )
 
                 OutlinedTextField(
                     value = department,
                     onValueChange = { department = it },
                     label = { Text(stringResource(R.string.title_departmentName)) },
-                    modifier = Modifier.fillMaxWidth().padding(10.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
                 )
 
 
-                TextField(
+                OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
+                    label = { Text(stringResource(R.string.title_description)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp)
                         .padding(10.dp)
-                        .border(
-                            width = 1.dp, color = Color.Black,
-                            shape = RoundedCornerShape(8.dp)
-                        )
+
                 )
 
 
@@ -101,7 +112,9 @@ fun UserEducationEditComponent(
                         onValueChange = { gpa = it },
                         label = { Text(stringResource(R.string.title_gpa)) },
                         maxLines = 1,
-                        modifier = Modifier.width(180.dp).padding(10.dp),
+                        modifier = Modifier
+                            .width(180.dp)
+                            .padding(10.dp),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
                     )
 
@@ -118,7 +131,9 @@ fun UserEducationEditComponent(
 
                 OutlinedButton(
                     onClick = { isOpenStartDateDialog = true },
-                    modifier = Modifier.align(Alignment.CenterHorizontally).width(150.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .width(150.dp)
                 ) {
                     Text(startDate)
 
@@ -132,7 +147,9 @@ fun UserEducationEditComponent(
 
                 OutlinedButton(
                     onClick = { isOpenFinishDateDialog = true },
-                    modifier = Modifier.align(Alignment.CenterHorizontally).width(150.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .width(150.dp)
                 ) {
                     Text(finishDate)
 

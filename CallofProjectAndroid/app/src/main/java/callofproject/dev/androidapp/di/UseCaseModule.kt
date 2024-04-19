@@ -32,13 +32,18 @@ object UseCaseModule {
         authentication = AuthenticationUseCase(service, context),
         uploadFile = UploadFileUseCase(service, preferences, context),
         project = ProjectUseCase(service, preferences),
-        userProfile = UserProfileUseCase(service, preferences)
+        userProfile = UserProfileUseCase(service, preferences),
+        notification = NotificationUseCase(context, preferences, service)
     )
 
     @Provides
     @ViewModelScoped
-    fun provideNotificationUseCase(@ApplicationContext context: Context): NotificationUseCase {
-        return NotificationUseCase(context)
+    fun provideNotificationUseCase(
+        @ApplicationContext context: Context,
+        preferences: IPreferences,
+        service: ICallOfProjectService
+    ): NotificationUseCase {
+        return NotificationUseCase(context, preferences, service)
     }
 
     @Provides

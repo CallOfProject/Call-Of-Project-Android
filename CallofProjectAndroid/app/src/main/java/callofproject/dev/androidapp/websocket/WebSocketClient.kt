@@ -3,6 +3,7 @@ package callofproject.dev.androidapp.websocket
 import android.content.Context
 import android.util.Log
 import callofproject.dev.androidapp.R
+import callofproject.dev.androidapp.R.string.websocket_channel
 import callofproject.dev.androidapp.domain.dto.NotificationDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.NotificationUseCase
@@ -20,6 +21,7 @@ class WebSocketClient @Inject constructor(
     private val gson: Gson,
     private val notificationUseCase: NotificationUseCase
 ) {
+
     private val compositeDisposable = CompositeDisposable()
     private var stompClient: StompClient? = null
 
@@ -37,15 +39,14 @@ class WebSocketClient @Inject constructor(
         if (stompClient != null)
             return
 
-        stompClient =
-            Stomp.over(ConnectionProvider.OKHTTP, context.getString(R.string.websocket_endpoint))
+        val channel = context.getString(websocket_channel).format(preferences.getUserId())
+        val websocketUrl = context.getString(R.string.websocket_endpoint)
+
+        stompClient = Stomp.over(ConnectionProvider.OKHTTP, websocketUrl)
 
         stompClient?.connect()
 
-        stompClient?.topic(
-            context.getString(R.string.websocket_notificationChannel)
-                .format(preferences.getUserId())
-        )?.let { stomp ->
+        stompClient?.topic(channel)?.let { stomp ->
             compositeDisposable.add(stomp.subscribe(::messageCallback, ::errorCallback))
         }
     }

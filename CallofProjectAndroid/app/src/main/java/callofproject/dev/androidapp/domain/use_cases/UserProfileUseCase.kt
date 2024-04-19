@@ -31,34 +31,27 @@ class UserProfileUseCase @Inject constructor(
     private val preferences: IPreferences
 ) {
     suspend fun saveCourse(courseCreateDTO: CourseCreateDTO): Resource<CourseDTO> {
-        var result: Resource<CourseDTO> = Resource.Loading()
-        result = try {
-            Log.d("SaveCourseUseCase", "invoke: $courseCreateDTO")
-            val token = preferences.getToken()!!
+        return try {
 
             val responseMessage = service.saveCourse(
                 courseCreateDTO = courseCreateDTO,
-                token = token
+                token = getBearerToken()
             )
 
-            return Resource.Success(responseMessage.`object`.toCourseDTO())
+            Resource.Success(responseMessage.`object`.toCourseDTO())
 
         } catch (e: Exception) {
             Log.e("SaveCourseUseCase", e.message ?: "An error occurred")
             Resource.Error(e.message ?: "An error occurred")
         }
-        return result
     }
 
     suspend fun saveEducation(educationCreateDTO: EducationCreateDTO): Resource<EducationDTO> {
-        var result: Resource<EducationDTO> = Resource.Loading()
-        result = try {
-
-            val token = preferences.getToken()!!
+        return try {
 
             val responseMessage = service.saveEducation(
                 educationCreateDTO = educationCreateDTO,
-                token = token
+                token = getBearerToken()
             )
 
             return Resource.Success(responseMessage.`object`.toEducationDTO())
@@ -67,17 +60,14 @@ class UserProfileUseCase @Inject constructor(
             Log.e("SaveEducationUseCase", e.message ?: "An error occurred")
             Resource.Error(e.message ?: "An error occurred")
         }
-        return result
     }
 
     suspend fun saveExperience(experienceCreateDTO: ExperienceCreateDTO): Resource<ExperienceDTO> {
-        var result: Resource<ExperienceDTO> = Resource.Loading()
-        result = try {
-            val token = preferences.getToken()!!
+        return try {
 
             val responseMessage = service.saveExperience(
                 experienceCreateDTO = experienceCreateDTO,
-                token = token
+                token = getBearerToken()
             )
 
             return Resource.Success(responseMessage.`object`.toExperienceDTO())
@@ -85,17 +75,14 @@ class UserProfileUseCase @Inject constructor(
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
-        return result
     }
 
     suspend fun saveLink(linkCreateDTO: LinkCreateDTO): Resource<LinkDTO> {
-        var result: Resource<LinkDTO> = Resource.Loading()
-        result = try {
-            val token = preferences.getToken()!!
+        return try {
 
             val responseMessage = service.saveLink(
                 linkCreateDTO = linkCreateDTO,
-                token = token
+                token = getBearerToken()
             )
 
             return Resource.Success(responseMessage.`object`.toLinkDTO())
@@ -103,116 +90,103 @@ class UserProfileUseCase @Inject constructor(
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
-        return result
     }
 
 
     suspend fun updateCourse(courseUpdateDTO: CourseUpdateDTO): Resource<CourseDTO> {
-        var result: Resource<CourseDTO> = Resource.Loading()
-        result = try {
-
-            val token = preferences.getToken()!!
+        return try {
 
             val responseMessage = service.updateCourse(
                 courseUpdateDTO = courseUpdateDTO,
-                token = token
+                token = getBearerToken()
             )
 
-            return Resource.Success(responseMessage.`object`)
+            Resource.Success(responseMessage.`object`)
 
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
-        return result
     }
 
 
     suspend fun updateEducation(educationCreateDTO: EducationUpdateDTO): Resource<EducationDTO> {
-        var result: Resource<EducationDTO> = Resource.Loading()
-        result = try {
-
-            val token = preferences.getToken()!!
+        return try {
 
             val responseMessage = service.updateEducation(
                 educationUpdateDTO = educationCreateDTO,
-                token = token
+                token = getBearerToken()
             )
 
-            return Resource.Success(responseMessage.`object`)
+            Resource.Success(responseMessage.`object`)
 
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
-        return result
     }
 
 
     suspend fun updateExperience(experienceUpdateDTO: ExperienceUpdateDTO): Resource<ExperienceDTO> {
-        var result: Resource<ExperienceDTO> = Resource.Loading()
-        result = try {
-
-            val token = preferences.getToken()!!
+        return try {
 
             val responseMessage = service.updateExperience(
                 experienceUpdateDTO = experienceUpdateDTO,
-                token = token
+                token = getBearerToken()
             )
 
-            return Resource.Success(responseMessage.`object`)
+            Resource.Success(responseMessage.`object`)
 
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
-        return result
     }
 
     suspend fun updateLink(linkUpdateDTO: LinkUpdateDTO): Resource<LinkDTO> {
-        var result: Resource<LinkDTO> = Resource.Loading()
-        result = try {
-
-            val token = preferences.getToken()!!
+        return try {
 
             val responseMessage = service.updateLink(
                 linkUpdateDTO = linkUpdateDTO,
-                token = token
+                token = getBearerToken()
             )
 
-            return Resource.Success(responseMessage.`object`)
+            Resource.Success(responseMessage.`object`)
 
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "An error occurred")
+            Resource.Error(e.message ?: "Link update failed")
         }
-        return result
     }
 
     suspend fun updateUserProfile(updateDTO: UserProfileUpdateDTO): Resource<UserProfileDTO> {
         return try {
-            val token = preferences.getToken() ?: throw IllegalStateException("Token is null")
 
             val responseMessage = service.updateUserProfile(
-                token = token,
+                token = getBearerToken(),
                 userId = UUID.fromString(updateDTO.userId),
                 aboutMe = updateDTO.aboutMe,
             )
 
             Resource.Success(responseMessage.`object`)
+
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
     }
 
+
     suspend fun findUserProfile(): Resource<UserWithProfileDTO> {
-        val token = preferences.getToken()!!
-        val userId = preferences.getUserId()!!
         return try {
+
             val responseMessage = service.findUserProfileByUserId(
-                userId = UUID.fromString(userId),
-                token = token
+                userId = UUID.fromString(preferences.getUserId()!!),
+                token = getBearerToken()
             )
 
             Resource.Success(responseMessage.`object`!!)
+
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
     }
+
+
+    private fun getBearerToken(): String = preferences.getToken()!!
 }

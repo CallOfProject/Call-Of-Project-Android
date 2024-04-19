@@ -1,9 +1,13 @@
 package callofproject.dev.androidapp.domain.use_cases
 
+import android.util.Log
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.dto.MultipleResponseMessagePageable
+import callofproject.dev.androidapp.domain.dto.NotificationDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectDetailDTO
+import callofproject.dev.androidapp.domain.dto.project.ProjectJoinRequestDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectOverviewDTO
+import callofproject.dev.androidapp.domain.dto.project.ProjectParticipantRequestDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDiscoveryDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
@@ -19,8 +23,7 @@ class ProjectUseCase @Inject constructor(
 ) {
 
     suspend fun findProjectDetails(id: String): Resource<ProjectDetailDTO> {
-        var result: Resource<ProjectDetailDTO> = Resource.Loading()
-        result = try {
+        return try {
 
             val token = preferences.getToken()!!
             val userId = preferences.getUserId()!!
@@ -43,19 +46,22 @@ class ProjectUseCase @Inject constructor(
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
-        return result
     }
 
     suspend fun findProjectDiscovery(page: Int): Flow<Resource<MultipleResponseMessagePageable<ProjectsDiscoveryDTO>>> {
-        val token = preferences.getToken()!!
         return flow {
+
             emit(Resource.Loading())
+
             try {
+
                 val response = service.projectDiscovery(
                     page,
-                    token = token
+                    token = preferences.getToken()!!
                 )
+
                 emit(Resource.Success(response))
+
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "An unexpected error occurred"))
             }
@@ -63,14 +69,16 @@ class ProjectUseCase @Inject constructor(
     }
 
     suspend fun findProjectOverview(id: String): Resource<ProjectOverviewDTO> {
-        val token = preferences.getToken()!!
+
         return try {
+
             val responseMessage = service.findProjectOverviewsById(
                 projectId = fromString(id),
-                token = token
+                token = preferences.getToken()!!
             )
 
             Resource.Success(responseMessage.`object`!!)
+
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
         }
@@ -78,16 +86,66 @@ class ProjectUseCase @Inject constructor(
 
 
     suspend fun findOwnerOfProjects(page: Int): Flow<Resource<MultipleResponseMessagePageable<ProjectsDetailDTO>>> {
-        val token = preferences.getToken()!!
-        val userId = preferences.getUserId()!!
         return flow {
+
             emit(Resource.Loading())
+
             try {
-                val response = service.findOwnerOfProjects(fromString(userId), page, token)
+
+                val response = service.findOwnerOfProjects(
+                    fromString(preferences.getUserId()!!),
+                    page,
+                    preferences.getToken()!!
+                )
+
                 emit(Resource.Success(response))
+
             } catch (e: Exception) {
                 emit(Resource.Error(e.message ?: "An unexpected error occurred"))
             }
         }
+    }
+
+
+    suspend fun answerProjectJoinRequest(
+        notificationDTO: NotificationDTO,
+        accepted: Boolean
+    ): Resource<Boolean> {
+
+        return try {
+            val dto = ProjectJoinRequestDTO(
+                notificationDTO.requestId!!,
+                notificationDTO.notificationId!!,
+                accepted
+            )
+            val response = service.answerProjectJoinRequest(
+                projectJoinRequestDTO = dto,
+                token = preferences.getToken()!!
+            )
+
+            Resource.Success(response.`object`)
+
+        } catch (e: Exception) {
+            Log.e("ProjectUseCase", "answerProjectJoinRequest: ", e)
+            Resource.Error(e.message ?: "An unexpected error occurred")
+        }
+
+    }
+
+
+    suspend fun sendProjectJoinRequest(projectId: String): Resource<ProjectParticipantRequestDTO> {
+        return try {
+            val response = service.sendProjectJoinRequest(
+                projectId = fromString(projectId),
+                userId = fromString(preferences.getUserId()!!),
+                token = preferences.getToken()!!
+            )
+
+            Resource.Success(response.`object`!!)
+
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An unexpected error occurred")
+        }
+
     }
 }

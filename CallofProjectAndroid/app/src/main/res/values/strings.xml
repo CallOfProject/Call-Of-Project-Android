@@ -84,6 +84,13 @@
     <string name="channel_name">notification_channel</string>
     <string name="channel_description">notification_channel</string>
     <string name="channel_id">my_notification_channel</string>
+    <string name="title_experience">Experience</string>
+    <string name="project_join_request_accepted">Project join request accepted</string>
+    <string name="error_occurred">Error in Project Request Accept</string>
+    <string name="project_join_request_rejected">Project Join Request Rejected!</string>
+    <string name="msg_notificationNotFound">These areas are clean. There are no notifications.</string>
+    <string name="request_sent">Project Join Request sent to owner!</string>
+    <string name="message_joinRequest">Join Project</string>
 
 
     <string-array name="array_projectStatus">

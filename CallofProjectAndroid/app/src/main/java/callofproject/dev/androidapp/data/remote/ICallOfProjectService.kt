@@ -2,11 +2,14 @@ package callofproject.dev.androidapp.data.remote
 
 import callofproject.dev.androidapp.domain.dto.AuthenticationResponse
 import callofproject.dev.androidapp.domain.dto.MultipleResponseMessagePageable
+import callofproject.dev.androidapp.domain.dto.NotificationDTO
 import callofproject.dev.androidapp.domain.dto.ResponseMessage
 import callofproject.dev.androidapp.domain.dto.UserLoginDTO
 import callofproject.dev.androidapp.domain.dto.UserRegisterDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectDetailDTO
+import callofproject.dev.androidapp.domain.dto.project.ProjectJoinRequestDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectOverviewDTO
+import callofproject.dev.androidapp.domain.dto.project.ProjectParticipantRequestDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDiscoveryDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileDTO
@@ -40,7 +43,6 @@ import java.util.UUID
 
 
 interface ICallOfProjectService {
-
     @POST("api/auth/authenticate/login")
     suspend fun login(@Body userLoginDTO: UserLoginDTO): AuthenticationResponse
 
@@ -50,37 +52,34 @@ interface ICallOfProjectService {
     @GET("/api/project/project/discovery/all")
     suspend fun projectDiscovery(
         @Query("p") p: Int,
-        @Header("Authorization") token: String? = "TOKEN"
+        @Header("Authorization") token: String
     ): MultipleResponseMessagePageable<ProjectsDiscoveryDTO>
-
 
     @GET("/api/project/project/find/overview")
     suspend fun findProjectOverviewsById(
         @Query("pid") projectId: UUID,
-        @Header("Authorization") token: String? = "TOKEN"
+        @Header("Authorization") token: String
     ): ResponseMessage<ProjectOverviewDTO>
 
     @GET("/api/project/project/find/all/owner-id")
     suspend fun findOwnerOfProjects(
         @Query("uid") projectId: UUID,
         @Query("p") page: Int,
-        @Header("Authorization") token: String? = "TOKEN"
+        @Header("Authorization") token: String
     ): MultipleResponseMessagePageable<ProjectsDetailDTO>
 
     @GET("/api/project/project/find/project-detail")
     suspend fun findProjectDetailsById(
         @Query("pid") projectId: UUID,
         @Query("uid") userId: UUID,
-        @Header("Authorization") token: String? = "TOKEN"
+        @Header("Authorization") token: String
     ): ResponseMessage<ProjectDetailDTO>
-
 
     @GET("/api/auth/users/find/user-with-profile/id")
     suspend fun findUserProfileByUserId(
         @Query("uid") userId: UUID,
         @Header("Authorization") token: String
     ): ResponseMessage<UserWithProfileDTO>
-
 
     @POST("/api/auth/user-info/save/education")
     suspend fun saveEducation(
@@ -106,7 +105,6 @@ interface ICallOfProjectService {
         @Header("Authorization") token: String
     ): ResponseMessage<ExperienceDTO>
 
-
     @POST("/api/auth/user-info/save/course")
     suspend fun saveCourse(
         @Body courseCreateDTO: CourseCreateDTO,
@@ -118,7 +116,6 @@ interface ICallOfProjectService {
         @Body courseUpdateDTO: CourseUpdateDTO,
         @Header("Authorization") token: String
     ): ResponseMessage<CourseDTO>
-
 
     @POST("/api/auth/user-info/save/link")
     suspend fun saveLink(
@@ -139,7 +136,6 @@ interface ICallOfProjectService {
         @Header("Authorization") token: String
     ): ResponseMessage<UserProfileDTO>
 
-
     @Multipart
     @POST("/api/auth/users/upload/profile-photo")
     suspend fun uploadProfilePhoto(
@@ -155,4 +151,27 @@ interface ICallOfProjectService {
         @Part file: MultipartBody.Part,
         @Header("Authorization") token: String
     ): ResponseMessage<String>
+
+
+    @POST("/api/project/project/participant/request")
+    suspend fun sendProjectJoinRequest(
+        @Query("pid") projectId: UUID,
+        @Query("uid") userId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<ProjectParticipantRequestDTO>
+
+
+    @GET("/api/notification/find/all/sort/created-at")
+    suspend fun findNotifications(
+        @Query("uid") userId: UUID,
+        @Query("p") page: Int,
+        @Header("Authorization") token: String
+    ): MultipleResponseMessagePageable<List<NotificationDTO>>
+
+
+    @POST("/api/project/project-owner/participant/request/approve")
+    suspend fun answerProjectJoinRequest(
+        @Body projectJoinRequestDTO: ProjectJoinRequestDTO,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
@@ -34,6 +35,7 @@ fun UserCoursesComponent(state: UserProfileState, viewModel: UserProfileViewMode
         onIconClick = { expandedAddCourse = true })
     {
         LazyColumn {
+
             items(state.userProfileDTO.profile.courses.size) { index ->
 
                 val course = state.userProfileDTO.profile.courses[index]
@@ -41,31 +43,10 @@ fun UserCoursesComponent(state: UserProfileState, viewModel: UserProfileViewMode
                 EditableCardComponent(
                     title = course.courseName,
                     onIconClick = {
-                        expandedUpdateCourse = true;
+                        expandedUpdateCourse = true
                         selectedCourseIndex = index
                     })
-                {
-                    Text(
-                        text = "Organizator: ${course.organization}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-
-                    Text(
-                        text = "Date: ${course.startDate} - ${course.finishDate}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-
-                    Text(
-                        text = "Description: ${course.description}",
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                }
+                { CourseDetails(course) }
             }
         }
     }
@@ -82,4 +63,29 @@ fun UserCoursesComponent(state: UserProfileState, viewModel: UserProfileViewMode
             onDismissRequest = { expandedAddCourse = false },
             confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateCourse(it)) }
         )
+}
+
+
+@Composable
+private fun CourseDetails(course: CourseDTO) {
+    Text(
+        text = "Organizator: ${course.organization}",
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Normal,
+        modifier = Modifier.padding(5.dp)
+    )
+
+    Text(
+        text = "Date: ${course.startDate} - ${course.finishDate}",
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Normal,
+        modifier = Modifier.padding(5.dp)
+    )
+
+    Text(
+        text = "Description: ${course.description}",
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Normal,
+        modifier = Modifier.padding(5.dp)
+    )
 }

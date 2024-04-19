@@ -1,7 +1,6 @@
 package callofproject.dev.androidapp.presentation.project.project_overview
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -24,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,7 +66,21 @@ fun ProjectOverviewScreen(
     val tech = state.projectOverviewDTO.technicalRequirements.split(",")
     val spec = state.projectOverviewDTO.specialRequirements.split(",")
 
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.ShowSnackbar -> {
+                    scaffoldState.showSnackbar(
+                        withDismissAction = true,
+                        message = event.msg.asString(context),
+                        duration = SnackbarDuration.Short
+                    )
+                }
 
+                else -> Unit
+            }
+        }
+    }
     Scaffold(
         topBar = {
             ProjectTopBarComponent(
@@ -267,17 +281,13 @@ fun ProjectOverviewScreen(
                     }
 
 
-                    Button(onClick = {
-                        Toast.makeText(
-                            context,
-                            "Project Join Request sent to Owner!",
-                            Toast.LENGTH_LONG
-                        )
-                            .show()
-                    }, modifier = Modifier.padding(10.dp)) {
-                        Text(text = "Join Project")
+                    if (state.projectOverviewDTO.projectOwnerName != viewModel.getUsername())
+                        Button(onClick = {
+                            viewModel.onEvent(ProjectOverviewEvent.OnSendJoinRequestClick(projectId))
+                        }, modifier = Modifier.padding(10.dp)) {
+                            Text(text = stringResource(R.string.message_joinRequest))
 
-                    }
+                        }
                 })
 
         }
