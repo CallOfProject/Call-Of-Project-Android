@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.project.project_filter.FilterScreen
 import callofproject.dev.androidapp.util.route.Route
@@ -31,7 +32,8 @@ import callofproject.dev.androidapp.util.route.UiEvent
 @Composable
 fun TopAppBarComponent(
     title: String = "",
-    onNavigate: (UiEvent.Navigate) -> Unit
+    onNavigate: (UiEvent.Navigate) -> Unit,
+    viewModel: TopBarViewModel = hiltViewModel()
 ) {
     val isSearching = remember { mutableStateOf(false) }
     val isFiltering = remember { mutableStateOf(false) }
@@ -88,7 +90,10 @@ fun TopAppBarComponent(
             )
         }
 
-        IconButton(onClick = { onNavigate(UiEvent.Navigate(Route.LOGIN)) }) {
+        IconButton(onClick = {
+            viewModel.stopWebsocket()
+            onNavigate(UiEvent.Navigate(Route.LOGIN))
+        }) {
             Icon(
                 painter = painterResource(id = R.drawable.logout),
                 contentDescription = "",

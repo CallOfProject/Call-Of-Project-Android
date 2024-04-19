@@ -10,7 +10,6 @@ import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.util.UUID
 import java.util.UUID.fromString
 import javax.inject.Inject
 

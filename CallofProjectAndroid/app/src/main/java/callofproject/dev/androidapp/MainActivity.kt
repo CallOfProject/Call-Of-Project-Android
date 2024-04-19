@@ -36,13 +36,19 @@ import callofproject.dev.androidapp.util.route.Route.PROJECT_DETAILS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_OVERVIEW
 import callofproject.dev.androidapp.util.route.Route.SIGN_UP
 import callofproject.dev.androidapp.util.route.navigate
+import com.onesignal.OneSignal
+import com.onesignal.debug.LogLevel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //initializePushNotifications()
         setContent {
             CallofProjectAndroidTheme {
                 val navController = rememberNavController()
@@ -186,6 +192,14 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun initializePushNotifications() {
+        OneSignal.Debug.logLevel = LogLevel.VERBOSE
+        OneSignal.initWithContext(this, resources.getString(R.string.one_signal_key))
+        CoroutineScope(Dispatchers.IO).launch {
+            OneSignal.Notifications.requestPermission(true)
         }
     }
 }

@@ -2,6 +2,8 @@ package callofproject.dev.androidapp.presentation.components.bottom_bar
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -106,17 +108,31 @@ fun BottomBarComponent(
             }
         )
 
+
         NavigationBarItem(
             selected = isSelectedNotifications,
             onClick = { viewModel.onEvent(BottomBarEvent.Navigate(NOTIFICATIONS)) },
             label = { Text(text = BOTTOM_NAVBAR_NOTIFICATION) },
             icon = {
-                Icon(
+                /*Icon(
                     painter = painterResource(R.drawable.notification_icon),
                     contentDescription = stringResource(R.string.default_image_description),
                     modifier = Modifier.size(24.dp)
-                )
-            }
+                )*/
+
+                BadgedBox(
+                    badge = {
+                        //Text(text = viewModel.notificationCount.toString())
+                        Badge()
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.notification_icon),
+                        contentDescription = stringResource(R.string.default_image_description),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            },
         )
     }
 }

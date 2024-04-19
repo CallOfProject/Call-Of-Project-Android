@@ -92,11 +92,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     //Retrofit
     implementation(libs.retrofit) { exclude(module = "okhttp") }
+    implementation (libs.okhttp)
     implementation(libs.gson)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.coil.compose)
+    implementation ("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation ("io.reactivex.rxjava2:rxjava:2.2.8")
+    implementation ("io.reactivex.rxjava2:rxandroid:2.1.0")
+    implementation("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
+
 }
 
 kapt {

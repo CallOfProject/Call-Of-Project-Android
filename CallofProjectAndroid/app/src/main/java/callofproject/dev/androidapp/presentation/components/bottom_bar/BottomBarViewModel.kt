@@ -22,6 +22,8 @@ class BottomBarViewModel @Inject constructor(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
+    var notificationCount by mutableStateOf(3)
+        private set
 
     fun onEvent(event: BottomBarEvent) = when (event) {
         is BottomBarEvent.Navigate -> onNavigate(event.route)

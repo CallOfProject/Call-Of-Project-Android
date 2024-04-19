@@ -6,11 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
+import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.UiEvent
 import callofproject.dev.androidapp.util.route.UiText
+import callofproject.dev.androidapp.websocket.WebSocketClient
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -20,12 +23,20 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import okhttp3.WebSocketListener
 import javax.inject.Inject
 
 @HiltViewModel
-class MainPageViewModel @Inject constructor(private val useCases: UseCaseFacade) : ViewModel() {
+class MainPageViewModel @Inject constructor(
+    private val useCases: UseCaseFacade,
+    private val webSocketClient: WebSocketClient,
+    private val pref: IPreferences,
+    private val gson: Gson
+) : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
+
+    private var webSocketListener: WebSocketListener? = null
 
     var state by mutableStateOf(MainPageState())
         private set
@@ -34,6 +45,7 @@ class MainPageViewModel @Inject constructor(private val useCases: UseCaseFacade)
 
     init {
         findProjectDiscovery()
+        startWebSocket()
     }
 
     private fun findProjectDiscovery() {
@@ -80,5 +92,9 @@ class MainPageViewModel @Inject constructor(private val useCases: UseCaseFacade)
                 _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/${event.projectId}"))
             }
         }
+    }
+
+    private fun startWebSocket() {
+        webSocketClient.connectWebSocket()
     }
 }

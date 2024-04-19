@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -82,6 +83,7 @@ fun ProjectDetailsScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(10.dp)
                         .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
@@ -90,13 +92,17 @@ fun ProjectDetailsScreen(
                     Image(
                         painter = rememberAsyncImagePainter(state.projectDetailsDTO.projectImagePath),
                         contentDescription = "project",
-                        modifier = Modifier.size(120.dp),
+                        modifier = Modifier
+                            .size(160.dp)
+                            .padding(1.dp),
                         alignment = Alignment.Center
                     )
                     Text(
                         text = state.projectDetailsDTO.projectTitle,
                         modifier = Modifier.padding(5.dp),
-                        style = MaterialTheme.typography.headlineMedium
+                        style = MaterialTheme.typography.headlineMedium,
+                        textAlign = TextAlign.Center,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = state.projectDetailsDTO.projectOwnerName,
@@ -144,7 +150,7 @@ fun ProjectDetailsScreen(
                         height = 270.dp
                     ) {
                         LazyColumn {
-                            items(tech.size){index ->
+                            items(tech.size) { index ->
                                 Card(
                                     colors = CardColors(
                                         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -155,8 +161,10 @@ fun ProjectDetailsScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(5.dp)
-                                        .border(BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                                            shape = RoundedCornerShape(5.dp))
+                                        .border(
+                                            BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                                            shape = RoundedCornerShape(5.dp)
+                                        )
                                 ) {
                                     Text(
                                         text = tech[index],
