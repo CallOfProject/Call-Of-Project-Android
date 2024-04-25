@@ -45,11 +45,11 @@ fun FilteredProjectScreen(
     val context = androidx.compose.ui.platform.LocalContext.current
 
     LaunchedEffect(key1 = true) {
+        viewModel.saveFilterOptions(filterObj)
         viewModel.onEvent(ProjectFilterEvent.OnClickFilterProjectBtn(filterObj))
     }
 
     LaunchedEffect(key1 = true) {
-        Log.d("FilteredProjectScreen", state.projectFilterList.projects.size.toString())
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Navigate -> onNavigate(event)

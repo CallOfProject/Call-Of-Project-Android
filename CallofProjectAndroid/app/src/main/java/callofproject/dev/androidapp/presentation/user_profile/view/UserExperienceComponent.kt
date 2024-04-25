@@ -25,7 +25,11 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewMod
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserExperienceEditComponent
 
 @Composable
-fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
+fun UserExperienceComponent(
+    state: UserProfileState,
+    viewModel: UserProfileViewModel,
+    isEditable: Boolean = true
+) {
     var expandedUpsertExperience by remember { mutableStateOf(false) }
     var expandedAddExperience by remember { mutableStateOf(false) }
     var selectedExperienceIndex by remember { mutableIntStateOf(-1) }
@@ -35,6 +39,7 @@ fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewM
         400.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = stringResource(R.string.default_image_description),
+        isEditable = isEditable,
         onIconClick = { expandedAddExperience = true }) {
 
         LazyColumn {
@@ -45,6 +50,7 @@ fun UserExperienceComponent(state: UserProfileState, viewModel: UserProfileViewM
 
                 EditableCardComponent(
                     title = experience.companyName,
+                    isEditable = isEditable,
                     onIconClick = {
                         expandedUpsertExperience = true; selectedExperienceIndex = index
                     }

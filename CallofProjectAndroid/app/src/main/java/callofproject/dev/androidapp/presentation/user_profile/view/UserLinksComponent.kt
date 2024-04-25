@@ -33,7 +33,11 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewMod
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserLinkEditComponent
 
 @Composable
-fun UserLinksComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
+fun UserLinksComponent(
+    state: UserProfileState,
+    viewModel: UserProfileViewModel,
+    isEditable: Boolean = true
+) {
     val context = LocalContext.current
     var expandedUpdateLink by remember { mutableStateOf(false) }
     var expandedAddLink by remember { mutableStateOf(false) }
@@ -44,6 +48,7 @@ fun UserLinksComponent(state: UserProfileState, viewModel: UserProfileViewModel)
         height = 400.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = "Add",
+        isEditable = isEditable,
         onIconClick = { expandedAddLink = true }
     ) {
         LazyColumn {
@@ -54,6 +59,7 @@ fun UserLinksComponent(state: UserProfileState, viewModel: UserProfileViewModel)
                 EditableCardComponent(
                     height = 100.dp,
                     title = link.linkTitle,
+                    isEditable = isEditable,
                     onIconClick = { expandedUpdateLink = true; selectedLinkIndex = index }
                 ) { LinkDetails(link, context) }
             }

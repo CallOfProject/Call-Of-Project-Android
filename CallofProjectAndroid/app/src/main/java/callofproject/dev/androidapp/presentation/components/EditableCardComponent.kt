@@ -41,6 +41,7 @@ fun EditableCardComponent(
     imageDescription: String = "Edit",
     padVal: PaddingValues = PaddingValues(10.dp),
     onIconClick: (context: Context) -> Unit = {},
+    isEditable: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -77,16 +78,17 @@ fun EditableCardComponent(
                 }
                 content()
             }
-            IconButton(
-                onClick = {
-                    onIconClick(context)
-                }, modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(10.dp)
-                    .size(24.dp)
-            ) {
-                Icon(imageVector, contentDescription = imageDescription)
-            }
+            if (isEditable)
+                IconButton(
+                    onClick = {
+                        onIconClick(context)
+                    }, modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(10.dp)
+                        .size(24.dp)
+                ) {
+                    Icon(imageVector, contentDescription = imageDescription)
+                }
 
         }
     }

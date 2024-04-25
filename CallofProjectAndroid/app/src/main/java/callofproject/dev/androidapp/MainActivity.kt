@@ -30,6 +30,7 @@ import callofproject.dev.androidapp.presentation.project.project_filter.Filtered
 import callofproject.dev.androidapp.presentation.project.project_overview.ProjectOverviewScreen
 import callofproject.dev.androidapp.presentation.search.SearchScreen
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileScreen
+import callofproject.dev.androidapp.presentation.user_profile.user_view.UserOverviewScreen
 import callofproject.dev.androidapp.ui.theme.CallofProjectAndroidTheme
 import callofproject.dev.androidapp.util.route.Route.FILTERED_PROJECTS
 import callofproject.dev.androidapp.util.route.Route.LOGIN
@@ -41,6 +42,7 @@ import callofproject.dev.androidapp.util.route.Route.PROJECT_DETAILS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_OVERVIEW
 import callofproject.dev.androidapp.util.route.Route.SEARCH_RESULT
 import callofproject.dev.androidapp.util.route.Route.SIGN_UP
+import callofproject.dev.androidapp.util.route.Route.USER_OVERVIEW
 import callofproject.dev.androidapp.util.route.navigate
 import com.google.gson.Gson
 import com.onesignal.OneSignal
@@ -192,6 +194,31 @@ class MainActivity : ComponentActivity() {
                         composable(PROFILE) {
                             UserProfileScreen(
                                 scaffoldState = scaffoldState,
+                                topBar = {
+                                    TopAppBarComponent(
+                                        title = stringResource(R.string.title_profile),
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                                bottomBar = {
+                                    BottomBarComponent(
+                                        scaffoldState = scaffoldState,
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                            )
+
+                        }
+
+                        composable(
+                            "$USER_OVERVIEW/{userId}",
+                            arguments = listOf(navArgument("userId") {
+                                type = NavType.StringType
+                            })
+                        ) {
+                            val userId = it.arguments?.getString("userId")
+                            UserOverviewScreen(
+                                userId = userId!!,
                                 topBar = {
                                     TopAppBarComponent(
                                         title = stringResource(R.string.title_profile),

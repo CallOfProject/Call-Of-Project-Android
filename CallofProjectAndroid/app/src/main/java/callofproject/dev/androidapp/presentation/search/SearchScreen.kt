@@ -187,7 +187,13 @@ fun SearchScreen(
                                 .padding(10.dp), shape = RoundedCornerShape(10.dp)
                         ) {
                             Row(
-                                modifier = Modifier.clickable {},
+                                modifier = Modifier.clickable {
+                                    viewModel.onEvent(
+                                        SearchEvent.OnUserClick(
+                                            user.userId.toString()
+                                        )
+                                    )
+                                },
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceEvenly,
                                 content = {

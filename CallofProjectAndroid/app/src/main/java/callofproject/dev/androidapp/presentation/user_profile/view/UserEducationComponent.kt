@@ -23,7 +23,7 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewMod
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserEducationEditComponent
 
 @Composable
-fun UserEducationComponent(state: UserProfileState, viewModel: UserProfileViewModel) {
+fun UserEducationComponent(state: UserProfileState, viewModel: UserProfileViewModel, isEditable: Boolean = true) {
     var expandedUpsertEducation by remember { mutableStateOf(false) }
     var expandedAddEducation by remember { mutableStateOf(false) }
     var selectedEducationIndex by remember { mutableIntStateOf(-1) }
@@ -33,6 +33,7 @@ fun UserEducationComponent(state: UserProfileState, viewModel: UserProfileViewMo
         400.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = "Add",
+        isEditable = isEditable,
         onIconClick = { expandedAddEducation = true }
     ) {
         LazyColumn {
@@ -41,6 +42,7 @@ fun UserEducationComponent(state: UserProfileState, viewModel: UserProfileViewMo
 
                 EditableCardComponent(
                     title = state.userProfileDTO.profile.educations[idx].schoolName,
+                    isEditable = isEditable,
                     onIconClick = { expandedUpsertEducation = true; selectedEducationIndex = idx }
                 ) { EducationDetails(state.userProfileDTO.profile.educations[idx]) }
             }

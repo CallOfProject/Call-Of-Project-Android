@@ -172,17 +172,19 @@ class UserProfileUseCase @Inject constructor(
     }
 
 
-    suspend fun findUserProfile(): Resource<UserWithProfileDTO> {
+    suspend fun findUserProfile(userId: String): Resource<UserWithProfileDTO> {
         return try {
 
             val responseMessage = service.findUserProfileByUserId(
-                userId = UUID.fromString(preferences.getUserId()!!),
+                userId = UUID.fromString(userId),
                 token = getBearerToken()
             )
 
+            Log.d("UserProfileUseCase", responseMessage.`object`!!.toString())
             Resource.Success(responseMessage.`object`!!)
 
         } catch (e: Exception) {
+            Log.e("UserProfileUseCase", e.message ?: "An error occurred")
             Resource.Error(e.message ?: "An error occurred")
         }
     }

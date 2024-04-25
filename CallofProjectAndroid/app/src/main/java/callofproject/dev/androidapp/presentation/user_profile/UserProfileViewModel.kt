@@ -381,9 +381,9 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
-    fun findUserProfileByUserId() {
+    fun findUserProfileByUserId(userId: String = preferences.getUserId()!!) {
         viewModelScope.launch {
-            useCaseFacade.userProfile.findUserProfile().let { result ->
+            useCaseFacade.userProfile.findUserProfile(userId).let { result ->
                 when (result) {
                     is Resource.Success -> {
                         state = state.copy(

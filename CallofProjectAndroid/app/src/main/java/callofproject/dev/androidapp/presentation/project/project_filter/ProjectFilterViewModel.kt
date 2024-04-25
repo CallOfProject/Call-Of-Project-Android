@@ -125,4 +125,8 @@ class ProjectFilterViewModel @Inject constructor(
             wordContains.value.ifBlank { "" },
         )
     }
+
+    fun saveFilterOptions(filterObj: ProjectFilterDTO) {
+        // TODO: Implement this method
+    }
 }
