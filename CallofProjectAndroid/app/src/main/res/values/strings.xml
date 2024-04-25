@@ -92,6 +92,12 @@
     <string name="request_sent">Project Join Request sent to owner!</string>
     <string name="message_joinRequest">Join Project</string>
     <string name="title_filteredProjects">Filtered Projects</string>
+    <string name="title_search">Search - \"%s\"</string>
+    <string name="search_users">Users</string>
+    <string name="search_projects">Projects</string>
+    <string name="username_root">cop_root</string>
+    <string name="username_admin">cop_admin</string>
+    <string name="follow">Follow</string>
 
 
     <string-array name="array_projectStatus">

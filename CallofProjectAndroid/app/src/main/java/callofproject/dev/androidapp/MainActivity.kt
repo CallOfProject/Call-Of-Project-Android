@@ -20,7 +20,7 @@ import androidx.navigation.navArgument
 import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.presentation.authentication.login.LoginScreen
 import callofproject.dev.androidapp.presentation.authentication.signup.RegisterScreen
-import callofproject.dev.androidapp.presentation.components.TopAppBarComponent
+import callofproject.dev.androidapp.presentation.components.topbar.TopAppBarComponent
 import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarComponent
 import callofproject.dev.androidapp.presentation.main_page.MainScreen
 import callofproject.dev.androidapp.presentation.notifications.NotificationScreen
@@ -28,6 +28,7 @@ import callofproject.dev.androidapp.presentation.project.my_projects.MyProjectsS
 import callofproject.dev.androidapp.presentation.project.project_details.ProjectDetailsScreen
 import callofproject.dev.androidapp.presentation.project.project_filter.FilteredProjectScreen
 import callofproject.dev.androidapp.presentation.project.project_overview.ProjectOverviewScreen
+import callofproject.dev.androidapp.presentation.search.SearchScreen
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileScreen
 import callofproject.dev.androidapp.ui.theme.CallofProjectAndroidTheme
 import callofproject.dev.androidapp.util.route.Route.FILTERED_PROJECTS
@@ -38,6 +39,7 @@ import callofproject.dev.androidapp.util.route.Route.PROFILE
 import callofproject.dev.androidapp.util.route.Route.PROJECTS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_DETAILS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_OVERVIEW
+import callofproject.dev.androidapp.util.route.Route.SEARCH_RESULT
 import callofproject.dev.androidapp.util.route.Route.SIGN_UP
 import callofproject.dev.androidapp.util.route.navigate
 import com.google.gson.Gson
@@ -116,6 +118,34 @@ class MainActivity : ComponentActivity() {
                                 topBar = {
                                     TopAppBarComponent(
                                         title = stringResource(R.string.title_filteredProjects),
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                                bottomBar = {
+                                    BottomBarComponent(
+                                        scaffoldState = scaffoldState,
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                                scaffoldState = scaffoldState,
+                                onNavigate = navController::navigate
+                            )
+                        }
+
+
+                        composable(
+                            "$SEARCH_RESULT/{keyword}",
+                            arguments = listOf(navArgument("keyword") {
+                                type = NavType.StringType
+                            })
+                        )
+                        {
+                            val keyword = it.arguments?.getString("keyword")!!
+                            SearchScreen(
+                                keyword = keyword,
+                                topBar = {
+                                    TopAppBarComponent(
+                                        title = stringResource(R.string.title_search).format(keyword),
                                         onNavigate = navController::navigate
                                     )
                                 },

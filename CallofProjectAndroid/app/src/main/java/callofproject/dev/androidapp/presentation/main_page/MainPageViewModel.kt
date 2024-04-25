@@ -49,6 +49,14 @@ class MainPageViewModel @Inject constructor(
         startWebSocket()
     }
 
+    fun onEvent(event: MainPageEvent) = when (event) {
+        is MainPageEvent.OnClickProjectDiscoveryItem -> {
+            viewModelScope.launch {
+                _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/${event.projectId}"))
+            }
+        }
+    }
+
     private fun findProjectDiscovery() {
         findAllJob?.cancel()
         state = state.copy(isLoading = true)
@@ -87,13 +95,6 @@ class MainPageViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: MainPageEvent) = when (event) {
-        is MainPageEvent.OnClickProjectDiscoveryItem -> {
-            viewModelScope.launch {
-                _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/${event.projectId}"))
-            }
-        }
-    }
 
     private fun startWebSocket() {
         webSocketClient.connectWebSocket()

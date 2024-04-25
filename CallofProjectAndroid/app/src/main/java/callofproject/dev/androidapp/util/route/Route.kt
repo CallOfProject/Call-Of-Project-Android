@@ -10,4 +10,6 @@ object Route {
     const val NOTIFICATIONS = "notifications"
     const val PROJECTS = "projects"
     const val FILTERED_PROJECTS = "filtered_projects"
+    const val USER_OVERVIEW = "user_overview"
+    const val SEARCH_RESULT = "search_result"
 }
