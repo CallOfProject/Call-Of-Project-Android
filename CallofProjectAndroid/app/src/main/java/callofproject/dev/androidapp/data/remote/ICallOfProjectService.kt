@@ -6,12 +6,15 @@ import callofproject.dev.androidapp.domain.dto.NotificationDTO
 import callofproject.dev.androidapp.domain.dto.ResponseMessage
 import callofproject.dev.androidapp.domain.dto.UserLoginDTO
 import callofproject.dev.androidapp.domain.dto.UserRegisterDTO
+import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectJoinRequestDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectOverviewDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectParticipantRequestDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDiscoveryDTO
+import callofproject.dev.androidapp.domain.dto.search.ProjectsDTO
+import callofproject.dev.androidapp.domain.dto.search.SearchUserAndProjectResponse
 import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.UserWithProfileDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.Course
@@ -174,4 +177,19 @@ interface ICallOfProjectService {
         @Body projectJoinRequestDTO: ProjectJoinRequestDTO,
         @Header("Authorization") token: String
     ): ResponseMessage<Boolean>
+
+    @POST("/api/filter-and-search/service/search")
+    suspend fun search(
+        @Query("p") page: Int,
+        @Query("keyword") keyword: String,
+        @Header("Authorization") token: String
+    ): MultipleResponseMessagePageable<SearchUserAndProjectResponse>
+
+
+    @POST("/api/filter-and-search/service/filter/projects")
+    suspend fun filterProjects(
+        @Query("p") page: Int,
+        @Body filterDTO: ProjectFilterDTO,
+        @Header("Authorization") token: String
+    ): MultipleResponseMessagePageable<ProjectsDTO>
 }

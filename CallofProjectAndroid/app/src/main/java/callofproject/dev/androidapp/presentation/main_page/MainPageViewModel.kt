@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
+import callofproject.dev.androidapp.presentation.project.project_filter.ProjectFilterState
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.UiEvent

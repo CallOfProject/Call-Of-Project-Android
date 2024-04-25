@@ -24,7 +24,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
-import callofproject.dev.androidapp.presentation.project.project_filter.FilterScreen
+import callofproject.dev.androidapp.presentation.project.project_filter.FilterComponent
 import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.UiEvent
 
@@ -57,7 +57,7 @@ fun TopAppBarComponent(
             )
 
         } else if (isFiltering.value) {
-            FilterScreen(isFiltering)
+            FilterComponent(isFiltering, onNavigate)
         } else {
             Text(text = title, color = MaterialTheme.colorScheme.onTertiaryContainer)
         }

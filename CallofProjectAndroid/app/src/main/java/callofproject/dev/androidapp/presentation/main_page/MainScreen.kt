@@ -116,7 +116,6 @@ fun MainScreen(
                                         style = MaterialTheme.typography.bodySmall
                                     )
                                 })
-
                         })
                 }
             }

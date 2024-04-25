@@ -4,12 +4,14 @@ import android.util.Log
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.dto.MultipleResponseMessagePageable
 import callofproject.dev.androidapp.domain.dto.NotificationDTO
+import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectJoinRequestDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectOverviewDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectParticipantRequestDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectsDiscoveryDTO
+import callofproject.dev.androidapp.domain.dto.search.ProjectsDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -145,6 +147,33 @@ class ProjectUseCase @Inject constructor(
 
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An unexpected error occurred")
+        }
+    }
+
+
+    suspend fun filterProjects(
+        dto: ProjectFilterDTO,
+        page: Int = 1
+    ): Flow<Resource<MultipleResponseMessagePageable<ProjectsDTO>>> {
+        return flow {
+
+            emit(Resource.Loading())
+
+            try {
+
+                val response = service.filterProjects(
+                    page = page,
+                    filterDTO = dto,
+                    token = preferences.getToken()!!
+                )
+
+                emit(Resource.Success(response))
+                Log.d("ProjectUseCase", "filterProjects: ${response.`object`}")
+
+            } catch (e: Exception) {
+                Log.e("ProjectUseCase", "filterProjects: ", e)
+                emit(Resource.Error(e.message ?: "An unexpected error occurred"))
+            }
         }
 
     }

@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.presentation.authentication.login.LoginScreen
 import callofproject.dev.androidapp.presentation.authentication.signup.RegisterScreen
 import callofproject.dev.androidapp.presentation.components.TopAppBarComponent
@@ -25,9 +26,11 @@ import callofproject.dev.androidapp.presentation.main_page.MainScreen
 import callofproject.dev.androidapp.presentation.notifications.NotificationScreen
 import callofproject.dev.androidapp.presentation.project.my_projects.MyProjectsScreen
 import callofproject.dev.androidapp.presentation.project.project_details.ProjectDetailsScreen
+import callofproject.dev.androidapp.presentation.project.project_filter.FilteredProjectScreen
 import callofproject.dev.androidapp.presentation.project.project_overview.ProjectOverviewScreen
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileScreen
 import callofproject.dev.androidapp.ui.theme.CallofProjectAndroidTheme
+import callofproject.dev.androidapp.util.route.Route.FILTERED_PROJECTS
 import callofproject.dev.androidapp.util.route.Route.LOGIN
 import callofproject.dev.androidapp.util.route.Route.MAIN_PAGE
 import callofproject.dev.androidapp.util.route.Route.NOTIFICATIONS
@@ -37,6 +40,7 @@ import callofproject.dev.androidapp.util.route.Route.PROJECT_DETAILS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_OVERVIEW
 import callofproject.dev.androidapp.util.route.Route.SIGN_UP
 import callofproject.dev.androidapp.util.route.navigate
+import com.google.gson.Gson
 import com.onesignal.OneSignal
 import com.onesignal.debug.LogLevel
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,6 +86,36 @@ class MainActivity : ComponentActivity() {
                                 topBar = {
                                     TopAppBarComponent(
                                         title = stringResource(R.string.title_mainPage),
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                                bottomBar = {
+                                    BottomBarComponent(
+                                        scaffoldState = scaffoldState,
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                                scaffoldState = scaffoldState,
+                                onNavigate = navController::navigate
+                            )
+                        }
+
+                        composable(
+                            "$FILTERED_PROJECTS/{filterObj}",
+                            arguments = listOf(navArgument("filterObj") {
+                                type = NavType.StringType
+                            })
+                        )
+                        {
+                            val filterObj = Gson().fromJson(
+                                it.arguments?.getString("filterObj"),
+                                ProjectFilterDTO::class.java
+                            )
+                            FilteredProjectScreen(
+                                filterObj = filterObj,
+                                topBar = {
+                                    TopAppBarComponent(
+                                        title = stringResource(R.string.title_filteredProjects),
                                         onNavigate = navController::navigate
                                     )
                                 },

@@ -91,6 +91,7 @@
     <string name="msg_notificationNotFound">These areas are clean. There are no notifications.</string>
     <string name="request_sent">Project Join Request sent to owner!</string>
     <string name="message_joinRequest">Join Project</string>
+    <string name="title_filteredProjects">Filtered Projects</string>
 
 
     <string-array name="array_projectStatus">
@@ -101,7 +102,7 @@
 
 
     <string-array name="array_interviewType">
-        <item>CODING</item>
+        <item>CODE</item>
         <item>TEST</item>
         <item>NO_INTERVIEW</item>
     </string-array>
@@ -127,8 +128,8 @@
 
 
     <string-array name="array_professionLevels">
-        <item>ENTRY_LEVEL</item>
-        <item>INTERMEDIATE</item>
-        <item>EXPERT</item>
+        <item>Entry_Level</item>
+        <item>Intermediate</item>
+        <item>Expert</item>
     </string-array>
 </resources>

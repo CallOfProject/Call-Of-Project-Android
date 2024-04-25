@@ -6,6 +6,7 @@ import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.AuthenticationUseCase
 import callofproject.dev.androidapp.domain.use_cases.NotificationUseCase
 import callofproject.dev.androidapp.domain.use_cases.ProjectUseCase
+import callofproject.dev.androidapp.domain.use_cases.SearchUseCase
 import callofproject.dev.androidapp.domain.use_cases.UploadFileUseCase
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.domain.use_cases.UserProfileUseCase
@@ -33,7 +34,8 @@ object UseCaseModule {
         uploadFile = UploadFileUseCase(service, preferences, context),
         project = ProjectUseCase(service, preferences),
         userProfile = UserProfileUseCase(service, preferences),
-        notification = NotificationUseCase(context, preferences, service)
+        notification = NotificationUseCase(context, preferences, service),
+        search = SearchUseCase(context, preferences, service)
     )
 
     @Provides

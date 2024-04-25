@@ -5,5 +5,6 @@ data class UseCaseFacade(
     val uploadFile: UploadFileUseCase,
     val project: ProjectUseCase,
     val userProfile: UserProfileUseCase,
-    val notification: NotificationUseCase
+    val notification: NotificationUseCase,
+    val search: SearchUseCase
 )

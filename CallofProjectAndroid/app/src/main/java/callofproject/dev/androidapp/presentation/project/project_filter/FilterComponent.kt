@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,17 +25,26 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.CustomDatePicker
-import callofproject.dev.androidapp.presentation.components.MultipleFilterChipComponent
 import callofproject.dev.androidapp.presentation.components.SingleFilterChipComponent
+import callofproject.dev.androidapp.util.route.UiEvent
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterScreen(
+fun FilterComponent(
     isFiltering: MutableState<Boolean>,
+    onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ProjectFilterViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Navigate -> onNavigate(event)
 
+                else -> Unit
+            }
+        }
+    }
     ModalBottomSheet(
         modifier = Modifier.fillMaxSize(),
         onDismissRequest = { isFiltering.value = false }) {
@@ -64,19 +74,19 @@ fun FilterScreen(
                 viewModel.interviewTypes
             )
 
-            MultipleFilterChipComponent(
+            SingleFilterChipComponent(
                 stringResource(R.string.text_degree),
                 viewModel.selectedDegrees,
                 viewModel.degreeItems
             )
 
-            MultipleFilterChipComponent(
+            SingleFilterChipComponent(
                 stringResource(R.string.text_feedbackTimeRange),
                 viewModel.selectedFeedbackTimeRanges,
                 viewModel.feedbackTimeRanges
             )
 
-            MultipleFilterChipComponent(
+            SingleFilterChipComponent(
                 stringResource(R.string.text_projectStatus),
                 viewModel.selectedProjectStatus,
                 viewModel.projectStatusItems
@@ -125,7 +135,7 @@ fun FilterScreen(
                 }
             }
 
-            Button(onClick = { viewModel.onEvent(ProjectFilterEvent.OnClickFilterBtn) }) {
+            Button(onClick = { viewModel.onEvent(ProjectFilterEvent.OnClickSaveFilterBtn) }) {
                 Text(text = stringResource(R.string.text_applyFilters))
             }
         }
