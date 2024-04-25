@@ -2,6 +2,9 @@
 
 The Call-of-Project Android app is the mobile counterpart of the Call-of-Project project. This mobile application incorporates some of the backend and frontend features. It employs the MVVM (Model-View-ViewModel) pattern.
 
+### Author
+- **Author:** [Nuri Can ÖZTÜRK](https://github.com/nuricanozturk01)
+
 ## Project Details
 
 For more information about the project, visit our repositories:
@@ -53,6 +56,9 @@ The application uses the following dependencies:
 <img width="200" src="./images/theme/dark/profile.png">
 <img width="200" src="./images/theme/dark/my_projects.png">
 <img width="200" src="./images/theme/dark/project_filter.png">
+<img width="200" src="./images/theme/dark/filter_project.png">
+<img width="200" src="./images/theme/dark/search_1.png">
+<img width="200" src="./images/theme/dark/search_2.png">
 </p>
 
 ### Light Theme
