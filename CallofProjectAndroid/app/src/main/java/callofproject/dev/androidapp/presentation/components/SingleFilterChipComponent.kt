@@ -10,13 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,8 +34,8 @@ fun SingleFilterChipComponent(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp)
-            .border(BorderStroke(1.dp, SolidColor(Color.Gray)))
+            .padding(3.dp)
+            .border(BorderStroke(1.dp, SolidColor(MaterialTheme.colorScheme.primary)))
     ) {
         Text(
             text = text,
@@ -49,10 +49,13 @@ fun SingleFilterChipComponent(
             horizontalArrangement = Center
         ) {
             items(itemsList) { item ->
+                val isSelected = item == selectedItem.value
                 FilterChip(
                     modifier = Modifier.padding(horizontal = 6.dp),
-                    selected = (item == selectedItem.value),
-                    onClick = { selectedItem.value = item },
+                    selected = isSelected,
+                    onClick = {
+                        if (isSelected) selectedItem.value = "" else selectedItem.value = item
+                    },
                     label = { Text(text = item, fontSize = 9.5.sp) }
                 )
             }

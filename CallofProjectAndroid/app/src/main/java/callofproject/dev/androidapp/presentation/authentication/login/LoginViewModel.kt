@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.presentation.authentication.login
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.AuthenticationResponse
+import callofproject.dev.androidapp.domain.dto.UserLoginDTO
+import callofproject.dev.androidapp.domain.preferences.IEncryptedPreferences
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
@@ -24,11 +27,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val preferences: IPreferences,
+    private val encryptedPref: IEncryptedPreferences,
     private val useCases: UseCaseFacade
 ) : ViewModel() {
 
@@ -37,6 +43,7 @@ class LoginViewModel @Inject constructor(
 
     var state by mutableStateOf(LoginState())
         private set
+
 
     fun onEvent(event: LoginEvent) = when (event) {
         is LoginEvent.OnLoginButtonClick -> login()
@@ -63,6 +70,8 @@ class LoginViewModel @Inject constructor(
             preferences.saveUsername(state.userLoginDTO.username)
             preferences.saveToken(result.data!!.accessToken)
             preferences.saveUserId(result.data.user_id.toString())
+            preferences.saveLoginDate(LocalDate.now())
+            encryptedPref.saveUserPassword(state.userLoginDTO.password)
             _uiEvent.send(Navigate(Route.MAIN_PAGE))
         }
 
@@ -73,10 +82,29 @@ class LoginViewModel @Inject constructor(
 
 
     private fun login() {
-        useCases.authentication.login(state.userLoginDTO).onEach { loginCallback(it) }.launchIn(viewModelScope)
+        useCases.authentication.login(state.userLoginDTO).onEach { loginCallback(it) }
+            .launchIn(viewModelScope)
     }
 
     private fun onRegisterClick() {
         viewModelScope.launch { _uiEvent.send(Navigate(SIGN_UP)) }
+    }
+
+
+    fun check() {
+        val willLastLogin = preferences.getLoginDate().plusDays(30)
+        val now = LocalDate.now()
+
+        if (now.isBefore(willLastLogin) || willLastLogin.isEqual(now)) {
+            val username = preferences.getUsername()
+            val password = encryptedPref.getUserPassword()
+            if (username != null && password != null) {
+                state = state.copy(userLoginDTO = UserLoginDTO(username, password))
+                login()
+            }
+        } else
+            viewModelScope.launch {
+                _uiEvent.send(ShowSnackbar(DynamicString("Please login again")))
+            }
     }
 }

@@ -55,6 +55,9 @@ fun NotificationScreen(
     val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
+
+    }
+    LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Navigate -> onNavigate(event)

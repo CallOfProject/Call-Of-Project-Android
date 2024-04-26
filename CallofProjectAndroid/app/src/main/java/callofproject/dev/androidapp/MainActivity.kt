@@ -20,8 +20,8 @@ import androidx.navigation.navArgument
 import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.presentation.authentication.login.LoginScreen
 import callofproject.dev.androidapp.presentation.authentication.signup.RegisterScreen
-import callofproject.dev.androidapp.presentation.components.topbar.TopAppBarComponent
 import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarComponent
+import callofproject.dev.androidapp.presentation.components.topbar.TopAppBarComponent
 import callofproject.dev.androidapp.presentation.main_page.MainScreen
 import callofproject.dev.androidapp.presentation.notifications.NotificationScreen
 import callofproject.dev.androidapp.presentation.project.my_projects.MyProjectsScreen
@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -278,6 +279,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
     private fun initializePushNotifications() {
         OneSignal.Debug.logLevel = LogLevel.VERBOSE

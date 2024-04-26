@@ -2,6 +2,7 @@ package callofproject.dev.androidapp.presentation.project.project_filter
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
+import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.Route
@@ -30,7 +32,8 @@ import javax.inject.Inject
 class ProjectFilterViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val useCases: UseCaseFacade,
-    private val gson: Gson
+    private val gson: Gson,
+    private val pref: IPreferences
 ) :
     ViewModel() {
     private val resources = context.resources as Resources
@@ -47,12 +50,14 @@ class ProjectFilterViewModel @Inject constructor(
     var selectedProjectStatus = mutableStateOf("")
     var isOpenStartDateDialog = mutableStateOf(false)
     var isOpenCompletionDateDialog = mutableStateOf(false)
+    var isOpenDeadlineDialog = mutableStateOf(false)
     var selectedProfessionLevel = mutableStateOf("")
     var selectedInterviewType = mutableStateOf("")
     var selectedProjectLevel = mutableStateOf("")
     var wordContains = mutableStateOf("")
     var startDate = mutableStateOf("")
     var selectedExpectedCompletionDate = mutableStateOf("")
+    var selectedApplicationDeadline = mutableStateOf("")
 
     private var filterJob: Job? = null
     var state by mutableStateOf(ProjectFilterState())
@@ -73,6 +78,13 @@ class ProjectFilterViewModel @Inject constructor(
     private fun findProjectsByFilter(projectFilterDTO: ProjectFilterDTO) {
         filterJob?.cancel()
         state = state.copy(isLoading = true)
+        val startDateStr = projectFilterDTO.startDate?.replace("-", "/")
+        val completionDateStr = projectFilterDTO.expectedCompletionDate?.replace("-", "/")
+        val deadlineStr = projectFilterDTO.applicationDeadline?.replace("-", "/")
+        projectFilterDTO.startDate = startDateStr
+        projectFilterDTO.expectedCompletionDate = completionDateStr
+        projectFilterDTO.applicationDeadline = deadlineStr
+
         filterJob = viewModelScope.launch {
             useCases.project.filterProjects(projectFilterDTO, 1)
                 .onStart { delay(500L) }
@@ -101,7 +113,10 @@ class ProjectFilterViewModel @Inject constructor(
 
     private fun saveFilterOpt() {
         viewModelScope.launch {
-            _uiEvent.send(UiEvent.Navigate("${Route.FILTERED_PROJECTS}/${gson.toJson(createDTO())}"))
+            val dto = createDTO()
+            Log.d("ProjectFilterViewModel", "saveFilterOpt: $dto")
+            pref.saveFilterObjects(dto)
+            _uiEvent.send(UiEvent.Navigate("${Route.FILTERED_PROJECTS}/${gson.toJson(dto)}"))
         }
     }
 
@@ -112,6 +127,16 @@ class ProjectFilterViewModel @Inject constructor(
     }
 
     private fun createDTO(): ProjectFilterDTO {
+        val startDateStr = startDate.value.replace("/", "-").ifBlank { null }
+
+        val expectedCompletionDateStr = selectedExpectedCompletionDate.value
+            .replace("/", "-")
+            .ifBlank { null }
+
+        val applicationDeadlineStr = selectedApplicationDeadline.value
+            .replace("/", "-")
+            .ifBlank { null }
+
         return ProjectFilterDTO(
             selectedProfessionLevel.value.ifBlank { null },
             selectedProjectLevel.value.ifBlank { null },
@@ -119,14 +144,26 @@ class ProjectFilterViewModel @Inject constructor(
             selectedFeedbackTimeRanges.value.ifBlank { null },
             selectedInterviewType.value.ifBlank { null },
             selectedProjectStatus.value.ifBlank { null },
-            startDate.value.ifBlank { null },
-            selectedExpectedCompletionDate.value.ifBlank { null },
-            selectedExpectedCompletionDate.value.ifBlank { null },
+            startDateStr,
+            expectedCompletionDateStr,
+            applicationDeadlineStr,
             wordContains.value.ifBlank { "" },
         )
     }
 
-    fun saveFilterOptions(filterObj: ProjectFilterDTO) {
-        // TODO: Implement this method
+    fun clearFilter() = pref.clearFilterObjects()
+    fun putFilterOptions() {
+        val savedFilterObjects = pref.getFilterObjects()
+        startDate.value = savedFilterObjects.startDate!!
+        selectedExpectedCompletionDate.value = savedFilterObjects.expectedCompletionDate!!
+        selectedApplicationDeadline.value = savedFilterObjects.applicationDeadline!!
+        selectedDegrees.value = savedFilterObjects.degree!!
+        selectedFeedbackTimeRanges.value = savedFilterObjects.feedbackTimeRange!!
+        selectedInterviewType.value = savedFilterObjects.interviewType!!
+        selectedProjectStatus.value = savedFilterObjects.projectStatus!!
+        selectedProfessionLevel.value = savedFilterObjects.professionLevel!!
+        selectedProjectLevel.value = savedFilterObjects.projectLevel!!
+        wordContains.value = savedFilterObjects.keyword!!
     }
+
 }

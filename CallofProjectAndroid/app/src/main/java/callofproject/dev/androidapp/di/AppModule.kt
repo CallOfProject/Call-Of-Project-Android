@@ -4,8 +4,14 @@ import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.data.local.preferences.DefaultPreferences
+import callofproject.dev.androidapp.data.local.preferences.EncryptedPreferences
+import callofproject.dev.androidapp.di.interceptor.EncryptedPreferencesInterceptor
+import callofproject.dev.androidapp.di.interceptor.PlainPreferencesInterceptor
+import callofproject.dev.androidapp.domain.preferences.IEncryptedPreferences
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -25,6 +31,7 @@ object AppModule {
 
     @Provides
     @Singleton
+    @PlainPreferencesInterceptor
     fun provideSharedPreferences(
         @ApplicationContext context: Context,
         app: Application
@@ -34,8 +41,38 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePreferences(sharedPreferences: SharedPreferences): IPreferences {
-        return DefaultPreferences(sharedPreferences)
+    fun providePreferences(
+        @ApplicationContext context: Context,
+        @PlainPreferencesInterceptor sharedPreferences: SharedPreferences
+    ): IPreferences {
+        return DefaultPreferences(context, sharedPreferences)
+    }
+
+
+    @Provides
+    @Singleton
+    @EncryptedPreferencesInterceptor
+    fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        val masterKey = MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+
+        return EncryptedSharedPreferences.create(
+            context,
+            context.getString(R.string.enc_shared_pref_name),
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideEncryptedPreferences(
+        @ApplicationContext context: Context,
+        @EncryptedPreferencesInterceptor sharedPreferences: SharedPreferences
+    ): IEncryptedPreferences {
+        return EncryptedPreferences(context, sharedPreferences)
     }
 
     @Provides
@@ -61,4 +98,5 @@ object AppModule {
     @Provides
     @Singleton
     fun provideGson(): Gson = GsonBuilder().create()
+
 }

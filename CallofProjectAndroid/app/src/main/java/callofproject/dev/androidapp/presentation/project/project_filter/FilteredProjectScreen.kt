@@ -1,12 +1,12 @@
 package callofproject.dev.androidapp.presentation.project.project_filter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -24,10 +25,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
-import callofproject.dev.androidapp.presentation.components.LoadingComponent
 import callofproject.dev.androidapp.util.route.UiEvent
 import coil.compose.rememberAsyncImagePainter
 
@@ -45,9 +47,9 @@ fun FilteredProjectScreen(
     val context = androidx.compose.ui.platform.LocalContext.current
 
     LaunchedEffect(key1 = true) {
-        viewModel.saveFilterOptions(filterObj)
         viewModel.onEvent(ProjectFilterEvent.OnClickFilterProjectBtn(filterObj))
     }
+
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
@@ -68,9 +70,33 @@ fun FilteredProjectScreen(
         topBar = { topBar() },
         bottomBar = { bottomBar() },
         snackbarHost = { SnackbarHost(scaffoldState) }) { it ->
+
         if (state.isLoading)
-            LoadingComponent(it)
-        else LazyColumn(
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                CircularProgressIndicator(strokeWidth = 2.dp)
+            }
+        if (!state.isLoading && state.projectFilterList.projects.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "No projects found",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight(600),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        } else LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(it),
@@ -80,7 +106,11 @@ fun FilteredProjectScreen(
 
             items(state.projectFilterList.projects.size) {
                 if (state.projectFilterList.projects.isEmpty())
-                    Text(text = "No projects found", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = "No projects found",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 else
                     Card(
                         colors = CardColors(

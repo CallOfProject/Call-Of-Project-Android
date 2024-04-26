@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -19,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +40,10 @@ fun FilterComponent(
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ProjectFilterViewModel = hiltViewModel()
 ) {
+
+    LaunchedEffect(key1 = true) { viewModel.putFilterOptions() }
+
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
@@ -45,8 +53,12 @@ fun FilterComponent(
             }
         }
     }
+
+
     ModalBottomSheet(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         onDismissRequest = { isFiltering.value = false }) {
         Column(
             modifier = Modifier
@@ -94,9 +106,12 @@ fun FilterComponent(
 
             OutlinedTextField(
                 value = viewModel.wordContains.value,
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .height(45.dp),
                 onValueChange = { viewModel.wordContains.value = it },
-                modifier = Modifier.padding(bottom = 8.dp),
-                textStyle = TextStyle(fontSize = 12.sp)
+                textStyle = TextStyle(fontSize = 12.sp),
+                maxLines = 1,
             )
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = SpaceBetween) {
@@ -105,7 +120,9 @@ fun FilterComponent(
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Text(
-                        text = viewModel.startDate.value.ifBlank { stringResource(R.string.btn_startDate) }
+                        text = viewModel.startDate.value.ifBlank { stringResource(R.string.btn_startDate) },
+                        fontSize = 12.sp,
+                        overflow = TextOverflow.Ellipsis
                     )
 
                     CustomDatePicker(
@@ -123,7 +140,9 @@ fun FilterComponent(
                     Text(
                         text = viewModel.selectedExpectedCompletionDate.value.ifBlank {
                             stringResource(R.string.btn_completionDate)
-                        }
+                        },
+                        fontSize = 12.sp,
+                        overflow = TextOverflow.Ellipsis
                     )
 
                     CustomDatePicker(
@@ -133,7 +152,31 @@ fun FilterComponent(
                         },
                         onDismiss = { viewModel.isOpenCompletionDateDialog.value = false })
                 }
+
+                OutlinedButton(
+                    onClick = { viewModel.isOpenCompletionDateDialog.value = true },
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                {
+                    Text(
+                        text = viewModel.selectedExpectedCompletionDate.value.ifBlank {
+                            stringResource(R.string.btn_applicationDeadline)
+                        },
+                        fontSize = 12.sp,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    CustomDatePicker(
+                        isOpenDateDialog = viewModel.isOpenDeadlineDialog.value,
+                        onDateSelected = { date ->
+                            viewModel.selectedApplicationDeadline.value = date
+                        },
+                        onDismiss = { viewModel.isOpenDeadlineDialog.value = false })
+                }
             }
+
+
+
 
             Button(onClick = { viewModel.onEvent(ProjectFilterEvent.OnClickSaveFilterBtn) }) {
                 Text(text = stringResource(R.string.text_applyFilters))

@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.domain.dto.search.SearchUserAndProjectResponse
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
-import callofproject.dev.androidapp.presentation.main_page.MainPageState
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.UiEvent
@@ -36,6 +35,10 @@ class SearchViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
+
+    init {
+        pref.clearFilterObjects()
+    }
 
     fun onEvent(event: SearchEvent) = when (event) {
         is SearchEvent.OnProjectClick -> navigateToProjectOverview(event.projectId)

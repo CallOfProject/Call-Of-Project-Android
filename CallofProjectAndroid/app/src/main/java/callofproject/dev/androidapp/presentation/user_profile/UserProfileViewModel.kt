@@ -52,6 +52,10 @@ class UserProfileViewModel @Inject constructor(
     private var uploadImageJob: Job? = null
     private var uploadCVJob: Job? = null
 
+    init {
+        preferences.clearFilterObjects()
+    }
+
     fun onEvent(event: UserProfileEvent) = when (event) {
         is UserProfileEvent.OnCreateEducation -> saveEducation(event.educationDTO)
         is UserProfileEvent.OnUpdateEducation -> updateEducation(event.educationDTO)

@@ -21,13 +21,13 @@ data class ProjectFilterDTO(
     val projectStatus: String? = null,
 
     @SerializedName("start_date")
-    val startDate: String? = null,
+    var startDate: String? = null,
 
     @SerializedName("expected_completion_date")
-    val expectedCompletionDate: String? = null,
+    var expectedCompletionDate: String? = null,
 
     @SerializedName("application_deadline")
-    val applicationDeadline: String? = null,
+    var applicationDeadline: String? = null,
 
-    val keyword: String = ""
+    val keyword: String? = ""
 )

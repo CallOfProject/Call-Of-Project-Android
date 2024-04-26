@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.NotificationDTO
+import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.UiEvent
@@ -24,7 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-    private val useCaseFacade: UseCaseFacade
+    private val useCaseFacade: UseCaseFacade,
+    private val pref: IPreferences
 ) : ViewModel() {
 
     private val _uiEvent = Channel<UiEvent>()
@@ -36,6 +38,7 @@ class NotificationViewModel @Inject constructor(
 
     init {
         getNotifications()
+        pref.clearFilterObjects()
     }
 
     fun onEvent(event: NotificationEvent) = when (event) {

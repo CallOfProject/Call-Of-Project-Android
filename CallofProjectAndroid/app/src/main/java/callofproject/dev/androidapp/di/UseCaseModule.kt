@@ -48,6 +48,7 @@ object UseCaseModule {
         return NotificationUseCase(context, preferences, service)
     }
 
+
     @Provides
     @ViewModelScoped
     fun provideWebSocketClient(

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.Route
@@ -22,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProjectViewModel @Inject constructor(
-    private val useCases: UseCaseFacade
+    private val useCases: UseCaseFacade,
+    private val pref: IPreferences
 ) : ViewModel() {
 
     var state by mutableStateOf(MyProjectsState())
@@ -34,6 +36,9 @@ class ProjectViewModel @Inject constructor(
 
     private var findAllJob: Job? = null
 
+    init {
+        pref.clearFilterObjects()
+    }
 
     fun onEvent(event: MyProjectsEvent) = when (event) {
         is MyProjectsEvent.OnClickProject -> handleClickProject(event.projectId)

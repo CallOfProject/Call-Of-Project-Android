@@ -98,6 +98,8 @@
     <string name="username_root">cop_root</string>
     <string name="username_admin">cop_admin</string>
     <string name="follow">Follow</string>
+    <string name="btn_applicationDeadline">Deadline</string>
+    <string name="enc_shared_pref_name">user_info_pref</string>
 
 
     <string-array name="array_projectStatus">

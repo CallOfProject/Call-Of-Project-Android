@@ -3,7 +3,6 @@ package callofproject.dev.androidapp.domain.use_cases
 import android.content.Context
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.dto.MultipleResponseMessagePageable
-import callofproject.dev.androidapp.domain.dto.project.ProjectsDiscoveryDTO
 import callofproject.dev.androidapp.domain.dto.search.SearchUserAndProjectResponse
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.util.Resource

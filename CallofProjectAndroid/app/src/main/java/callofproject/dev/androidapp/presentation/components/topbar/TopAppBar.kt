@@ -1,6 +1,5 @@
 package callofproject.dev.androidapp.presentation.components.topbar
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -31,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.project.project_filter.FilterComponent
-import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.UiEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,10 +108,7 @@ fun TopAppBarComponent(
             )
         }
 
-        IconButton(onClick = {
-            viewModel.stopWebsocket()
-            onNavigate(UiEvent.Navigate(Route.LOGIN))
-        }) {
+        IconButton(onClick = { viewModel.onEvent(TopBarEvent.OnLogoutClicked) }) {
             Icon(
                 painter = painterResource(id = R.drawable.logout),
                 contentDescription = "",
