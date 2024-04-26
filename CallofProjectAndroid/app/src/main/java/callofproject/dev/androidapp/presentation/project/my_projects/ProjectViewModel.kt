@@ -46,7 +46,7 @@ class ProjectViewModel @Inject constructor(
 
     private fun handleClickProject(projectId: String) {
         viewModelScope.launch {
-            _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/$projectId"))
+            _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/$projectId/0"))
         }
 
     }

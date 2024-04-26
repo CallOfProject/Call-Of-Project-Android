@@ -30,6 +30,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,7 +53,8 @@ fun ProjectDetailsScreen(
     scaffoldState: SnackbarHostState,
     onNavigate: (UiEvent.Navigate) -> Unit,
     projectId: String,
-    viewModel: ProjectDetailViewModel = hiltViewModel()
+    viewModel: ProjectDetailViewModel = hiltViewModel(),
+    selectedNavBar: Int
 ) {
 
     val state = viewModel.state
@@ -66,9 +68,9 @@ fun ProjectDetailsScreen(
     Scaffold(
         topBar = {
             ProjectTopBarComponent(
-                scaffoldState = scaffoldState,
                 onNavigate = onNavigate,
-                projectId = projectId
+                projectId = projectId,
+                selectedNavBar = selectedNavBar
             )
         },
         bottomBar = { BottomBarComponent(scaffoldState, onNavigate) }
@@ -305,7 +307,7 @@ fun ProjectDetailsScreen(
                         Icons.Filled.Lock,
                         contentDescription = stringResource(R.string.default_image_description),
                         modifier = Modifier.size(55.dp),
-                        //colorFilter = ColorFilter.tint(Color.Red)
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
                     )
                     Text(
                         text = stringResource(R.string.warning_projectViewNotAllowed),

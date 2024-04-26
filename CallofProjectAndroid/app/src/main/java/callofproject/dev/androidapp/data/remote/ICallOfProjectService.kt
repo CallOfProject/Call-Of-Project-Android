@@ -35,6 +35,7 @@ import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkUpdateDTO
 import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -170,6 +171,24 @@ interface ICallOfProjectService {
         @Query("p") page: Int,
         @Header("Authorization") token: String
     ): MultipleResponseMessagePageable<List<NotificationDTO>>
+
+    @DELETE("/api/notification/clear/all")
+    suspend fun deleteAllNotifications(
+        @Query("uid") userId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+    @GET("/api/notification/find/all/count/unread")
+    suspend fun findAllUnreadNotificationCount(
+        @Query("uid") userId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Long>
+
+    @POST("/api/notification/mark/all/read")
+    suspend fun markAllNotificationsRead(
+        @Query("uid") userId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
 
 
     @POST("/api/project/project-owner/participant/request/approve")

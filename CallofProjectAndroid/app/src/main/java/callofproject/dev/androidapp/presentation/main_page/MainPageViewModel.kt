@@ -52,7 +52,7 @@ class MainPageViewModel @Inject constructor(
     fun onEvent(event: MainPageEvent) = when (event) {
         is MainPageEvent.OnClickProjectDiscoveryItem -> {
             viewModelScope.launch {
-                _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/${event.projectId}"))
+                _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/${event.projectId}/0"))
             }
         }
     }

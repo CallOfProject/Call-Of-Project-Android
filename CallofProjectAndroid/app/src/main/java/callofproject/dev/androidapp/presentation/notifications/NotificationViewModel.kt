@@ -39,11 +39,91 @@ class NotificationViewModel @Inject constructor(
     init {
         getNotifications()
         pref.clearFilterObjects()
+        findAllUnReadNotifications()
     }
 
     fun onEvent(event: NotificationEvent) = when (event) {
         is NotificationEvent.OnAcceptProjectJoinRequest -> acceptProjectJoinRequest(event.notificationDTO)
         is NotificationEvent.OnRejectProjectJoinRequest -> rejectProjectJoinRequest(event.notificationDTO)
+        is NotificationEvent.OnMarkAllAsReadClicked -> markAllAsRead()
+        is NotificationEvent.OnClearAllClicked -> clearAll()
+    }
+
+    fun findAllUnReadNotifications() {
+        viewModelScope.launch {
+            useCaseFacade.notification.findAllUnreadNotificationCount()
+                .onStart { delay(500L) }
+                .onEach { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            state = state.copy(
+                                unReadNotificationsCount = resource.data ?: 0,
+                                isLoading = false,
+                            )
+                        }
+
+                        is Resource.Error -> {
+                            state = state.copy(
+                                isLoading = false,
+                                notifications = emptyList()
+                            )
+                        }
+
+                        is Resource.Loading -> {
+                            state = state.copy(
+                                isLoading = true,
+                                notifications = emptyList()
+                            )
+                        }
+                    }
+                }.launchIn(this)
+        }
+    }
+
+    private fun clearAll() {
+        viewModelScope.launch {
+            useCaseFacade.notification.deleteAllNotifications()
+                .onStart { delay(500L) }
+                .onEach { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.notifications_cleared)))
+                            getNotifications()
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
+                        }
+
+                        is Resource.Loading -> {
+                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
+                        }
+                    }
+                }.launchIn(this)
+        }
+    }
+
+    private fun markAllAsRead() {
+        viewModelScope.launch {
+            useCaseFacade.notification.markAllNotificationsRead()
+                .onStart { delay(100L) }
+                .onEach { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.notifications_marked_as_read)))
+                            getNotifications()
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
+                        }
+
+                        is Resource.Loading -> {
+                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
+                        }
+                    }
+                }.launchIn(this)
+        }
     }
 
 

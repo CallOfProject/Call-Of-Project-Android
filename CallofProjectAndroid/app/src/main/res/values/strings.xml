@@ -100,6 +100,10 @@
     <string name="follow">Follow</string>
     <string name="btn_applicationDeadline">Deadline</string>
     <string name="enc_shared_pref_name">user_info_pref</string>
+    <string name="notifications_cleared">All notifications are removed</string>
+    <string name="notifications_marked_as_read">All notifications marked as read</string>
+    <string name="btn_markAllAsRead">Mark All as Read</string>
+    <string name="btn_clearAll">Clear All</string>
 
 
     <string-array name="array_projectStatus">

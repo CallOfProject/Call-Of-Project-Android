@@ -50,7 +50,7 @@ class SearchViewModel @Inject constructor(
         searchJob?.cancel()
         state = state.copy(isLoading = true)
         searchJob = viewModelScope.launch {
-            useCaseFacade.search(keyword).onStart { delay(500L) }.onEach { result ->
+            useCaseFacade.search(keyword).onStart { delay(100L) }.onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
                         state = state.copy(isLoading = true)
@@ -85,7 +85,7 @@ class SearchViewModel @Inject constructor(
 
     private fun navigateToProjectOverview(projectId: String) {
         viewModelScope.launch {
-            _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/$projectId"))
+            _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/$projectId/0"))
         }
     }
 }

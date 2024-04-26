@@ -56,6 +56,7 @@ fun ProjectOverviewScreen(
     scaffoldState: SnackbarHostState,
     onNavigate: (UiEvent.Navigate) -> Unit,
     projectId: String,
+    selectedNavBar: Int
 ) {
     LaunchedEffect(key1 = true) {
         viewModel.findProjectOverview(projectId)
@@ -84,9 +85,9 @@ fun ProjectOverviewScreen(
     Scaffold(
         topBar = {
             ProjectTopBarComponent(
-                scaffoldState = scaffoldState,
                 onNavigate = onNavigate,
-                projectId = projectId
+                projectId = projectId,
+                selectedNavBar = selectedNavBar
             )
         },
         bottomBar = { BottomBarComponent(scaffoldState, onNavigate) }) {

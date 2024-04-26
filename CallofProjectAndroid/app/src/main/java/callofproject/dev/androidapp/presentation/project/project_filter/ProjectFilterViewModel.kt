@@ -122,7 +122,7 @@ class ProjectFilterViewModel @Inject constructor(
 
     private fun navigateProjectOverview(projectId: String) {
         viewModelScope.launch {
-            _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/$projectId"))
+            _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/$projectId/0"))
         }
     }
 

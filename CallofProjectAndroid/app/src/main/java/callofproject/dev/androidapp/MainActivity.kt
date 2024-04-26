@@ -164,31 +164,45 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            "$PROJECT_OVERVIEW/{projectId}", arguments =
-                            listOf(navArgument("projectId") {
-                                type = NavType.StringType
-                            })
+                            "$PROJECT_OVERVIEW/{projectId}/{selectedNavBarIndex}", arguments =
+                            listOf(
+                                navArgument("projectId") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("selectedNavBarIndex") {
+                                    type = NavType.IntType
+                                }
+                            )
                         ) {
                             val projectId = it.arguments?.getString("projectId")
+                            val selectedIndex = it.arguments?.getInt("selectedNavBarIndex")
                             ProjectOverviewScreen(
                                 projectId = projectId!!,
                                 scaffoldState = scaffoldState,
-                                onNavigate = navController::navigate
+                                onNavigate = navController::navigate,
+                                selectedNavBar = selectedIndex!!
                             )
 
                         }
 
                         composable(
-                            "$PROJECT_DETAILS/{projectId}", arguments =
-                            listOf(navArgument("projectId") {
-                                type = NavType.StringType
-                            })
+                            "$PROJECT_DETAILS/{projectId}/{selectedNavBarIndex}", arguments =
+                            listOf(
+                                navArgument("projectId") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("selectedNavBarIndex") {
+                                    type = NavType.IntType
+                                }
+                            )
                         ) {
                             val projectId = it.arguments?.getString("projectId")
+                            val selectedIndex = it.arguments?.getInt("selectedNavBarIndex")
                             ProjectDetailsScreen(
                                 projectId = projectId!!,
                                 scaffoldState = scaffoldState,
-                                onNavigate = navController::navigate
+                                onNavigate = navController::navigate,
+                                selectedNavBar = selectedIndex!!
                             )
                         }
 

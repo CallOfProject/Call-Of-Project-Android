@@ -1,20 +1,13 @@
 package callofproject.dev.androidapp.presentation.project.components.projects_topbar
 
-import android.widget.Toast
-import android.widget.Toast.makeText
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,27 +22,34 @@ private const val BOTTOM_NAVBAR_PROJECT_DETAILS = "Project Details"
 
 @Composable
 fun ProjectTopBarComponent(
-    scaffoldState: SnackbarHostState,
     projectId: String,
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: TopBarViewModel = hiltViewModel(),
+    selectedNavBar: Int = 0
 ) {
-    val isSelectedProjectOverview by remember { mutableStateOf(true) }
-    val isSelectedProjectDetails by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+
+    val items = listOf(
+        ProjectTopNavigationItem(
+            title = BOTTOM_NAVBAR_PROJECT_OVERVIEW,
+            selectedIcon = painterResource(R.drawable.overview_icon),
+            unselectedIcon = painterResource(R.drawable.overview_icon),
+        ),
+        ProjectTopNavigationItem(
+            title = BOTTOM_NAVBAR_PROJECT_DETAILS,
+            selectedIcon = painterResource(R.drawable.baseline_details_24),
+            unselectedIcon = painterResource(R.drawable.baseline_details_24),
+        ),
+    )
+
+
+    LaunchedEffect(key1 = true) {
+        viewModel.selectedItemIndex.value = selectedNavBar
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.Navigate -> onNavigate(event)
-
-                is UiEvent.ShowSnackbar -> {
-                    scaffoldState.showSnackbar(message = event.msg.asString(context))
-                }
-
-                is UiEvent.ShowToastMessage -> {
-                    makeText(context, event.message.asString(context), Toast.LENGTH_SHORT).show()
-                }
 
                 else -> Unit
             }
@@ -58,30 +58,25 @@ fun ProjectTopBarComponent(
 
 
     NavigationBar {
-        NavigationBarItem(
-            selected = isSelectedProjectOverview,
-            onClick = { viewModel.onEvent(OnClickProjectOverviewBtn(projectId)) },
-            label = { Text(text = BOTTOM_NAVBAR_PROJECT_OVERVIEW) },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.overview_icon),
-                    contentDescription = stringResource(R.string.default_image_description),
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        )
-
-        NavigationBarItem(
-            selected = isSelectedProjectDetails,
-            onClick = { viewModel.onEvent(OnClickProjectDetailsBtn(projectId)) },
-            label = { Text(text = BOTTOM_NAVBAR_PROJECT_DETAILS) },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_details_24),
-                    contentDescription = stringResource(R.string.default_image_description),
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        )
+        items.forEachIndexed { index, item ->
+            NavigationBarItem(
+                selected = viewModel.selectedItemIndex.value == index,
+                onClick = {
+                    viewModel.selectedItemIndex.value = index
+                    when (index) {
+                        0 -> viewModel.onEvent(OnClickProjectOverviewBtn(projectId))
+                        1 -> viewModel.onEvent(OnClickProjectDetailsBtn(projectId))
+                    }
+                },
+                label = { Text(text = item.title) },
+                icon = {
+                    Icon(
+                        painter = item.selectedIcon,
+                        contentDescription = stringResource(R.string.default_image_description),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            )
+        }
     }
 }

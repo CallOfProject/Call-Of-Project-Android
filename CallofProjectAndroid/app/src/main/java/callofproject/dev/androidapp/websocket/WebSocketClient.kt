@@ -9,6 +9,8 @@ import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.NotificationUseCase
 import com.google.gson.Gson
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.Stomp.ConnectionProvider
 import ua.naiksoftware.stomp.StompClient
@@ -25,6 +27,9 @@ class WebSocketClient @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
     private var stompClient: StompClient? = null
 
+    private val _notificationFlow = MutableSharedFlow<NotificationDTO>()
+    val notificationFlow: SharedFlow<NotificationDTO> = _notificationFlow
+
     private fun errorCallback(throwable: Throwable) {
         Log.e("WebSocketClient", "Error", throwable)
     }
@@ -32,6 +37,7 @@ class WebSocketClient @Inject constructor(
     private fun messageCallback(stompMessage: StompMessage) {
         val message = gson.fromJson(stompMessage.payload, NotificationDTO::class.java)
         notificationUseCase.createApprovalNotification(message)
+        _notificationFlow.tryEmit(message)
     }
 
     fun connectWebSocket() {

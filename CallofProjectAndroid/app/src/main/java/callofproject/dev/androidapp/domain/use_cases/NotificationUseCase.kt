@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
@@ -80,5 +81,46 @@ class NotificationUseCase @Inject constructor(
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notificationManager.notify(/*notificationId*/0, builder.build())
+    }
+
+
+    suspend fun markAllNotificationsRead(): Flow<Resource<Boolean>> = flow {
+        emit(Loading())
+        try {
+            val response = service.markAllNotificationsRead(
+                userId = UUID.fromString(pref.getUserId()!!),
+                token = pref.getToken()!!
+            )
+            emit(Success(response.`object`))
+        } catch (e: Exception) {
+            emit(Error(e.message ?: "An unexpected error occurred"))
+        }
+    }
+
+    suspend fun deleteAllNotifications(): Flow<Resource<Boolean>> = flow {
+        emit(Loading())
+        try {
+            val response = service.deleteAllNotifications(
+                userId = UUID.fromString(pref.getUserId()!!),
+                token = pref.getToken()!!
+            )
+            emit(Success(response.`object`))
+        } catch (e: Exception) {
+            emit(Error(e.message ?: "An unexpected error occurred"))
+        }
+    }
+
+    suspend fun findAllUnreadNotificationCount(): Flow<Resource<Long>> = flow {
+        emit(Loading())
+        try {
+            val response = service.findAllUnreadNotificationCount(
+                userId = UUID.fromString(pref.getUserId()!!),
+                token = pref.getToken()!!
+            )
+            emit(Success(response.`object`))
+        } catch (e: Exception) {
+            Log.e("NotificationUseCase", "Error", e)
+            emit(Error(e.message ?: "An unexpected error occurred"))
+        }
     }
 }
