@@ -1,5 +1,7 @@
 package callofproject.dev.androidapp.presentation.user_profile.view
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -13,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
@@ -33,10 +36,11 @@ fun UserCoursesComponent(
     var selectedCourseIndex by remember { mutableIntStateOf(-1) }
 
     EditableCardComponent("Courses",
-        490.dp,
+        500.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = "Add",
         isEditable = isEditable,
+        removable = false,
         onIconClick = { expandedAddCourse = true })
     {
         LazyColumn {
@@ -48,11 +52,16 @@ fun UserCoursesComponent(
                 EditableCardComponent(
                     title = course.courseName,
                     isEditable = isEditable,
+                    onRemoveClick = { viewModel.onEvent(UserProfileEvent.OnDeleteCourse(course.courseId)) },
                     onIconClick = {
                         expandedUpdateCourse = true
                         selectedCourseIndex = index
-                    })
-                { CourseDetails(course) }
+                    },
+                    height = 250.dp
+                )
+                {
+                    CourseDetails(course)
+                }
             }
         }
     }
@@ -74,24 +83,54 @@ fun UserCoursesComponent(
 
 @Composable
 private fun CourseDetails(course: CourseDTO) {
-    Text(
-        text = "Organizator: ${course.organization}",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Normal,
-        modifier = Modifier.padding(5.dp)
-    )
+    Column(
 
-    Text(
-        text = "Date: ${course.startDate} - ${course.finishDate}",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Normal,
-        modifier = Modifier.padding(5.dp)
-    )
+    ) {
+        Row {
+            Text(
+                text = "Organizator:",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+            )
 
-    Text(
-        text = "Description: ${course.description}",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Normal,
-        modifier = Modifier.padding(5.dp)
-    )
+            Text(
+                text = course.organization,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+            )
+        }
+
+
+        Row {
+            Text(
+                text = "Date:",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Text(
+                text = "${course.startDate} - ${course.finishDate}",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+            )
+        }
+
+
+        Column {
+            Text(
+                text = "Description:",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+
+            )
+
+            Text(
+                text = course.description,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+                overflow = TextOverflow.Ellipsis,
+
+            )
+        }
+    }
 }

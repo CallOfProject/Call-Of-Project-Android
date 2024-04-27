@@ -26,7 +26,9 @@ import androidx.core.content.ContextCompat
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnCreateLink
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnRemoveLinkClicked
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnUpdateLink
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModel
@@ -45,10 +47,11 @@ fun UserLinksComponent(
 
     EditableCardComponent(
         title = stringResource(R.string.title_links),
-        height = 400.dp,
+        height = 440.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = "Add",
         isEditable = isEditable,
+        removable = false,
         onIconClick = { expandedAddLink = true }
     ) {
         LazyColumn {
@@ -57,9 +60,11 @@ fun UserLinksComponent(
                 val link = state.userProfileDTO.profile.links[index]
 
                 EditableCardComponent(
-                    height = 100.dp,
+                    height = 125.dp,
                     title = link.linkTitle,
                     isEditable = isEditable,
+                    removable = true,
+                    onRemoveClick = { viewModel.onEvent(OnRemoveLinkClicked(link.linkId)) },
                     onIconClick = { expandedUpdateLink = true; selectedLinkIndex = index }
                 ) { LinkDetails(link, context) }
             }

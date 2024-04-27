@@ -91,24 +91,25 @@ fun NotificationScreen(
                 verticalArrangement = Arrangement.Center,
                 modifier = if (state.notifications.isEmpty()) Modifier.fillMaxSize() else Modifier
             ) {
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        OutlinedButton(onClick = {
-                            viewModel.onEvent(NotificationEvent.OnMarkAllAsReadClicked)
-                        }) {
-                            Text(text = stringResource(R.string.btn_markAllAsRead))
-                        }
+                if (state.notifications.isNotEmpty())
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            OutlinedButton(onClick = {
+                                viewModel.onEvent(NotificationEvent.OnMarkAllAsReadClicked)
+                            }) {
+                                Text(text = stringResource(R.string.btn_markAllAsRead))
+                            }
 
-                        OutlinedButton(onClick = {
-                            viewModel.onEvent(NotificationEvent.OnClearAllClicked)
-                        }) {
-                            Text(text = stringResource(R.string.btn_clearAll))
+                            OutlinedButton(onClick = {
+                                viewModel.onEvent(NotificationEvent.OnClearAllClicked)
+                            }) {
+                                Text(text = stringResource(R.string.btn_clearAll))
+                            }
                         }
                     }
-                }
                 if (state.notifications.isEmpty()) {
                     item {
                         Text(

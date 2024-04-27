@@ -24,13 +24,15 @@ fun UserAboutMeComponent(state: UserProfileState, viewModel: UserProfileViewMode
     var expandedUpsertAboutMe by remember { mutableStateOf(false) }
 
     EditableCardComponent(
+        height = 250.dp,
+        removable = false,
         title = stringResource(R.string.title_aboutMe),
         isEditable = isEditable,
         onIconClick = { expandedUpsertAboutMe = true })
     {
         Text(
             text = state.userProfileDTO.profile.aboutMe ?: "",
-            fontSize = 15.sp,
+            fontSize = 14.5.sp,
             fontWeight = FontWeight.Normal,
             modifier = Modifier.padding(5.dp)
         )

@@ -104,6 +104,7 @@
     <string name="notifications_marked_as_read">All notifications marked as read</string>
     <string name="btn_markAllAsRead">Mark All as Read</string>
     <string name="btn_clearAll">Clear All</string>
+    <string name="unfollow">Unfollow</string>
 
 
     <string-array name="array_projectStatus">

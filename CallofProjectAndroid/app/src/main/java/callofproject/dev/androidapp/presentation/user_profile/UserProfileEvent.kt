@@ -18,4 +18,10 @@ sealed class UserProfileEvent {
     data class OnUpdateAboutMe(val aboutMe: String) : UserProfileEvent()
     data class OnUploadProfilePhoto(val pp: Uri) : UserProfileEvent()
     data class OnUploadCv(val file: Uri) : UserProfileEvent()
+
+    data class OnRemoveLinkClicked(val linkId: Long) : UserProfileEvent()
+
+    data class OnDeleteCourse(val courseId: String) : UserProfileEvent()
+    data class OnDeleteEducation(val educationId: String) : UserProfileEvent()
+    data class OnDeleteExperience(val experienceId: String) : UserProfileEvent()
 }

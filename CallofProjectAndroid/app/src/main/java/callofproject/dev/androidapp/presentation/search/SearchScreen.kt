@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
@@ -26,7 +27,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -184,25 +188,29 @@ fun SearchScreen(
                             ),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(10.dp), shape = RoundedCornerShape(10.dp)
+                                .padding(10.dp),
+                            shape = RoundedCornerShape(10.dp)
                         ) {
                             Row(
-                                modifier = Modifier.clickable {
-                                    viewModel.onEvent(
-                                        SearchEvent.OnUserClick(
-                                            user.userId.toString()
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        viewModel.onEvent(
+                                            SearchEvent.OnUserClick(
+                                                user.userId.toString()
+                                            )
                                         )
-                                    )
-                                },
+                                    },
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                horizontalArrangement = Arrangement.Absolute.SpaceAround,
                                 content = {
                                     Image(
                                         painter = rememberAsyncImagePainter(user.image),
                                         contentDescription = "project",
+                                        contentScale = ContentScale.FillBounds,
                                         modifier = Modifier
                                             .size(100.dp)
-                                            .align(Alignment.CenterVertically),
+                                            .clip(RectangleShape),
                                         alignment = Alignment.Center
                                     )
 
@@ -228,17 +236,41 @@ fun SearchScreen(
                                     )
                                         Column(
                                             horizontalAlignment = Alignment.CenterHorizontally,
-                                            modifier = Modifier.padding(10.dp),
+                                            modifier = Modifier.padding(5.dp),
                                             content = {
                                                 OutlinedButton(onClick = { }) {
                                                     Text(text = stringResource(R.string.follow))
                                                 }
                                             }
                                         )
-                                })
+                                    else if (user.username == stringResource(R.string.username_root) ||
+                                        user.username == stringResource(R.string.username_admin)
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier.padding(5.dp),
+                                            content = {
+                                                OutlinedButton(
+                                                    onClick = { },
+                                                    enabled = false
+                                                ) {
+                                                    Text(text = stringResource(R.string.follow))
+                                                }
+                                            })
+                                    } else
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier.padding(5.dp),
+                                            content = {
+                                                OutlinedButton(onClick = { }) {
+                                                    Text(text = stringResource(R.string.unfollow))
+                                                }
+                                            })
+                                }
+                            )
                         }
-                    }
 
+                    }
             }
         }
     }

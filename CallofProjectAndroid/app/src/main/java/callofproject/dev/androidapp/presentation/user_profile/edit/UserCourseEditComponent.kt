@@ -24,7 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
@@ -72,6 +74,7 @@ fun UserCourseEditComponent(
                 OutlinedTextField(
                     value = firm,
                     onValueChange = { firm = it },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     label = { Text(stringResource(R.string.title_companyName)) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -81,6 +84,7 @@ fun UserCourseEditComponent(
                 OutlinedTextField(
                     value = courseName,
                     onValueChange = { courseName = it },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     label = { Text(stringResource(R.string.title_courseName)) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -92,6 +96,7 @@ fun UserCourseEditComponent(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     label = { Text(stringResource(R.string.title_description)) },
                     modifier = Modifier
                         .fillMaxWidth()

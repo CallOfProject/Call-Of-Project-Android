@@ -189,6 +189,61 @@ class UserProfileUseCase @Inject constructor(
         }
     }
 
+    suspend fun removeCourse(courseId: String): Resource<Unit> {
+        return try {
+            service.removeCourse(
+                userId = UUID.fromString(preferences.getUserId()!!),
+                courseId = UUID.fromString(courseId),
+                token = getBearerToken()
+            )
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
+
+
+    suspend fun removeEducation(educationId: String): Resource<Unit> {
+        return try {
+            service.removeEducation(
+                userId = UUID.fromString(preferences.getUserId()!!),
+                educationId = UUID.fromString(educationId),
+                token = getBearerToken()
+            )
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
+
+
+    suspend fun removeExperience(experienceId: String): Resource<Unit> {
+        return try {
+            service.removeExperience(
+                userId = UUID.fromString(preferences.getUserId()!!),
+                experienceId = UUID.fromString(experienceId),
+                token = getBearerToken()
+            )
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
+
+
+    suspend fun removeLink(linkId: Long): Resource<Unit> {
+        return try {
+            service.removeLink(
+                userId = UUID.fromString(preferences.getUserId()!!),
+                linkId = linkId,
+                token = getBearerToken()
+            )
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
+
 
     private fun getBearerToken(): String = preferences.getToken()!!
 }

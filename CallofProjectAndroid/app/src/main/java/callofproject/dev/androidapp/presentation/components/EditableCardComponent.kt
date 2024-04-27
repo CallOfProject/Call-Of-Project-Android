@@ -3,6 +3,8 @@ package callofproject.dev.androidapp.presentation.components
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
@@ -27,11 +31,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import callofproject.dev.androidapp.R
 
 @Composable
 fun EditableCardComponent(
@@ -41,6 +47,8 @@ fun EditableCardComponent(
     imageDescription: String = "Edit",
     padVal: PaddingValues = PaddingValues(10.dp),
     onIconClick: (context: Context) -> Unit = {},
+    removable: Boolean = true,
+    onRemoveClick: () -> Unit = {},
     isEditable: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -67,7 +75,9 @@ fun EditableCardComponent(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp)
                 ) {
                     Text(
                         text = title,
@@ -78,17 +88,36 @@ fun EditableCardComponent(
                 }
                 content()
             }
-            if (isEditable)
-                IconButton(
-                    onClick = {
-                        onIconClick(context)
-                    }, modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(10.dp)
-                        .size(24.dp)
-                ) {
-                    Icon(imageVector, contentDescription = imageDescription)
+            if (isEditable) {
+                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                    IconButton(
+                        onClick = {
+                            onIconClick(context)
+                        }, modifier = Modifier
+                            .align(Alignment.Top)
+                            .padding(10.dp)
+                            .size(24.dp)
+                    ) {
+                        Icon(imageVector, contentDescription = imageDescription)
+                    }
+
+                    if (removable)
+                        IconButton(
+                            onClick = { onRemoveClick() },
+                            modifier = Modifier
+                                .align(Alignment.Top)
+                                .padding(10.dp)
+                                .size(24.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.trash),
+                                contentDescription = imageDescription
+                            )
+                        }
                 }
+
+
+            }
 
         }
     }

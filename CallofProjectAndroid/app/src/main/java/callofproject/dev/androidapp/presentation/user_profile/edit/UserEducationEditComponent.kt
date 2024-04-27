@@ -26,8 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
@@ -74,6 +76,7 @@ fun UserEducationEditComponent(
                     value = school,
                     onValueChange = { school = it },
                     label = { Text(stringResource(R.string.title_schoolName)) },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
@@ -83,6 +86,7 @@ fun UserEducationEditComponent(
                     value = department,
                     onValueChange = { department = it },
                     label = { Text(stringResource(R.string.title_departmentName)) },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
@@ -92,6 +96,7 @@ fun UserEducationEditComponent(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     label = { Text(stringResource(R.string.title_description)) },
                     modifier = Modifier
                         .fillMaxWidth()

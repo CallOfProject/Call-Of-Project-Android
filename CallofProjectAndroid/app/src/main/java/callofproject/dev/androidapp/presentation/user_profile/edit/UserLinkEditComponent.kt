@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -21,7 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
@@ -55,7 +59,7 @@ fun UserLinkEditComponent(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(5.dp)
             ) {
 
                 Text(
@@ -67,6 +71,7 @@ fun UserLinkEditComponent(
                     value = linkName,
                     onValueChange = { linkName = it },
                     label = { Text(stringResource(R.string.title_profileLinkName)) },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
@@ -76,9 +81,10 @@ fun UserLinkEditComponent(
                     value = link,
                     onValueChange = { link = it },
                     label = { Text(stringResource(R.string.title_profileLink)) },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(10.dp),
                 )
 
 

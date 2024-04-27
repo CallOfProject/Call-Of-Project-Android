@@ -68,6 +68,114 @@ class UserProfileViewModel @Inject constructor(
         is UserProfileEvent.OnUpdateAboutMe -> updateAboutMe(event.aboutMe)
         is UserProfileEvent.OnUploadProfilePhoto -> uploadProfilePhoto(event.pp)
         is UserProfileEvent.OnUploadCv -> uploadCv(event.file)
+        is UserProfileEvent.OnRemoveLinkClicked -> removeLink(event.linkId)
+        is UserProfileEvent.OnDeleteCourse -> deleteCourse(event.courseId)
+        is UserProfileEvent.OnDeleteEducation -> deleteEducation(event.educationId)
+        is UserProfileEvent.OnDeleteExperience -> deleteExperience(event.experienceId)
+    }
+
+    private fun deleteExperience(experienceId: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile.removeExperience(experienceId)
+                .let { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            state = state.copy(
+                                userProfileDTO = state.userProfileDTO.copy(
+                                    profile = state.userProfileDTO.profile
+                                        .copy(experiences = state.userProfileDTO.profile.experiences.filter {
+                                            it.experienceId != experienceId
+                                        })
+                                )
+                            )
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
+                        }
+
+                        is Resource.Loading -> {}
+                    }
+                }
+        }
+    }
+
+    private fun deleteEducation(educationId: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile.removeEducation(educationId)
+                .let { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            state = state.copy(
+                                userProfileDTO = state.userProfileDTO.copy(
+                                    profile = state.userProfileDTO.profile
+                                        .copy(educations = state.userProfileDTO.profile.educations.filter {
+                                            it.educationId != educationId
+                                        })
+                                )
+                            )
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
+                        }
+
+                        is Resource.Loading -> {}
+                    }
+                }
+        }
+    }
+
+    private fun deleteCourse(courseId: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile.removeCourse(courseId)
+                .let { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            state = state.copy(
+                                userProfileDTO = state.userProfileDTO.copy(
+                                    profile = state.userProfileDTO.profile
+                                        .copy(courses = state.userProfileDTO.profile.courses.filter {
+                                            it.courseId != courseId
+                                        })
+                                )
+                            )
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
+                        }
+
+                        is Resource.Loading -> {}
+                    }
+                }
+        }
+    }
+
+    private fun removeLink(linkId: Long) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile.removeLink(linkId)
+                .let { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            state = state.copy(
+                                userProfileDTO = state.userProfileDTO.copy(
+                                    profile = state.userProfileDTO.profile
+                                        .copy(links = state.userProfileDTO.profile.links.filter {
+                                            it.linkId != linkId
+                                        })
+                                )
+                            )
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
+                        }
+
+                        is Resource.Loading -> {}
+                    }
+                }
+        }
     }
 
     private fun uploadCv(file: Uri) {

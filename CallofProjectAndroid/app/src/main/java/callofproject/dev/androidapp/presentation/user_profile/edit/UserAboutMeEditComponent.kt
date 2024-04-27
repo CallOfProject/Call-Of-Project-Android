@@ -12,6 +12,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -23,7 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import callofproject.dev.androidapp.R
 
@@ -58,14 +62,19 @@ fun UserAboutMeEditComponent(
                     style = MaterialTheme.typography.headlineSmall
                 )
 
-                TextField(
+                OutlinedTextField(
                     value = aboutMe,
                     onValueChange = { aboutMe = it },
+                    textStyle = TextStyle(fontSize = 14.sp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                         .padding(10.dp)
-                        .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            shape = RoundedCornerShape(8.dp)
+                        )
                 )
 
 

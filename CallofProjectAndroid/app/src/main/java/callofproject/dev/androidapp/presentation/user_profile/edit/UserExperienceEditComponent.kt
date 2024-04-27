@@ -25,7 +25,9 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
@@ -79,7 +81,8 @@ fun UserExperienceEditComponent(
                     label = { Text(stringResource(R.string.title_companyName)) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(10.dp),
+                    textStyle = TextStyle(fontSize = 14.sp),
                 )
 
                 OutlinedTextField(
@@ -88,7 +91,8 @@ fun UserExperienceEditComponent(
                     label = { Text(stringResource(R.string.title_positionName)) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(10.dp),
+                    textStyle = TextStyle(fontSize = 14.sp),
                 )
 
                 OutlinedTextField(
@@ -97,7 +101,8 @@ fun UserExperienceEditComponent(
                     label = { Text(stringResource(R.string.title_websiteLink)) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(10.dp),
+                    textStyle = TextStyle(fontSize = 14.sp),
                 )
                 OutlinedTextField(
                     label = { Text(stringResource(R.string.title_description)) },
@@ -106,7 +111,8 @@ fun UserExperienceEditComponent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp)
-                        .padding(10.dp)
+                        .padding(10.dp),
+                    textStyle = TextStyle(fontSize = 14.sp),
                 )
 
                 OutlinedButton(
@@ -146,7 +152,10 @@ fun UserExperienceEditComponent(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
-                    Button(onClick = { onDismissRequest() }) { Text(text = stringResource(R.string.btn_cancel)) }
+                    Button(onClick = { onDismissRequest() })
+                    {
+                        Text(text = stringResource(R.string.btn_cancel))
+                    }
 
                     Button(onClick = {
                         confirmEvent(

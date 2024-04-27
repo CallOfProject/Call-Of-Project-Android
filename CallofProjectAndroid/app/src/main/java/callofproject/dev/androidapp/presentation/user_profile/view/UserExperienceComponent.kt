@@ -1,5 +1,7 @@
 package callofproject.dev.androidapp.presentation.user_profile.view
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -14,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import callofproject.dev.androidapp.R
@@ -40,6 +43,7 @@ fun UserExperienceComponent(
         imageVector = Icons.Filled.Add,
         imageDescription = stringResource(R.string.default_image_description),
         isEditable = isEditable,
+        removable = false,
         onIconClick = { expandedAddExperience = true }) {
 
         LazyColumn {
@@ -49,8 +53,16 @@ fun UserExperienceComponent(
                 val experience = state.userProfileDTO.profile.experiences[index]
 
                 EditableCardComponent(
+                    height = 250.dp,
                     title = experience.companyName,
                     isEditable = isEditable,
+                    onRemoveClick = {
+                        viewModel.onEvent(
+                            UserProfileEvent.OnDeleteExperience(
+                                experience.experienceId
+                            )
+                        )
+                    },
                     onIconClick = {
                         expandedUpsertExperience = true; selectedExperienceIndex = index
                     }
@@ -76,24 +88,52 @@ fun UserExperienceComponent(
 
 @Composable
 private fun ExperienceDetails(experience: ExperienceDTO) {
-    Text(
-        text = "Position: ${experience.position}",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Normal,
-        modifier = Modifier.padding(5.dp)
-    )
 
-    Text(
-        text = "Date: ${experience.startDate} - ${experience.finishDate}",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Normal,
-        modifier = Modifier.padding(5.dp)
-    )
 
-    Text(
-        text = "Description: ${experience.description}",
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Normal,
-        modifier = Modifier.padding(5.dp)
-    )
+    Row {
+        Text(
+            text = "Position:",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+        )
+
+        Text(
+            text = experience.position,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+        )
+    }
+
+
+    Row {
+        Text(
+            text = "Date:",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+        )
+
+        Text(
+            text = "${experience.startDate} - ${experience.finishDate}",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+        )
+    }
+
+    Column {
+        Text(
+            text = "Description:",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+
+            )
+
+        Text(
+            text = experience.description,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            overflow = TextOverflow.Ellipsis,
+
+            )
+    }
+
 }

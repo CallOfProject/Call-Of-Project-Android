@@ -211,4 +211,62 @@ interface ICallOfProjectService {
         @Body filterDTO: ProjectFilterDTO,
         @Header("Authorization") token: String
     ): MultipleResponseMessagePageable<ProjectsDTO>
+
+
+    @DELETE("/api/auth/user-info/delete/education")
+    suspend fun removeEducation(
+        @Query("uid") userId: UUID,
+        @Query("id") educationId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+
+    @DELETE("/api/auth/user-info/delete/experience")
+    suspend fun removeExperience(
+        @Query("uid") userId: UUID,
+        @Query("id") experienceId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+
+    @DELETE("/api/auth/user-info/delete/course")
+    suspend fun removeCourse(
+        @Query("uid") userId: UUID,
+        @Query("id") courseId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+
+    @DELETE("/api/auth/user-info/delete/link")
+    suspend fun removeLink(
+        @Query("uid") userId: UUID,
+        @Query("id") linkId: Long,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+    /*@POST("/api/community/personal-connection/send/connection-request")
+    suspend fun sendConnectionRequest(
+        @Query("user_id") userId: UUID,
+        @Query("friend_id") connectionId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+
+    @POST("/api/community/personal-connection/answer/connection-request")
+    suspend fun answerConnectionRequest(
+        @Query("user_id") userId: UUID,
+        @Query("friend_id") connectionId: UUID,
+        @Query("answer") isAccepted: Boolean,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+    @POST("/api/community/personal-connection/remove/connection")
+    suspend fun removeConnection(
+        @Query("user_id") userId: UUID,
+        @Query("friend_id") connectionId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>*/
+
+
+
 }
