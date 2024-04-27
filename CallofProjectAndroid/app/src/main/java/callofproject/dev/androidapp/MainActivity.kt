@@ -21,7 +21,6 @@ import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.presentation.authentication.login.LoginScreen
 import callofproject.dev.androidapp.presentation.authentication.signup.RegisterScreen
 import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarComponent
-import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarViewModel.Companion.selectedItemIndex
 import callofproject.dev.androidapp.presentation.components.topbar.TopAppBarComponent
 import callofproject.dev.androidapp.presentation.main_page.MainScreen
 import callofproject.dev.androidapp.presentation.notifications.NotificationScreen
@@ -55,12 +54,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    override fun onResume() {
-        super.onResume()
-        selectedItemIndex.value = 0
-    }
-
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -192,8 +185,8 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
-                            "$PROJECT_DETAILS/{projectId}/{selectedNavBarIndex}", arguments =
-                            listOf(
+                            "$PROJECT_DETAILS/{projectId}/{selectedNavBarIndex}",
+                            arguments = listOf(
                                 navArgument("projectId") {
                                     type = NavType.StringType
                                 },
@@ -233,9 +226,10 @@ class MainActivity : ComponentActivity() {
 
                         composable(
                             "$USER_OVERVIEW/{userId}",
-                            arguments = listOf(navArgument("userId") {
-                                type = NavType.StringType
-                            })
+                            arguments = listOf(
+                                navArgument("userId") {
+                                    type = NavType.StringType
+                                })
                         ) {
                             val userId = it.arguments?.getString("userId")
                             UserOverviewScreen(

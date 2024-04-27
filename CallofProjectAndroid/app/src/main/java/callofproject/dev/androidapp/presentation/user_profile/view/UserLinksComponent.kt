@@ -26,7 +26,6 @@ import androidx.core.content.ContextCompat
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
-import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnCreateLink
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnRemoveLinkClicked
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnUpdateLink
@@ -65,7 +64,10 @@ fun UserLinksComponent(
                     isEditable = isEditable,
                     removable = true,
                     onRemoveClick = { viewModel.onEvent(OnRemoveLinkClicked(link.linkId)) },
-                    onIconClick = { expandedUpdateLink = true; selectedLinkIndex = index }
+                    onIconClick = {
+                        expandedUpdateLink = true;
+                        selectedLinkIndex = index
+                    }
                 ) { LinkDetails(link, context) }
             }
         }

@@ -1,6 +1,5 @@
 package callofproject.dev.androidapp.presentation.main_page
 
-
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

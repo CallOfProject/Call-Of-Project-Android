@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import okhttp3.WebSocketListener
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,8 +34,6 @@ class MainPageViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
-
-    private var webSocketListener: WebSocketListener? = null
 
     var state by mutableStateOf(MainPageState())
         private set

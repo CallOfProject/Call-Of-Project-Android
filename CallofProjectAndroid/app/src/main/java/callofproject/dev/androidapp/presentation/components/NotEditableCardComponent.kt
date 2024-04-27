@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 fun NotEditableCardComponent(
     title: String,
     height: Dp,
-    padVal: PaddingValues = PaddingValues(20.dp),
+    padVal: PaddingValues = PaddingValues(10.dp),
     modifier: Modifier = Modifier
         .fillMaxWidth()
         .height(height)

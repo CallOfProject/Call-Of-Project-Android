@@ -266,7 +266,4 @@ interface ICallOfProjectService {
         @Query("friend_id") connectionId: UUID,
         @Header("Authorization") token: String
     ): ResponseMessage<Boolean>*/
-
-
-
 }

@@ -1,13 +1,16 @@
 package callofproject.dev.androidapp.domain.dto
 
-class MultipleResponseMessagePageable<T>(
-    val totalPage: Long,
-    val page: Int,
-    val itemCount: Int,
-    val message: String,
-    val `object`: T
-) {
-    private val total_page: Long = 0
-    private val item_count = 0
+import com.google.gson.annotations.SerializedName
 
-}
+data class MultipleResponseMessagePageable<T>(
+    @SerializedName("total_page")
+    val totalPage: Long,
+    @SerializedName("page")
+    val page: Int,
+    @SerializedName("item_count")
+    val itemCount: Int,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("object")
+    val `object`: T
+)

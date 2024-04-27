@@ -214,8 +214,9 @@ fun ProjectDetailsScreen(
 
                     NotEditableCardComponent(
                         title = stringResource(R.string.title_projectDateInformation),
-                        height = 270.dp
+                        height = 270.dp,
                     ) {
+
                         RowBasedCardComponent(
                             title = stringResource(R.string.title_projectStartDate),
                             value = state.projectDetailsDTO.startDate
