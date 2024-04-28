@@ -18,9 +18,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitModule {
     @Provides
     @ViewModelScoped
-    fun provideRetrofit(@ApplicationContext context: Context): Retrofit {
-        return Retrofit.Builder().baseUrl(context.getString(R.string.remote_baseUrl))
+    fun provideRetrofit(@ApplicationContext context: Context): Retrofit =
+        Retrofit.Builder().baseUrl(context.getString(R.string.remote_baseUrl))
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .client(OkHttpClient.Builder().build()).build()
-    }
 }

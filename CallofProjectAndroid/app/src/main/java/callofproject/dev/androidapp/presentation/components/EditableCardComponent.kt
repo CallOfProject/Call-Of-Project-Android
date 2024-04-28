@@ -67,17 +67,20 @@ fun EditableCardComponent(
     ) {
 
         Box {
-            Column(modifier = Modifier.padding(5.dp)) {
+            Column(
+                modifier = Modifier.padding(5.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp)
                 ) {
                     Text(
                         text = title,
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -85,31 +88,37 @@ fun EditableCardComponent(
                 content()
             }
             if (isEditable) {
-                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-                    IconButton(
-                        onClick = {
-                            onIconClick(context)
-                        }, modifier = Modifier
-                            .align(Alignment.Top)
-                            .padding(10.dp)
-                            .size(24.dp)
-                    ) {
-                        Icon(imageVector, contentDescription = imageDescription)
-                    }
+                Row(
+                    horizontalArrangement = Arrangement.Absolute.Right,
+                    verticalAlignment = Alignment.Top,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
 
                     if (removable)
                         IconButton(
                             onClick = { onRemoveClick() },
                             modifier = Modifier
                                 .align(Alignment.Top)
-                                .padding(10.dp)
-                                .size(24.dp)
+                                .padding(5.dp)
+                                .size(23.dp)
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.trash),
                                 contentDescription = imageDescription
                             )
                         }
+
+                    IconButton(
+                        onClick = {
+                            onIconClick(context)
+                        }, modifier = Modifier
+                            .align(Alignment.Top)
+                            .padding(5.dp)
+                            .size(23.dp)
+                    ) {
+                        Icon(imageVector, contentDescription = imageDescription)
+                    }
+
                 }
 
 

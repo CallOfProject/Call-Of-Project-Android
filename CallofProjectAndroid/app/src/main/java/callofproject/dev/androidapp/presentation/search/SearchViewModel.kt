@@ -11,6 +11,7 @@ import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.UiEvent
+import callofproject.dev.androidapp.util.route.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,8 +45,35 @@ class SearchViewModel @Inject constructor(
     fun onEvent(event: SearchEvent) = when (event) {
         is SearchEvent.OnProjectClick -> navigateToProjectOverview(event.projectId)
         is SearchEvent.OnUserClick -> navigateToUserOverview(event.userId)
+        is SearchEvent.OnAddConnectionClick -> sendConnectionRequest(event.userId)
     }
 
+    private fun sendConnectionRequest(userId: UUID) {
+        viewModelScope.launch {
+            useCaseFacade.communicationUseCase.sendCommunicationRequest(userId).let {
+                when (it) {
+                    is Resource.Success -> {
+                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("Connection request sent")))
+                    }
+
+                    is Resource.Error -> {
+                        _uiEvent.send(
+                            UiEvent.ShowSnackbar(
+                                UiText.DynamicString(
+                                    it.message ?: "Connection request failed"
+                                )
+                            )
+                        )
+                    }
+
+                    is Resource.Loading -> {
+                        // do nothing
+                    }
+                }
+
+            }
+        }
+    }
 
     fun search(keyword: String) {
         searchJob?.cancel()

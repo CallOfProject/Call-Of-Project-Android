@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.NotificationDataType.PROJECT_JOIN_REQUEST
+import callofproject.dev.androidapp.domain.dto.NotificationDataType.REQUEST
 import callofproject.dev.androidapp.util.route.UiEvent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -61,7 +63,11 @@ fun NotificationScreen(
                 is UiEvent.Navigate -> onNavigate(event)
 
                 is UiEvent.ShowSnackbar -> {
-                    scaffoldState.showSnackbar(message = event.msg.asString(context))
+                    scaffoldState.showSnackbar(
+                        message = event.msg.asString(context),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
                 }
 
                 else -> Unit
@@ -144,6 +150,23 @@ fun NotificationScreen(
                                 )
                             }
                         )
+                    else if (notification.notificationDataType == REQUEST)
+                        NotificationCardDialog(
+                            msg = state.notifications[index].message!!,
+                            onAccept = {
+                                viewModel.onEvent(
+                                    NotificationEvent.OnAcceptConnectionRequest(
+                                        notification
+                                    )
+                                )
+                            },
+                            onReject = {
+                                viewModel.onEvent(
+                                    NotificationEvent.OnRejectConnectionRequest(
+                                        notification
+                                    )
+                                )
+                            })
                     else NotificationCard(state.notifications[index].message!!)
                 }
             }

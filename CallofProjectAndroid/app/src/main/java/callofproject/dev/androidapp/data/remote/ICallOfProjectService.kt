@@ -6,6 +6,7 @@ import callofproject.dev.androidapp.domain.dto.NotificationDTO
 import callofproject.dev.androidapp.domain.dto.ResponseMessage
 import callofproject.dev.androidapp.domain.dto.UserLoginDTO
 import callofproject.dev.androidapp.domain.dto.UserRegisterDTO
+import callofproject.dev.androidapp.domain.dto.connection.UserConnectionsDTO
 import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectJoinRequestDTO
@@ -50,7 +51,7 @@ interface ICallOfProjectService {
     @POST("api/auth/authenticate/login")
     suspend fun login(@Body userLoginDTO: UserLoginDTO): AuthenticationResponse
 
-    @POST("api/auth/authenticate/register")
+    @POST("api/auth/authenticate/register/mobile")
     suspend fun register(@Body registerDTO: UserRegisterDTO): AuthenticationResponse
 
     @GET("/api/project/project/discovery/all")
@@ -244,7 +245,7 @@ interface ICallOfProjectService {
         @Header("Authorization") token: String
     ): ResponseMessage<Boolean>
 
-    /*@POST("/api/community/personal-connection/send/connection-request")
+    @POST("/api/community/personal-connection/send/connection-request")
     suspend fun sendConnectionRequest(
         @Query("user_id") userId: UUID,
         @Query("friend_id") connectionId: UUID,
@@ -265,5 +266,42 @@ interface ICallOfProjectService {
         @Query("user_id") userId: UUID,
         @Query("friend_id") connectionId: UUID,
         @Header("Authorization") token: String
-    ): ResponseMessage<Boolean>*/
+    ): ResponseMessage<Boolean>
+
+
+    @POST("/api/community/personal-connection/block/connection")
+    suspend fun blockConnection(
+        @Query("user_id") userId: UUID,
+        @Query("friend_id") connectionId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+
+    @POST("/api/community/personal-connection/unblock/connection")
+    suspend fun unblockConnection(
+        @Query("user_id") userId: UUID,
+        @Query("friend_id") connectionId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
+
+    @GET("/api/community/personal-connection/get/connections")
+    suspend fun findConnections(
+        @Query("user_id") userId: UUID,
+        @Header("Authorization") token: String
+    ): MultipleResponseMessagePageable<UserConnectionsDTO>
+
+
+    @GET("/api/community/personal-connection/get/connection-requests")
+    suspend fun findConnectionRequests(
+        @Query("user_id") userId: UUID,
+        @Header("Authorization") token: String
+    ): MultipleResponseMessagePageable<UserConnectionsDTO>
+
+
+    @GET("/api/community/personal-connection/get/blocked-connections")
+    suspend fun findBlockedConnections(
+        @Query("user_id") userId: UUID,
+        @Header("Authorization") token: String
+    ): MultipleResponseMessagePageable<UserConnectionsDTO>
+
 }

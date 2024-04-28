@@ -7,6 +7,7 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +17,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarViewModel.Companion.selectedItemIndex
+import callofproject.dev.androidapp.util.route.Route.CONNECTIONS
 import callofproject.dev.androidapp.util.route.Route.MAIN_PAGE
 import callofproject.dev.androidapp.util.route.Route.NOTIFICATIONS
 import callofproject.dev.androidapp.util.route.Route.PROFILE
@@ -29,6 +32,7 @@ private const val BOTTOM_NAVBAR_HOME = "Home"
 private const val BOTTOM_NAVBAR_PROFILE = "Profile"
 private const val BOTTOM_NAVBAR_NOTIFICATION = "Notification"
 private const val BOTTOM_NAVBAR_PROJECT = "My Projects"
+private const val BOTTOM_NAVBAR_CONNECTIONS = "Connections"
 
 @Composable
 fun BottomBarComponent(
@@ -62,6 +66,13 @@ fun BottomBarComponent(
             selectedIcon = painterResource(R.drawable.notification_icon),
             unselectedIcon = painterResource(R.drawable.notification_icon),
             hasNews = true
+        ),
+
+        BottomNavigationItem(
+            title = BOTTOM_NAVBAR_CONNECTIONS,
+            selectedIcon = painterResource(R.drawable.people),
+            unselectedIcon = painterResource(R.drawable.people),
+            hasNews = true
         )
     )
 
@@ -82,7 +93,11 @@ fun BottomBarComponent(
                 is UiEvent.Navigate -> onNavigate(event)
 
                 is UiEvent.ShowSnackbar -> {
-                    scaffoldState.showSnackbar(message = event.msg.asString(context))
+                    scaffoldState.showSnackbar(
+                        message = event.msg.asString(context),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
                 }
 
                 is UiEvent.ShowToastMessage -> {
@@ -107,9 +122,10 @@ fun BottomBarComponent(
                         1 -> viewModel.onEvent(BottomBarEvent.Navigate(PROFILE))
                         2 -> viewModel.onEvent(BottomBarEvent.Navigate(PROJECTS))
                         3 -> viewModel.onEvent(BottomBarEvent.Navigate(NOTIFICATIONS))
+                        4 -> viewModel.onEvent(BottomBarEvent.Navigate(CONNECTIONS))
                     }
                 },
-                label = { Text(text = item.title) },
+                label = { Text(text = item.title, fontSize = 10.sp) },
                 icon = {
                     if (index != 3)
                         Icon(

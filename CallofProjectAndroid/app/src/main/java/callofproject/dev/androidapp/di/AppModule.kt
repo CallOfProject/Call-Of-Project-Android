@@ -44,9 +44,7 @@ object AppModule {
     fun providePreferences(
         @ApplicationContext context: Context,
         @PlainPreferencesInterceptor sharedPreferences: SharedPreferences
-    ): IPreferences {
-        return DefaultPreferences(context, sharedPreferences)
-    }
+    ): IPreferences = DefaultPreferences(context, sharedPreferences)
 
 
     @Provides
@@ -69,11 +67,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideEncryptedPreferences(
-        @ApplicationContext context: Context,
         @EncryptedPreferencesInterceptor sharedPreferences: SharedPreferences
-    ): IEncryptedPreferences {
-        return EncryptedPreferences(context, sharedPreferences)
-    }
+    ): IEncryptedPreferences = EncryptedPreferences(sharedPreferences)
 
     @Provides
     @Singleton

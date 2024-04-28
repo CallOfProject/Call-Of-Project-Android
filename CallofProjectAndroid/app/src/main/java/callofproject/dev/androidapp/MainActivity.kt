@@ -22,6 +22,7 @@ import callofproject.dev.androidapp.presentation.authentication.login.LoginScree
 import callofproject.dev.androidapp.presentation.authentication.signup.RegisterScreen
 import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarComponent
 import callofproject.dev.androidapp.presentation.components.topbar.TopAppBarComponent
+import callofproject.dev.androidapp.presentation.connections.ConnectionsScreen
 import callofproject.dev.androidapp.presentation.main_page.MainScreen
 import callofproject.dev.androidapp.presentation.notifications.NotificationScreen
 import callofproject.dev.androidapp.presentation.project.my_projects.MyProjectsScreen
@@ -32,6 +33,7 @@ import callofproject.dev.androidapp.presentation.search.SearchScreen
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileScreen
 import callofproject.dev.androidapp.presentation.user_profile.user_view.UserOverviewScreen
 import callofproject.dev.androidapp.ui.theme.CallofProjectAndroidTheme
+import callofproject.dev.androidapp.util.route.Route.CONNECTIONS
 import callofproject.dev.androidapp.util.route.Route.FILTERED_PROJECTS
 import callofproject.dev.androidapp.util.route.Route.LOGIN
 import callofproject.dev.androidapp.util.route.Route.MAIN_PAGE
@@ -90,6 +92,26 @@ class MainActivity : ComponentActivity() {
                                 topBar = {
                                     TopAppBarComponent(
                                         title = stringResource(R.string.title_mainPage),
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                                bottomBar = {
+                                    BottomBarComponent(
+                                        scaffoldState = scaffoldState,
+                                        onNavigate = navController::navigate
+                                    )
+                                },
+                                scaffoldState = scaffoldState,
+                                onNavigate = navController::navigate
+                            )
+                        }
+
+
+                        composable(CONNECTIONS) {
+                            ConnectionsScreen(
+                                topBar = {
+                                    TopAppBarComponent(
+                                        title = stringResource(R.string.title_connections),
                                         onNavigate = navController::navigate
                                     )
                                 },

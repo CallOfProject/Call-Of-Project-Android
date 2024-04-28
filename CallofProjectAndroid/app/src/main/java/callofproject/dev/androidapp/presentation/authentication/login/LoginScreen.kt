@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +54,11 @@ fun LoginScreen(
                 is UiEvent.Navigate -> onNavigate(event)
 
                 is UiEvent.ShowSnackbar -> {
-                    scaffoldState.showSnackbar(message = event.msg.asString(context))
+                    scaffoldState.showSnackbar(
+                        message = event.msg.asString(context),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
                 }
 
                 else -> Unit

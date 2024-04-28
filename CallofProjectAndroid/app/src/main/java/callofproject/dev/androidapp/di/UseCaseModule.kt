@@ -4,6 +4,7 @@ import android.content.Context
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.AuthenticationUseCase
+import callofproject.dev.androidapp.domain.use_cases.CommunicationUseCase
 import callofproject.dev.androidapp.domain.use_cases.NotificationUseCase
 import callofproject.dev.androidapp.domain.use_cases.ProjectUseCase
 import callofproject.dev.androidapp.domain.use_cases.SearchUseCase
@@ -35,7 +36,8 @@ object UseCaseModule {
         project = ProjectUseCase(service, preferences),
         userProfile = UserProfileUseCase(service, preferences),
         notification = NotificationUseCase(context, preferences, service),
-        search = SearchUseCase(context, preferences, service)
+        search = SearchUseCase(context, preferences, service),
+        communicationUseCase = CommunicationUseCase(preferences, service)
     )
 
     @Provides
@@ -44,9 +46,7 @@ object UseCaseModule {
         @ApplicationContext context: Context,
         preferences: IPreferences,
         service: ICallOfProjectService
-    ): NotificationUseCase {
-        return NotificationUseCase(context, preferences, service)
-    }
+    ): NotificationUseCase = NotificationUseCase(context, preferences, service)
 
 
     @Provides

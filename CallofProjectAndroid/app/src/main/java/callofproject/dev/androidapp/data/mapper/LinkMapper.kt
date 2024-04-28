@@ -6,27 +6,14 @@ import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkUpdateDTO
 
 fun Link.toLinkDTO(): LinkDTO {
-    return LinkDTO(
-        linkId = linkId,
-        linkTitle = linkTitle,
-        link = link
-    )
+    return LinkDTO(linkId, linkTitle, link)
 }
 
 
 fun LinkDTO.toLinkCreateDTO(userId: String): LinkCreateDTO {
-    return LinkCreateDTO(
-        userId = userId,
-        linkTitle = linkTitle,
-        link = link
-    )
+    return LinkCreateDTO(userId, linkTitle, link)
 }
 
 fun LinkDTO.toLinkUpdateDTO(userId: String): LinkUpdateDTO {
-    return LinkUpdateDTO(
-        userId = userId,
-        linkId = linkId,
-        linkTitle = linkTitle,
-        link = link
-    )
+    return LinkUpdateDTO(linkId, userId, linkTitle, link)
 }

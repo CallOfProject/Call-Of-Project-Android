@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -67,7 +68,8 @@ fun RegisterScreen(
                 is UiEvent.ShowSnackbar -> {
                     scaffoldState.showSnackbar(
                         message = event.msg.asString(context),
-                        withDismissAction = true
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
                     )
                 }
 
@@ -76,12 +78,7 @@ fun RegisterScreen(
                         .show()
                 }
 
-                else -> {
-                    scaffoldState.showSnackbar(
-                        message = context.getString(R.string.text_invalidOperation),
-                        withDismissAction = true
-                    )
-                }
+                else -> Unit
             }
         }
     }

@@ -46,10 +46,6 @@ fun TopAppBarComponent(
             when (event) {
                 is UiEvent.Navigate -> onNavigate(event)
 
-                is UiEvent.ShowSnackbar -> {
-
-                }
-
                 else -> Unit
             }
         }

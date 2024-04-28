@@ -47,6 +47,44 @@ class NotificationViewModel @Inject constructor(
         is NotificationEvent.OnRejectProjectJoinRequest -> rejectProjectJoinRequest(event.notificationDTO)
         is NotificationEvent.OnMarkAllAsReadClicked -> markAllAsRead()
         is NotificationEvent.OnClearAllClicked -> clearAll()
+        is NotificationEvent.OnAcceptConnectionRequest -> acceptConnectionRequest(event.notificationDTO)
+        is NotificationEvent.OnRejectConnectionRequest -> rejectConnectionRequest(event.notificationDTO)
+    }
+
+    private fun rejectConnectionRequest(notificationDTO: NotificationDTO) {
+        answerConnectionRequest(notificationDTO, false)
+    }
+
+    private fun acceptConnectionRequest(notificationDTO: NotificationDTO) {
+        answerConnectionRequest(notificationDTO, true)
+    }
+
+    private fun answerConnectionRequest(notificationDTO: NotificationDTO, isAccepted: Boolean) {
+        viewModelScope.launch {
+            useCaseFacade.communicationUseCase.answerConnectionRequest(
+                notificationDTO.fromUserId.toString(),
+                isAccepted
+            )
+                .let {
+                    when (it) {
+                        is Resource.Success -> {
+                            if (isAccepted)
+                                _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("Connection request accepted")))
+                            else
+                                _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("Connection request rejected")))
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
+                        }
+
+                        is Resource.Loading -> {
+                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
+                        }
+                    }
+
+                }
+        }
     }
 
     fun findAllUnReadNotifications() {
@@ -83,7 +121,7 @@ class NotificationViewModel @Inject constructor(
     private fun clearAll() {
         viewModelScope.launch {
             useCaseFacade.notification.deleteAllNotifications()
-                .onStart { delay(500L) }
+                .onStart { delay(50L) }
                 .onEach { resource ->
                     when (resource) {
                         is Resource.Success -> {

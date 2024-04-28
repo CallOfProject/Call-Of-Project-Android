@@ -5,6 +5,9 @@
       <entry key="MainActivity">
         <State />
       </entry>
+      <entry key="PreviewConnectionsScreen">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <runningDeviceTargetsSelectedWithDialog>

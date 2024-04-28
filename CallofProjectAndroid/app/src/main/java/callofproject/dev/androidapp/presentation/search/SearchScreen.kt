@@ -13,9 +13,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,11 +34,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.LoadingComponent
+import callofproject.dev.androidapp.presentation.search.SearchEvent.OnAddConnectionClick
 import callofproject.dev.androidapp.util.route.UiEvent
 import coil.compose.rememberAsyncImagePainter
 
@@ -62,7 +67,11 @@ fun SearchScreen(
                 is UiEvent.Navigate -> onNavigate(event)
 
                 is UiEvent.ShowSnackbar -> {
-                    scaffoldState.showSnackbar(message = event.msg.asString(context))
+                    scaffoldState.showSnackbar(
+                        message = event.msg.asString(context),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
                 }
 
                 else -> Unit
@@ -201,14 +210,14 @@ fun SearchScreen(
                                         )
                                     },
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Absolute.SpaceAround,
+                                horizontalArrangement = Arrangement.SpaceBetween,
                                 content = {
                                     Image(
                                         painter = rememberAsyncImagePainter(user.image),
                                         contentDescription = "project",
                                         contentScale = ContentScale.FillBounds,
                                         modifier = Modifier
-                                            .size(100.dp)
+                                            .size(90.dp)
                                             .clip(RectangleShape),
                                         alignment = Alignment.Center
                                     )
@@ -229,42 +238,35 @@ fun SearchScreen(
                                         }
                                     )
 
-                                    if (user.username != stringResource(R.string.username_root) &&
-                                        user.username != stringResource(R.string.username_admin) &&
-                                        user.username != viewModel.getCurrentUsername()
-                                    )
+                                    val currentUsername = viewModel.getCurrentUsername()
+                                    val rootUsername = stringResource(R.string.username_root)
+                                    val adminUsername = stringResource(R.string.username_admin)
+
+                                    if (user.username != rootUsername && user.username != adminUsername && user.username != currentUsername)
                                         Column(
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             modifier = Modifier.padding(5.dp),
                                             content = {
-                                                OutlinedButton(onClick = { }) {
-                                                    Text(text = stringResource(R.string.follow))
+                                                IconButton(onClick = {
+                                                    viewModel.onEvent(OnAddConnectionClick(user.userId))
+                                                }) {
+                                                    Icon(
+                                                        painter = painterResource(R.drawable.add_connection),
+                                                        contentDescription = "",
+                                                        tint = MaterialTheme.colorScheme.primary,
+                                                        modifier = Modifier
+                                                            .size(30.dp)
+
+                                                    )
                                                 }
                                             }
                                         )
-                                    else if (user.username == stringResource(R.string.username_root) ||
-                                        user.username == stringResource(R.string.username_admin)
-                                    ) {
+                                    else if (user.username == rootUsername || user.username == adminUsername)
                                         Column(
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                             modifier = Modifier.padding(5.dp),
-                                            content = {
-                                                OutlinedButton(
-                                                    onClick = { },
-                                                    enabled = false
-                                                ) {
-                                                    Text(text = stringResource(R.string.follow))
-                                                }
-                                            })
-                                    } else
-                                        Column(
-                                            horizontalAlignment = Alignment.CenterHorizontally,
-                                            modifier = Modifier.padding(5.dp),
-                                            content = {
-                                                OutlinedButton(onClick = { }) {
-                                                    Text(text = stringResource(R.string.unfollow))
-                                                }
-                                            })
+                                            content = {}
+                                        )
                                 }
                             )
                         }

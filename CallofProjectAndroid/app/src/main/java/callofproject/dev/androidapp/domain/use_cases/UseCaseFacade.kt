@@ -6,5 +6,6 @@ data class UseCaseFacade(
     val project: ProjectUseCase,
     val userProfile: UserProfileUseCase,
     val notification: NotificationUseCase,
-    val search: SearchUseCase
+    val search: SearchUseCase,
+    val communicationUseCase: CommunicationUseCase
 )

@@ -62,7 +62,6 @@ class WebSocketClient @Inject constructor(
             compositeDisposable.clear()
             it.disconnect()
             stompClient = null
-            Log.d("WebSocketClient", "Disconnected")
         }
     }
 }

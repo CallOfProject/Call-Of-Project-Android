@@ -12,4 +12,5 @@ object Route {
     const val FILTERED_PROJECTS = "filtered_projects"
     const val USER_OVERVIEW = "user_overview"
     const val SEARCH_RESULT = "search_result"
+    const val CONNECTIONS = "connections"
 }
