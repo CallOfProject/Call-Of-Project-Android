@@ -1,6 +1,8 @@
 package callofproject.dev.androidapp.presentation.search
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,15 +37,23 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
+import callofproject.dev.androidapp.presentation.components.DropDownComponent
 import callofproject.dev.androidapp.presentation.components.LoadingComponent
+import callofproject.dev.androidapp.presentation.main_page.MainPageEvent
+import callofproject.dev.androidapp.presentation.main_page.SORT_TYPE_ASC
+import callofproject.dev.androidapp.presentation.main_page.SORT_TYPE_DESC
 import callofproject.dev.androidapp.presentation.search.SearchEvent.OnAddConnectionClick
+import callofproject.dev.androidapp.presentation.search.SearchEvent.OnSortProjects
+import callofproject.dev.androidapp.presentation.search.SearchEvent.OnSortType
 import callofproject.dev.androidapp.util.route.UiEvent
 import coil.compose.rememberAsyncImagePainter
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchScreen(
     keyword: String,
@@ -58,7 +68,12 @@ fun SearchScreen(
     val context = LocalContext.current
     var isSelectedProjects by remember { mutableStateOf(false) }
     var isSelectedUsers by remember { mutableStateOf(true) }
-
+    val dropdownOptions = stringArrayResource(R.array.array_sortingOptions).toList()
+    val sortTypeOptions = listOf(SORT_TYPE_DESC, SORT_TYPE_ASC)
+    val expandedSortOptions by remember { mutableStateOf(false) }
+    val expandedSortTypes by remember { mutableStateOf(false) }
+    val selectedSortOption = remember { mutableStateOf(sortTypeOptions[0]) }
+    val selectedSortType = remember { mutableStateOf(dropdownOptions[0]) }
     LaunchedEffect(key1 = true) { viewModel.search(keyword) }
 
     LaunchedEffect(key1 = true) {
@@ -96,6 +111,7 @@ fun SearchScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -104,8 +120,8 @@ fun SearchScreen(
                     ) {
                         OutlinedButton(
                             colors = ButtonColors(
-                                containerColor = MaterialTheme.colorScheme.background,
-                                contentColor = MaterialTheme.colorScheme.primary,
+                                containerColor = if (!isSelectedUsers) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primary,
+                                contentColor = if (!isSelectedUsers) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary,
                                 disabledContainerColor = Color.Transparent,
                                 disabledContentColor = Color.Transparent
                             ),
@@ -119,6 +135,12 @@ fun SearchScreen(
                         }
 
                         OutlinedButton(
+                            colors = ButtonColors(
+                                containerColor = if (!isSelectedProjects) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.primary,
+                                contentColor = if (!isSelectedProjects) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary,
+                                disabledContainerColor = Color.Transparent,
+                                disabledContentColor = Color.Transparent
+                            ),
                             onClick = {
                                 isSelectedUsers = !isSelectedUsers
                                 isSelectedProjects = !isSelectedProjects
@@ -130,15 +152,33 @@ fun SearchScreen(
                         }
                     }
 
-                    Text(
-                        text = if (isSelectedProjects)
-                            stringResource(R.string.search_projects)
-                        else stringResource(R.string.search_users),
-                        style = MaterialTheme.typography.titleMedium
-                    )
                 }
 
-                if (isSelectedProjects)
+                if (isSelectedProjects) {
+                    stickyHeader {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            DropDownComponent(
+                                options = dropdownOptions,
+                                onClick = { viewModel.onEvent(OnSortProjects(it)) },
+                                isOpen = expandedSortOptions,
+                                selectedItem = selectedSortOption
+                            )
+
+                            DropDownComponent(
+                                options = sortTypeOptions,
+                                onClick = {
+                                    viewModel.onEvent(OnSortType(it, selectedSortOption.value))
+                                },
+                                isOpen = expandedSortTypes,
+                                selectedItem = selectedSortType
+                            )
+                        }
+                    }
                     items(state.searchResult.projects.projects.size) {
                         Card(
                             colors = CardColors(
@@ -184,6 +224,7 @@ fun SearchScreen(
                                 })
                         }
                     }
+                }
                 if (isSelectedUsers)
                     items(state.searchResult.users.users.size) {
                         val user = state.searchResult.users.users[it]

@@ -28,4 +28,6 @@ data class UserProfileDTO(
     val experiences: List<ExperienceDTO> = emptyList(),
 
     val links: List<LinkDTO> = emptyList(),
+
+    val tags: List<UserTagDTO> = emptyList()
 )

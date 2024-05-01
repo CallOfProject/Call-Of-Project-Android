@@ -10,6 +10,8 @@ import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.data.local.preferences.DefaultPreferences
 import callofproject.dev.androidapp.data.local.preferences.EncryptedPreferences
 import callofproject.dev.androidapp.di.interceptor.EncryptedPreferencesInterceptor
+import callofproject.dev.androidapp.di.interceptor.LocalDateFormatterInterceptor
+import callofproject.dev.androidapp.di.interceptor.LocalDateTimeFormatterInterceptor
 import callofproject.dev.androidapp.di.interceptor.PlainPreferencesInterceptor
 import callofproject.dev.androidapp.domain.preferences.IEncryptedPreferences
 import callofproject.dev.androidapp.domain.preferences.IPreferences
@@ -72,12 +74,14 @@ object AppModule {
 
     @Provides
     @Singleton
+    @LocalDateTimeFormatterInterceptor
     fun provideDateTimeFormatter(@ApplicationContext context: Context): DateTimeFormatter {
         return DateTimeFormatter.ofPattern(context.getString(R.string.local_datetime_formatter))
     }
 
     @Provides
     @Singleton
+    @LocalDateFormatterInterceptor
     fun provideDateTimeFormatterForLocalDate(@ApplicationContext context: Context): DateTimeFormatter {
         return DateTimeFormatter.ofPattern(context.getString(R.string.local_date_formatter))
     }
