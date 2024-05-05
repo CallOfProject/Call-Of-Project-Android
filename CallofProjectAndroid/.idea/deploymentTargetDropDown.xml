@@ -8,6 +8,9 @@
       <entry key="PreviewConnectionsScreen">
         <State />
       </entry>
+      <entry key="PreviewTag">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <runningDeviceTargetsSelectedWithDialog>

@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -68,6 +69,7 @@ fun TopAppBarComponent(
                 keyboardActions = KeyboardActions(onSearch = {
                     viewModel.onEvent(TopBarEvent.OnSearchEntered(tf.value))
                 }),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
             )
 
         } else if (isFiltering.value) {

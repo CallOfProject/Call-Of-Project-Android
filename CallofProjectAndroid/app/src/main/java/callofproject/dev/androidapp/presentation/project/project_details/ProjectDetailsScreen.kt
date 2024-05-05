@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -41,7 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.NotEditableCardComponent
 import callofproject.dev.androidapp.presentation.components.RowBasedCardComponent
-import callofproject.dev.androidapp.presentation.components.TagComponent
+import callofproject.dev.androidapp.presentation.components.TagItem
 import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarComponent
 import callofproject.dev.androidapp.presentation.project.components.projects_topbar.ProjectTopBarComponent
 import callofproject.dev.androidapp.util.route.UiEvent
@@ -74,7 +76,7 @@ fun ProjectDetailsScreen(
             )
         },
         bottomBar = { BottomBarComponent(scaffoldState, onNavigate) }
-    ) {
+    ) { it ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -284,14 +286,20 @@ fun ProjectDetailsScreen(
                     }
 
 
-                    NotEditableCardComponent(stringResource(R.string.title_projectTags), 250.dp) {
+                    NotEditableCardComponent(
+                        stringResource(R.string.title_projectTags),
+                        250.dp,
+                    ) {
                         FlowRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .wrapContentSize(Alignment.TopCenter),
+                                .wrapContentSize(Alignment.CenterStart),
                         ) {
-                            (0..state.projectDetailsDTO.projectTags.size - 1).forEach {
-                                TagComponent(text = state.projectDetailsDTO.projectTags[it].tagName)
+                            (0..<state.projectDetailsDTO.projectTags.size).forEach { idx ->
+                                TagItem(
+                                    text = state.projectDetailsDTO.projectTags[idx].tagName,
+                                    isRemovable = false
+                                )
                             }
                         }
                     }

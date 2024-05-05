@@ -44,7 +44,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.DropDownComponent
 import callofproject.dev.androidapp.presentation.components.LoadingComponent
-import callofproject.dev.androidapp.presentation.main_page.MainPageEvent
 import callofproject.dev.androidapp.presentation.main_page.SORT_TYPE_ASC
 import callofproject.dev.androidapp.presentation.main_page.SORT_TYPE_DESC
 import callofproject.dev.androidapp.presentation.search.SearchEvent.OnAddConnectionClick

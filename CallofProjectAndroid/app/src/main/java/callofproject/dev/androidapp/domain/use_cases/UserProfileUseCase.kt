@@ -8,6 +8,7 @@ import callofproject.dev.androidapp.data.mapper.toLinkDTO
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileUpdateDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.UserTagDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.UserWithProfileDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseCreateDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
@@ -244,6 +245,32 @@ class UserProfileUseCase @Inject constructor(
         }
     }
 
+
+    suspend fun createUserTag(tagName: String): Resource<UserTagDTO> {
+        return try {
+            val result = service.createUserTag(
+                userId = UUID.fromString(preferences.getUserId()!!),
+                tagName = tagName,
+                token = getBearerToken()
+            )
+            Resource.Success(result.`object`)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
+
+    suspend fun removeUserTag(tagId: UUID): Resource<Unit> {
+        return try {
+            service.deleteUserTag(
+                userId = UUID.fromString(preferences.getUserId()!!),
+                tagId = tagId,
+                token = getBearerToken()
+            )
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
 
     private fun getBearerToken(): String = preferences.getToken()!!
 }

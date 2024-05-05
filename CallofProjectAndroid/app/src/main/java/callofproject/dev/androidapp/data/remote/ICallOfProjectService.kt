@@ -17,6 +17,8 @@ import callofproject.dev.androidapp.domain.dto.project.ProjectsDiscoveryDTO
 import callofproject.dev.androidapp.domain.dto.search.ProjectsDTO
 import callofproject.dev.androidapp.domain.dto.search.SearchUserAndProjectResponse
 import callofproject.dev.androidapp.domain.dto.user_profile.UserProfileDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.UserTagDTO
+import callofproject.dev.androidapp.domain.dto.user_profile.UserTagsDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.UserWithProfileDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.course.Course
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseCreateDTO
@@ -303,5 +305,21 @@ interface ICallOfProjectService {
         @Query("user_id") userId: UUID,
         @Header("Authorization") token: String
     ): MultipleResponseMessagePageable<UserConnectionsDTO>
+
+
+    @POST("/api/auth/users/create/user-tag/single")
+    suspend fun createUserTag(
+        @Query("uid") userId: UUID,
+        @Query("tag_name") tagName: String,
+        @Header("Authorization") token: String
+    ): ResponseMessage<UserTagDTO>
+
+
+    @DELETE("/api/auth/users/delete/user-tag")
+    suspend fun deleteUserTag(
+        @Query("uid") userId: UUID,
+        @Query("tid") tagId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<UserTagsDTO>
 
 }

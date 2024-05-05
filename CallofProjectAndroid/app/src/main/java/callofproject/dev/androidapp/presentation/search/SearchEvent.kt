@@ -1,6 +1,5 @@
 package callofproject.dev.androidapp.presentation.search
 
-import callofproject.dev.androidapp.presentation.main_page.MainPageEvent
 import java.util.UUID
 
 sealed class SearchEvent {

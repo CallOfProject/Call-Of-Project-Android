@@ -24,4 +24,7 @@ sealed class UserProfileEvent {
     data class OnDeleteCourse(val courseId: String) : UserProfileEvent()
     data class OnDeleteEducation(val educationId: String) : UserProfileEvent()
     data class OnDeleteExperience(val experienceId: String) : UserProfileEvent()
+
+    data class OnCreateTag(val tagName: String) : UserProfileEvent()
+    data class OnRemoveTag(val tagId: String) : UserProfileEvent()
 }

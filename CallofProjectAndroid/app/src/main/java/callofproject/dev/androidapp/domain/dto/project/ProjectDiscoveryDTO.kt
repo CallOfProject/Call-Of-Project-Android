@@ -1,7 +1,6 @@
 package callofproject.dev.androidapp.domain.dto.project
 
 import com.google.gson.annotations.SerializedName
-import java.util.Date
 import java.util.UUID
 
 data class ProjectDiscoveryDTO(

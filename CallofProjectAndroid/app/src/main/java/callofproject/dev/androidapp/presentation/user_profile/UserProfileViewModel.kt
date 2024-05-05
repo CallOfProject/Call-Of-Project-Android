@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,6 +73,58 @@ class UserProfileViewModel @Inject constructor(
         is UserProfileEvent.OnDeleteCourse -> deleteCourse(event.courseId)
         is UserProfileEvent.OnDeleteEducation -> deleteEducation(event.educationId)
         is UserProfileEvent.OnDeleteExperience -> deleteExperience(event.experienceId)
+        is UserProfileEvent.OnCreateTag -> createTag(event.tagName)
+        is UserProfileEvent.OnRemoveTag -> removeTag(event.tagId)
+    }
+
+    private fun removeTag(tagId: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile.removeUserTag(UUID.fromString(tagId))
+                .let { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            state = state.copy(
+                                userProfileDTO = state.userProfileDTO.copy(
+                                    profile = state.userProfileDTO.profile
+                                        .copy(tags = state.userProfileDTO.profile.tags.filter {
+                                            it.tagId != tagId
+                                        })
+                                )
+                            )
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
+                        }
+
+                        is Resource.Loading -> {}
+                    }
+                }
+        }
+    }
+
+    private fun createTag(tagName: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile.createUserTag(tagName)
+                .let { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            state = state.copy(
+                                userProfileDTO = state.userProfileDTO.copy(
+                                    profile = state.userProfileDTO.profile
+                                        .copy(tags = state.userProfileDTO.profile.tags + result.data!!)
+                                )
+                            )
+                        }
+
+                        is Resource.Error -> {
+                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
+                        }
+
+                        is Resource.Loading -> {}
+                    }
+                }
+        }
     }
 
     private fun deleteExperience(experienceId: String) {
