@@ -260,6 +260,7 @@ interface ICallOfProjectService {
         @Query("user_id") userId: UUID,
         @Query("friend_id") connectionId: UUID,
         @Query("answer") isAccepted: Boolean,
+        @Query("notification_id") notificationId: String = "",
         @Header("Authorization") token: String
     ): ResponseMessage<Boolean>
 

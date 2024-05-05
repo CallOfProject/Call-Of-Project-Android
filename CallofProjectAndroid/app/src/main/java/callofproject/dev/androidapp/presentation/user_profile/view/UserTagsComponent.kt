@@ -33,7 +33,8 @@ fun UserTagsComponent(
         imageDescription = "Add",
         isEditable = isEditable,
         removable = false,
-        onIconClick = { expandedAddLink = true})
+        onIconClick = { expandedAddLink = true }
+    )
     {
         LazyRow {
             items(state.userProfileDTO.profile.tags.size) {
@@ -43,12 +44,11 @@ fun UserTagsComponent(
     }
 
 
-    if (expandedAddLink) {
+    if (expandedAddLink)
         UserTagEditComponent(
             onDismissRequest = { expandedAddLink = false },
             userTagDTO = state.userProfileDTO.profile.tags,
             confirmEvent = { viewModel.onEvent(UserProfileEvent.OnCreateTag(it)) },
             removeEvent = { viewModel.onEvent(UserProfileEvent.OnRemoveTag(it)) }
         )
-    }
 }

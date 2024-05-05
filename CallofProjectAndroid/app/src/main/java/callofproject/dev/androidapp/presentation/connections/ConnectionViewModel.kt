@@ -40,26 +40,21 @@ class ConnectionViewModel @Inject constructor(
     private fun removeConnection(friendId: String) {
 
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.removeConnection(friendId).let {
-                when (it) {
+            useCaseFacade.communicationUseCase.removeConnection(friendId).let { res ->
+                when (res) {
                     is Resource.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = true, error = "")
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = false, error = "",
+                            connections = state.connections.filter { it.userId != friendId })
                     }
 
                     is Resource.Error -> {
                         state = state.copy(
                             isLoading = false,
-                            error = it.message ?: "An error occurred"
+                            error = res.message ?: "An error occurred"
                         )
                     }
                 }
@@ -69,26 +64,24 @@ class ConnectionViewModel @Inject constructor(
 
     private fun unblockConnection(friendId: String) {
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.unblockConnection(friendId).let {
-                when (it) {
+            useCaseFacade.communicationUseCase.unblockConnection(friendId).let { res ->
+                when (res) {
                     is Resource.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = true, error = "")
                     }
 
                     is Resource.Success -> {
                         state = state.copy(
                             isLoading = false,
-                            error = ""
+                            error = "",
+                            connections = state.connections.filter { it.userId != friendId }
                         )
                     }
 
                     is Resource.Error -> {
                         state = state.copy(
                             isLoading = false,
-                            error = it.message ?: "An error occurred"
+                            error = res.message ?: "An error occurred"
                         )
                     }
                 }
@@ -99,26 +92,24 @@ class ConnectionViewModel @Inject constructor(
 
     private fun blockConnection(friendId: String) {
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.blockConnection(friendId).let {
-                when (it) {
+            useCaseFacade.communicationUseCase.blockConnection(friendId).let { res ->
+                when (res) {
                     is Resource.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = true, error = "")
                     }
 
                     is Resource.Success -> {
                         state = state.copy(
                             isLoading = false,
-                            error = ""
+                            error = "",
+                            connections = state.connections.filter { it.userId != friendId }
                         )
                     }
 
                     is Resource.Error -> {
                         state = state.copy(
                             isLoading = false,
-                            error = it.message ?: "An error occurred"
+                            error = res.message ?: "An error occurred"
                         )
                     }
                 }
@@ -128,39 +119,37 @@ class ConnectionViewModel @Inject constructor(
     }
 
     private fun rejectConnection(friendId: String) {
+
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.answerConnectionRequest(friendId, false).let {
-                when (it) {
+            useCaseFacade.communicationUseCase.answerConnectionRequest(friendId, false).let { res ->
+                when (res) {
                     is Resource.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = true, error = "")
                     }
 
                     is Resource.Success -> {
                         state = state.copy(
                             isLoading = false,
-                            error = ""
+                            error = "",
+                            connections = state.connections.filter { it.userId != friendId }
                         )
                     }
 
                     is Resource.Error -> {
                         state = state.copy(
                             isLoading = false,
-                            error = it.message ?: "An error occurred"
+                            error = res.message ?: "An error occurred"
                         )
                     }
                 }
             }
         }
-
     }
 
     private fun acceptConnection(friendId: String) {
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.answerConnectionRequest(friendId, true).let {
-                when (it) {
+            useCaseFacade.communicationUseCase.answerConnectionRequest(friendId, true).let { res ->
+                when (res) {
                     is Resource.Loading -> {
                         state = state.copy(
                             isLoading = true,
@@ -169,16 +158,14 @@ class ConnectionViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = false, error = "",
+                            connections = state.connections.filter { it.userId != friendId })
                     }
 
                     is Resource.Error -> {
                         state = state.copy(
                             isLoading = false,
-                            error = it.message ?: "An error occurred"
+                            error = res.message ?: "An error occurred"
                         )
                     }
                 }
@@ -202,9 +189,7 @@ class ConnectionViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(
-                            connections = it.data ?: emptyList(),
-                        )
+                        state = state.copy(connections = it.data ?: emptyList())
                     }
 
                     is Resource.Error -> {
@@ -224,16 +209,11 @@ class ConnectionViewModel @Inject constructor(
             useCaseFacade.communicationUseCase.findPendingConnections().let {
                 when (it) {
                     is Resource.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = true, error = "")
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(
-                            connections = it.data ?: emptyList(),
-                        )
+                        state = state.copy(connections = it.data ?: emptyList())
                     }
 
                     is Resource.Error -> {
@@ -247,7 +227,7 @@ class ConnectionViewModel @Inject constructor(
 
     }
 
-    fun findConnections() {
+    private fun findConnections() {
         findAllJob?.cancel()
         state = state.copy(isLoading = true)
         findAllJob = viewModelScope.launch {

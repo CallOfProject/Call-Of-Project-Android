@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.presentation.notifications
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,7 +12,9 @@ import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.UiEvent
+import callofproject.dev.androidapp.util.route.UiEvent.ShowSnackbar
 import callofproject.dev.androidapp.util.route.UiText
+import callofproject.dev.androidapp.util.route.UiText.StringResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -52,30 +55,35 @@ class NotificationViewModel @Inject constructor(
     }
 
     private fun rejectConnectionRequest(notificationDTO: NotificationDTO) {
-        answerConnectionRequest(notificationDTO, false)
+        answerConnectionRequest(notificationDTO, false, notificationDTO.notificationId!!)
     }
 
     private fun acceptConnectionRequest(notificationDTO: NotificationDTO) {
-        answerConnectionRequest(notificationDTO, true)
+        answerConnectionRequest(notificationDTO, true, notificationDTO.notificationId!!)
     }
 
-    private fun answerConnectionRequest(notificationDTO: NotificationDTO, isAccepted: Boolean) {
+    private fun answerConnectionRequest(
+        notificationDTO: NotificationDTO,
+        isAccepted: Boolean,
+        notificationId: String
+    ) {
         viewModelScope.launch {
             useCaseFacade.communicationUseCase.answerConnectionRequest(
                 notificationDTO.fromUserId.toString(),
-                isAccepted
+                isAccepted,
+                notificationId
             )
                 .let {
                     when (it) {
                         is Resource.Success -> {
                             if (isAccepted)
-                                _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("Connection request accepted")))
+                                _uiEvent.send(ShowSnackbar(UiText.DynamicString("Connection request accepted")))
                             else
-                                _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString("Connection request rejected")))
+                                _uiEvent.send(ShowSnackbar(UiText.DynamicString("Connection request rejected")))
                         }
 
                         is Resource.Error -> {
-                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
+                            _uiEvent.send(ShowSnackbar(StringResource(R.string.error_occurred)))
                         }
 
                         is Resource.Loading -> {
@@ -87,7 +95,7 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    fun findAllUnReadNotifications() {
+   private fun findAllUnReadNotifications() {
         viewModelScope.launch {
             useCaseFacade.notification.findAllUnreadNotificationCount()
                 .onStart { delay(500L) }
@@ -125,12 +133,12 @@ class NotificationViewModel @Inject constructor(
                 .onEach { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.notifications_cleared)))
+                            _uiEvent.send(ShowSnackbar(StringResource(R.string.notifications_cleared)))
                             getNotifications()
                         }
 
                         is Resource.Error -> {
-                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
+                            _uiEvent.send(ShowSnackbar(StringResource(R.string.error_occurred)))
                         }
 
                         is Resource.Loading -> {
@@ -148,12 +156,12 @@ class NotificationViewModel @Inject constructor(
                 .onEach { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.notifications_marked_as_read)))
+                            _uiEvent.send(ShowSnackbar(StringResource(R.string.notifications_marked_as_read)))
                             getNotifications()
                         }
 
                         is Resource.Error -> {
-                            _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
+                            _uiEvent.send(ShowSnackbar(StringResource(R.string.error_occurred)))
                         }
 
                         is Resource.Loading -> {
@@ -170,11 +178,11 @@ class NotificationViewModel @Inject constructor(
             useCaseFacade.project.answerProjectJoinRequest(notificationDTO, false).let { result ->
                 when (result) {
                     is Resource.Success -> {
-                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.project_join_request_rejected)))
+                        _uiEvent.send(ShowSnackbar(StringResource(R.string.project_join_request_rejected)))
                     }
 
                     is Resource.Error -> {
-                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
+                        _uiEvent.send(ShowSnackbar(StringResource(R.string.error_occurred)))
                     }
 
                     is Resource.Loading -> {
@@ -190,11 +198,11 @@ class NotificationViewModel @Inject constructor(
             useCaseFacade.project.answerProjectJoinRequest(notificationDTO, true).let { result ->
                 when (result) {
                     is Resource.Success -> {
-                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.project_join_request_accepted)))
+                        _uiEvent.send(ShowSnackbar(StringResource(R.string.project_join_request_accepted)))
                     }
 
                     is Resource.Error -> {
-                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_occurred)))
+                        _uiEvent.send(ShowSnackbar(StringResource(R.string.error_occurred)))
                     }
 
                     is Resource.Loading -> {

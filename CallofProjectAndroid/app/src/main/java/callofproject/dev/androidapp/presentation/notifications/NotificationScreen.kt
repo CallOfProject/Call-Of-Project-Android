@@ -40,8 +40,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
+import callofproject.dev.androidapp.domain.dto.NotificationDataType.CONNECTION_REQUEST
 import callofproject.dev.androidapp.domain.dto.NotificationDataType.PROJECT_JOIN_REQUEST
 import callofproject.dev.androidapp.domain.dto.NotificationDataType.REQUEST
+import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnAcceptConnectionRequest
+import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnAcceptProjectJoinRequest
+import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnRejectConnectionRequest
+import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnRejectProjectJoinRequest
 import callofproject.dev.androidapp.util.route.UiEvent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -132,42 +137,22 @@ fun NotificationScreen(
                     }
                 } else items(state.notifications.size) { index ->
                     val notification = state.notifications[index]
-                    if (notification.notificationDataType == PROJECT_JOIN_REQUEST)
-                        NotificationCardDialog(
+                    when (notification.notificationDataType) {
+
+                        PROJECT_JOIN_REQUEST -> NotificationCardDialog(
                             msg = state.notifications[index].message!!,
-                            onAccept = {
-                                viewModel.onEvent(
-                                    NotificationEvent.OnAcceptProjectJoinRequest(
-                                        notification
-                                    )
-                                )
-                            },
-                            onReject = {
-                                viewModel.onEvent(
-                                    NotificationEvent.OnRejectProjectJoinRequest(
-                                        notification
-                                    )
-                                )
-                            }
+                            onAccept = { viewModel.onEvent(OnAcceptProjectJoinRequest(notification)) },
+                            onReject = { viewModel.onEvent(OnRejectProjectJoinRequest(notification)) }
                         )
-                    else if (notification.notificationDataType == REQUEST)
-                        NotificationCardDialog(
+
+                        CONNECTION_REQUEST -> NotificationCardDialog(
                             msg = state.notifications[index].message!!,
-                            onAccept = {
-                                viewModel.onEvent(
-                                    NotificationEvent.OnAcceptConnectionRequest(
-                                        notification
-                                    )
-                                )
-                            },
-                            onReject = {
-                                viewModel.onEvent(
-                                    NotificationEvent.OnRejectConnectionRequest(
-                                        notification
-                                    )
-                                )
-                            })
-                    else NotificationCard(state.notifications[index].message!!)
+                            onAccept = { viewModel.onEvent(OnAcceptConnectionRequest(notification)) },
+                            onReject = { viewModel.onEvent(OnRejectConnectionRequest(notification)) }
+                        )
+
+                        else -> NotificationCard(state.notifications[index].message!!)
+                    }
                 }
             }
         }

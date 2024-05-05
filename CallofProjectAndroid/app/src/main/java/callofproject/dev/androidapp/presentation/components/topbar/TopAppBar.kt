@@ -42,6 +42,7 @@ fun TopAppBarComponent(
     val isSearching = remember { mutableStateOf(false) }
     val isFiltering = remember { mutableStateOf(false) }
     val tf = remember { mutableStateOf("") }
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {

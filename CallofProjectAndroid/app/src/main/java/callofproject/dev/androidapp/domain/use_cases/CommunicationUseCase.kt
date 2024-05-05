@@ -31,16 +31,28 @@ class CommunicationUseCase @Inject constructor(
 
     suspend fun answerConnectionRequest(
         friendId: String,
-        isAccepted: Boolean
+        isAccepted: Boolean,
+        notificationId: String? = ""
     ): Resource<Boolean> {
         return try {
 
-            val responseMessage = service.answerConnectionRequest(
-                userId = UUID.fromString(pref.getUserId()!!),
-                connectionId = UUID.fromString(friendId),
-                isAccepted = isAccepted,
-                token = pref.getToken()!!
-            )
+
+            val responseMessage = notificationId?.let {
+                service.answerConnectionRequest(
+                    userId = UUID.fromString(pref.getUserId()!!),
+                    connectionId = UUID.fromString(friendId),
+                    isAccepted = isAccepted,
+                    notificationId = it,
+                    token = pref.getToken()!!
+                )
+            } ?: run {
+                service.answerConnectionRequest(
+                    userId = UUID.fromString(pref.getUserId()!!),
+                    connectionId = UUID.fromString(friendId),
+                    isAccepted = isAccepted,
+                    token = pref.getToken()!!
+                )
+            }
 
             Resource.Success(responseMessage.`object`)
 
