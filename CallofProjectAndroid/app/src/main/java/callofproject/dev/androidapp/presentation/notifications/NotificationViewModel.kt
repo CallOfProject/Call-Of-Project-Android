@@ -1,6 +1,5 @@
 package callofproject.dev.androidapp.presentation.notifications
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -95,10 +94,10 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-   private fun findAllUnReadNotifications() {
+    private fun findAllUnReadNotifications() {
         viewModelScope.launch {
             useCaseFacade.notification.findAllUnreadNotificationCount()
-                .onStart { delay(500L) }
+                .onStart { delay(50L) }
                 .onEach { resource ->
                     when (resource) {
                         is Resource.Success -> {
@@ -152,7 +151,7 @@ class NotificationViewModel @Inject constructor(
     private fun markAllAsRead() {
         viewModelScope.launch {
             useCaseFacade.notification.markAllNotificationsRead()
-                .onStart { delay(100L) }
+                .onStart { delay(50L) }
                 .onEach { resource ->
                     when (resource) {
                         is Resource.Success -> {
@@ -219,37 +218,22 @@ class NotificationViewModel @Inject constructor(
         state = state.copy(isLoading = true)
         job = viewModelScope.launch {
             useCaseFacade.notification.findAllNotificationsPageable(1)
-                .onStart { delay(500L) }
+                .onStart { delay(50L) }
                 .onEach { resource ->
                     when (resource) {
-
                         is Resource.Success -> {
-                            state = state.copy(
-                                notifications = resource.data?.`object` ?: emptyList(),
-                                isLoading = false,
-                            )
+                            state = state.copy(notifications = resource.data?.`object` ?: emptyList(), isLoading = false,)
                         }
-
 
                         is Resource.Loading -> {
-                            state = state.copy(
-                                isLoading = true,
-                                notifications = emptyList()
-                            )
+                            state = state.copy(isLoading = true, notifications = emptyList())
                         }
-
 
                         is Resource.Error -> {
-                            state = state.copy(
-                                isLoading = false,
-                                notifications = emptyList()
-                            )
+                            state = state.copy(isLoading = false, notifications = emptyList())
                         }
                     }
-
                 }.launchIn(this)
-
         }
     }
-
 }

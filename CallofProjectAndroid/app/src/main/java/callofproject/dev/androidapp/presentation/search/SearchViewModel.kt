@@ -187,7 +187,7 @@ class SearchViewModel @Inject constructor(
         searchJob?.cancel()
         state = state.copy(isLoading = true)
         searchJob = viewModelScope.launch {
-            useCaseFacade.search(keyword).onStart { delay(100L) }.onEach { result ->
+            useCaseFacade.search(keyword).onStart { delay(50L) }.onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
                         state = state.copy(isLoading = true)

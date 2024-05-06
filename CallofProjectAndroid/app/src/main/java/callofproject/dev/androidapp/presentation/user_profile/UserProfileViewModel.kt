@@ -281,8 +281,7 @@ class UserProfileViewModel @Inject constructor(
         state = state.copy(
             userProfileDTO = state.userProfileDTO.copy(
                 profile = state.userProfileDTO.profile.copy(profilePhoto = data)
-            ), isPhotoLoading = false
-        )
+            ), isPhotoLoading = false)
         _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_profile_photo_uploaded)))
     }
 
@@ -431,11 +430,7 @@ class UserProfileViewModel @Inject constructor(
     private fun updateExperience(experienceDTO: ExperienceDTO) {
         viewModelScope.launch {
             useCaseFacade.userProfile.updateExperience(
-                experienceDTO.toExperienceUpdateDTO(
-                    preferences.getUserId()!!
-                )
-            )
-                .let { result ->
+                experienceDTO.toExperienceUpdateDTO(preferences.getUserId()!!)).let { result ->
                     when (result) {
                         is Resource.Success -> {
                             state = state.copy(
@@ -447,7 +442,6 @@ class UserProfileViewModel @Inject constructor(
                                 )
                             )
                         }
-
                         is Resource.Error -> {
                             //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
                         }
@@ -475,7 +469,6 @@ class UserProfileViewModel @Inject constructor(
                                     )
                             )
                         }
-
                         is Resource.Error -> {
                             //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
                         }
@@ -524,7 +517,6 @@ class UserProfileViewModel @Inject constructor(
                 .let { result ->
                     when (result) {
                         is Resource.Success -> {
-
                             state = state.copy(
                                 userProfileDTO = state.userProfileDTO.copy(
                                     profile = state.userProfileDTO.profile.copy(
@@ -533,7 +525,6 @@ class UserProfileViewModel @Inject constructor(
                                 )
                             )
                         }
-
                         is Resource.Error -> {
                             //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
                         }
@@ -551,9 +542,7 @@ class UserProfileViewModel @Inject constructor(
             useCaseFacade.userProfile.findUserProfile(userId).let { result ->
                 when (result) {
                     is Resource.Success -> {
-                        state = state.copy(
-                            userProfileDTO = result.data!!
-                        )
+                        state = state.copy(userProfileDTO = result.data!!)
                     }
 
                     is Resource.Error -> {

@@ -45,9 +45,9 @@ class BottomBarViewModel @Inject constructor(
         receiveNotification()
     }
 
-    fun receiveNotification() {
+    private fun receiveNotification() {
         viewModelScope.launch {
-            notificationFlow.collect { notification ->
+            notificationFlow.collect { _ ->
                 state = state.copy(unReadNotificationsCount = state.unReadNotificationsCount + 1)
             }
         }
@@ -66,20 +66,15 @@ class BottomBarViewModel @Inject constructor(
     fun findAllUnReadNotifications() {
         viewModelScope.launch {
             useCaseFacade.notification.findAllUnreadNotificationCount()
-                .onStart { delay(100L) }
+                .onStart { delay(50L) }
                 .onEach { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            state = state.copy(
-                                unReadNotificationsCount = resource.data ?: 0,
-                            )
-                            Log.d("NotificationCount", resource.data.toString())
+                            state = state.copy(unReadNotificationsCount = resource.data ?: 0)
                         }
 
                         is Resource.Error -> {
-                            state = state.copy(
-                                unReadNotificationsCount = 0,
-                            )
+                            state = state.copy(unReadNotificationsCount = 0)
                         }
 
                         is Resource.Loading -> {

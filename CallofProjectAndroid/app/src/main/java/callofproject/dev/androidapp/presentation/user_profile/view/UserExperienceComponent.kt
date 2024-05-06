@@ -86,11 +86,9 @@ fun UserExperienceComponent(
 
 @Composable
 private fun ExperienceDetails(experience: ExperienceDTO) {
-
-
     Row {
         Text(
-            text = "Position:",
+            text = stringResource(R.string.title_position),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
         )
@@ -105,7 +103,7 @@ private fun ExperienceDetails(experience: ExperienceDTO) {
 
     Row {
         Text(
-            text = "Date:",
+            text = stringResource(R.string.title_date),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
         )
@@ -119,7 +117,7 @@ private fun ExperienceDetails(experience: ExperienceDTO) {
 
     Column {
         Text(
-            text = "Description:",
+            text = stringResource(R.string.title_description),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
 

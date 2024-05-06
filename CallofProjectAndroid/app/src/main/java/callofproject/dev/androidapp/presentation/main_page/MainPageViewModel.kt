@@ -150,7 +150,7 @@ class MainPageViewModel @Inject constructor(
         state = state.copy(isLoading = true)
         findAllJob = viewModelScope.launch {
             useCases.project.findProjectDiscovery(1)
-                .onStart { delay(500L) }
+                .onStart { delay(50L) }
                 .onEach { result ->
                     when (result) {
                         is Resource.Loading -> {

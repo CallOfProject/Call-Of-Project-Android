@@ -32,12 +32,14 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.UserTagDTO
 import callofproject.dev.androidapp.presentation.components.TagItem
 
@@ -67,7 +69,9 @@ fun UserTagEditComponent(
             ),
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(5.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
             ) {
                 Box(
                     modifier = Modifier
@@ -81,7 +85,11 @@ fun UserTagEditComponent(
                         modifier = Modifier
                             .wrapContentHeight()
                             .fillMaxWidth()
-                            .border(1.dp, MaterialTheme.colorScheme.onSecondaryContainer, CircleShape)
+                            .border(
+                                1.dp,
+                                MaterialTheme.colorScheme.onSecondaryContainer,
+                                CircleShape
+                            )
                             .shadow(5.dp, CircleShape)
                             .background(MaterialTheme.colorScheme.background, CircleShape)
                             .padding(horizontal = 10.dp, vertical = 10.dp),
@@ -93,7 +101,7 @@ fun UserTagEditComponent(
                             ) {
                                 if (tagName.isEmpty()) {
                                     Text(
-                                        text = "Tag Name",
+                                        text = stringResource(R.string.tag_name),
                                         color = Color.LightGray,
                                         fontSize = 14.sp
                                     )

@@ -22,9 +22,7 @@ class ConnectionViewModel @Inject constructor(
 
     private var findAllJob: Job? = null
 
-    init {
-        findConnections()
-    }
+    init { findConnections() }
 
     fun onEvent(event: ConnectionEvent) = when (event) {
         is ConnectionEvent.FindConnections -> findConnections()
@@ -47,15 +45,11 @@ class ConnectionViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(isLoading = false, error = "",
-                            connections = state.connections.filter { it.userId != friendId })
+                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
                     }
 
                     is Resource.Error -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = res.message ?: "An error occurred"
-                        )
+                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
                     }
                 }
             }
@@ -71,18 +65,11 @@ class ConnectionViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = "",
-                            connections = state.connections.filter { it.userId != friendId }
-                        )
+                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
                     }
 
                     is Resource.Error -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = res.message ?: "An error occurred"
-                        )
+                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
                     }
                 }
             }
@@ -99,18 +86,11 @@ class ConnectionViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = "",
-                            connections = state.connections.filter { it.userId != friendId }
-                        )
+                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
                     }
 
                     is Resource.Error -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = res.message ?: "An error occurred"
-                        )
+                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
                     }
                 }
             }
@@ -128,18 +108,11 @@ class ConnectionViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = "",
-                            connections = state.connections.filter { it.userId != friendId }
-                        )
+                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
                     }
 
                     is Resource.Error -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = res.message ?: "An error occurred"
-                        )
+                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
                     }
                 }
             }
@@ -151,22 +124,14 @@ class ConnectionViewModel @Inject constructor(
             useCaseFacade.communicationUseCase.answerConnectionRequest(friendId, true).let { res ->
                 when (res) {
                     is Resource.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = true, error = "")
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(isLoading = false, error = "",
-                            connections = state.connections.filter { it.userId != friendId })
-                    }
+                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId }) }
 
                     is Resource.Error -> {
-                        state = state.copy(
-                            isLoading = false,
-                            error = res.message ?: "An error occurred"
-                        )
+                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
                     }
                 }
             }
@@ -182,10 +147,7 @@ class ConnectionViewModel @Inject constructor(
             useCaseFacade.communicationUseCase.findBlockedConnections().let {
                 when (it) {
                     is Resource.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = true, error = "")
                     }
 
                     is Resource.Success -> {
@@ -193,9 +155,7 @@ class ConnectionViewModel @Inject constructor(
                     }
 
                     is Resource.Error -> {
-                        state = state.copy(
-                            error = it.message ?: "An error occurred"
-                        )
+                        state = state.copy(error = it.message ?: "An error occurred")
                     }
                 }
             }
@@ -217,9 +177,7 @@ class ConnectionViewModel @Inject constructor(
                     }
 
                     is Resource.Error -> {
-                        state = state.copy(
-                            error = it.message ?: "An error occurred"
-                        )
+                        state = state.copy(error = it.message ?: "An error occurred")
                     }
                 }
             }
@@ -234,22 +192,15 @@ class ConnectionViewModel @Inject constructor(
             useCaseFacade.communicationUseCase.findConnections().let {
                 when (it) {
                     is Resource.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            error = ""
-                        )
+                        state = state.copy(isLoading = true, error = "")
                     }
 
                     is Resource.Success -> {
-                        state = state.copy(
-                            connections = it.data ?: emptyList(),
-                        )
+                        state = state.copy(connections = it.data ?: emptyList(),)
                     }
 
                     is Resource.Error -> {
-                        state = state.copy(
-                            error = it.message ?: "An error occurred"
-                        )
+                        state = state.copy(error = it.message ?: "An error occurred")
                     }
                 }
             }

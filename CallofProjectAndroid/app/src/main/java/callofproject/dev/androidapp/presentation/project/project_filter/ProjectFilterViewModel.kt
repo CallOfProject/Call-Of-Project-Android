@@ -87,7 +87,7 @@ class ProjectFilterViewModel @Inject constructor(
 
         filterJob = viewModelScope.launch {
             useCases.project.filterProjects(projectFilterDTO, 1)
-                .onStart { delay(500L) }
+                .onStart { delay(50L) }
                 .onEach { result ->
                     when (result) {
                         is Resource.Loading -> {
@@ -114,7 +114,6 @@ class ProjectFilterViewModel @Inject constructor(
     private fun saveFilterOpt() {
         viewModelScope.launch {
             val dto = createDTO()
-            Log.d("ProjectFilterViewModel", "saveFilterOpt: $dto")
             pref.saveFilterObjects(dto)
             _uiEvent.send(UiEvent.Navigate("${Route.FILTERED_PROJECTS}/${gson.toJson(dto)}"))
         }

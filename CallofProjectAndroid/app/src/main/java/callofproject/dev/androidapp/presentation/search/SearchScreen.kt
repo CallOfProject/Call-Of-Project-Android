@@ -47,8 +47,10 @@ import callofproject.dev.androidapp.presentation.components.LoadingComponent
 import callofproject.dev.androidapp.presentation.main_page.SORT_TYPE_ASC
 import callofproject.dev.androidapp.presentation.main_page.SORT_TYPE_DESC
 import callofproject.dev.androidapp.presentation.search.SearchEvent.OnAddConnectionClick
+import callofproject.dev.androidapp.presentation.search.SearchEvent.OnProjectClick
 import callofproject.dev.androidapp.presentation.search.SearchEvent.OnSortProjects
 import callofproject.dev.androidapp.presentation.search.SearchEvent.OnSortType
+import callofproject.dev.androidapp.presentation.search.SearchEvent.OnUserClick
 import callofproject.dev.androidapp.util.route.UiEvent
 import coil.compose.rememberAsyncImagePainter
 
@@ -171,7 +173,12 @@ fun SearchScreen(
                             DropDownComponent(
                                 options = sortTypeOptions,
                                 onClick = {
-                                    viewModel.onEvent(OnSortType(it, selectedSortOption.value))
+                                    viewModel.onEvent(
+                                        OnSortType(
+                                            it,
+                                            selectedSortOption.value
+                                        )
+                                    )
                                 },
                                 isOpen = expandedSortTypes,
                                 selectedItem = selectedSortType
@@ -192,7 +199,11 @@ fun SearchScreen(
                         ) {
                             Row(
                                 modifier = Modifier.clickable {
-                                    viewModel.onEvent(SearchEvent.OnProjectClick(state.searchResult.projects.projects[it].projectId.toString()))
+                                    viewModel.onEvent(
+                                        OnProjectClick(
+                                            state.searchResult.projects.projects[it].projectId.toString()
+                                        )
+                                    )
                                 },
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -244,7 +255,7 @@ fun SearchScreen(
                                     .fillMaxWidth()
                                     .clickable {
                                         viewModel.onEvent(
-                                            SearchEvent.OnUserClick(
+                                            OnUserClick(
                                                 user.userId.toString()
                                             )
                                         )

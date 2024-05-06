@@ -322,5 +322,4 @@ interface ICallOfProjectService {
         @Query("tid") tagId: UUID,
         @Header("Authorization") token: String
     ): ResponseMessage<UserTagsDTO>
-
 }

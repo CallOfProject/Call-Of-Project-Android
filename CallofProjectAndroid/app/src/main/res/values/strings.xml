@@ -35,13 +35,13 @@
     <string name="title_upsert_education">Upsert Education</string>
     <string name="btn_save">Save</string>
     <string name="title_graduateStatus">Finish/Continue</string>
-    <string name="title_gpa">GPA</string>
+    <string name="title_gpa">GPA:</string>
     <string name="title_departmentName">Department Name</string>
     <string name="title_schoolName">School Name</string>
     <string name="title_upsert_experience">Upsert Experience</string>
     <string name="title_companyName">Company</string>
     <string name="title_positionName">Position</string>
-    <string name="title_description">Description</string>
+    <string name="title_description">Description:</string>
     <string name="title_websiteLink">Website Link</string>
     <string name="title_upsert_course">Upsert Course</string>
     <string name="title_courseName">Course Name</string>
@@ -108,6 +108,14 @@
     <string name="title_connections">Connections</string>
     <string name="sort_prefix">"Sort: "</string>
     <string name="remove_tag">Remove Tag</string>
+    <string name="tag_name">Tag Name</string>
+    <string name="cv">CV</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="title_organizator">Organizator: </string>
+    <string name="title_date">Date: </string>
+    <string name="title_department">"Department: "</string>
+    <string name="title_position">Position:</string>
+    <string name="title_userTags">User Tags</string>
 
 
     <string-array name="array_projectStatus">

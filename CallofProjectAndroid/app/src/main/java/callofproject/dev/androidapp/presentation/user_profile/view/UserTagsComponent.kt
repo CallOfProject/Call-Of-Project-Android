@@ -9,7 +9,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.components.TagItem
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
@@ -27,10 +29,10 @@ fun UserTagsComponent(
     var expandedAddLink by remember { mutableStateOf(false) }
 
     EditableCardComponent(
-        "User Tags",
+        stringResource(R.string.title_userTags),
         200.dp,
         imageVector = Icons.Filled.Add,
-        imageDescription = "Add",
+        imageDescription = stringResource(R.string.default_image_description),
         isEditable = isEditable,
         removable = false,
         onIconClick = { expandedAddLink = true }

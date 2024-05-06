@@ -287,7 +287,7 @@ fun ProjectOverviewScreen(
                     }
 
 
-                    if (state.projectOverviewDTO.projectOwnerName != viewModel.getUsername())
+                    if (viewModel.isParticipantOrOwner())
                         Button(onClick = {
                             viewModel.onEvent(ProjectOverviewEvent.OnSendJoinRequestClick(projectId))
                         }, modifier = Modifier.padding(10.dp)) {

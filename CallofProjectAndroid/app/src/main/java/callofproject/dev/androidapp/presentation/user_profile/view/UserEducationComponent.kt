@@ -12,10 +12,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
@@ -79,7 +81,7 @@ private fun EducationDetails(education: EducationDTO) {
 
     Row {
         Text(
-            text = "Department:",
+            text = stringResource(R.string.title_department),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
         )
@@ -94,7 +96,7 @@ private fun EducationDetails(education: EducationDTO) {
 
     Row {
         Text(
-            text = "Date:",
+            text = stringResource(R.string.title_date),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
         )
@@ -109,7 +111,7 @@ private fun EducationDetails(education: EducationDTO) {
 
     Row {
         Text(
-            text = "GPA:",
+            text = stringResource(R.string.title_gpa),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
 
@@ -126,7 +128,7 @@ private fun EducationDetails(education: EducationDTO) {
 
     Column {
         Text(
-            text = "Description:",
+            text = stringResource(R.string.title_description),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
 

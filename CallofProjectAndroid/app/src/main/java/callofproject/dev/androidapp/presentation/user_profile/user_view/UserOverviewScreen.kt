@@ -39,12 +39,7 @@ fun UserOverviewScreen(
         bottomBar = bottomBar,
     )
     {
-        Box(
-            contentAlignment = Alignment.TopCenter,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-        )
+        Box(contentAlignment = Alignment.TopCenter, modifier = Modifier.fillMaxSize().padding(it))
         {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

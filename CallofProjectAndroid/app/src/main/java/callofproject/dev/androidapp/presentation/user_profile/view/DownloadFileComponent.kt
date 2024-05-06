@@ -50,7 +50,7 @@ fun DownloadFileComponent(
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.size(5.dp))
-            Text(text = "CV", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Text(text = stringResource(R.string.cv), fontSize = 12.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

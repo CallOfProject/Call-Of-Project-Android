@@ -23,7 +23,6 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @Module
 @InstallIn(ViewModelComponent::class)
 object UseCaseModule {
-
     @ViewModelScoped
     @Provides
     fun provideUseCaseFacade(

@@ -56,7 +56,7 @@ class ProjectViewModel @Inject constructor(
             findAllJob?.cancel()
             state = state.copy(isLoading = true)
             findAllJob = useCases.project.findOwnerOfProjects(1)
-                .onStart { delay(500L) }
+                .onStart { delay(50L) }
                 .onEach { resource ->
                     when (resource) {
 
@@ -67,20 +67,12 @@ class ProjectViewModel @Inject constructor(
                             )
                         }
 
-
                         is Resource.Loading -> {
-                            state = state.copy(
-                                isLoading = true,
-                                myProjects = emptyList()
-                            )
+                            state = state.copy(isLoading = true, myProjects = emptyList())
                         }
 
-
                         is Resource.Error -> {
-                            state = state.copy(
-                                isLoading = false,
-                                myProjects = emptyList()
-                            )
+                            state = state.copy(isLoading = false, myProjects = emptyList())
                         }
                     }
 

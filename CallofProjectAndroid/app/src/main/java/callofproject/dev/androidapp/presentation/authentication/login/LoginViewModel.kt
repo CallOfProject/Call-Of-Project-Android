@@ -44,15 +44,14 @@ class LoginViewModel @Inject constructor(
 
 
     fun onEvent(event: LoginEvent) = when (event) {
+
         is LoginEvent.OnLoginButtonClick -> login()
 
         is LoginEvent.OnRegisterButtonClick -> onRegisterClick()
 
-        is LoginEvent.OnUsernameChange -> state =
-            state.copy(userLoginDTO = state.userLoginDTO.copy(username = event.username))
+        is LoginEvent.OnUsernameChange -> state = state.copy(userLoginDTO = state.userLoginDTO.copy(username = event.username))
 
-        is LoginEvent.OnPasswordChange -> state =
-            state.copy(userLoginDTO = state.userLoginDTO.copy(password = event.password))
+        is LoginEvent.OnPasswordChange -> state = state.copy(userLoginDTO = state.userLoginDTO.copy(password = event.password))
     }
 
     private suspend fun loginCallback(result: Resource<AuthenticationResponse>) = when (result) {

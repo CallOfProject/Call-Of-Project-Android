@@ -71,5 +71,8 @@ class ProjectOverviewViewModel @Inject constructor(
         }
     }
 
-    internal fun getUsername(): String = pref.getUsername()!!
+    private fun getUsername(): String = pref.getUsername()!!
+    fun isParticipantOrOwner(): Boolean {
+        return state.projectOverviewDTO.projectOwnerName != getUsername() && state.projectOverviewDTO.projectParticipants.none { it.username == getUsername() }
+    }
 }
