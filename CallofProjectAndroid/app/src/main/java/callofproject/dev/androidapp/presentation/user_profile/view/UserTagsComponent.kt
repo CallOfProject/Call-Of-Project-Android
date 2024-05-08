@@ -1,5 +1,9 @@
 package callofproject.dev.androidapp.presentation.user_profile.view
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -8,6 +12,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import callofproject.dev.androidapp.R
@@ -18,6 +24,7 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModel
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserTagEditComponent
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun UserTagsComponent(
     state: UserProfileState,
@@ -29,7 +36,7 @@ fun UserTagsComponent(
 
     EditableCardComponent(
         stringResource(R.string.title_userTags),
-        200.dp,
+        400.dp,
         imageVector = Icons.Filled.Add,
         imageDescription = stringResource(R.string.default_image_description),
         isEditable = isEditable,
@@ -37,11 +44,18 @@ fun UserTagsComponent(
         onIconClick = { expandedAddLink = true }
     )
     {
-        LazyRow {
-            items(state.userProfileDTO.profile.tags.size) {
-                TagItem(text = state.userProfileDTO.profile.tags[it].tagName, isRemovable = false)
+
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.CenterStart)
+        ) {
+
+            (0..<state.userProfileDTO.profile.tags.size).forEach { idx ->
+                TagItem(text = state.userProfileDTO.profile.tags[idx].tagName, isRemovable = false)
             }
         }
+
     }
 
 

@@ -2,6 +2,8 @@ package callofproject.dev.androidapp.presentation.user_profile.view
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,11 +41,12 @@ fun UserAboutMeComponent(
         isEditable = isEditable,
         onIconClick = { expandedUpsertAboutMe.value = true })
     {
+        val scrollState = rememberScrollState()
         Text(
             text = state.userProfileDTO.profile.aboutMe ?: "",
             fontSize = 14.5.sp,
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(5.dp).verticalScroll(scrollState)
         )
     }
 

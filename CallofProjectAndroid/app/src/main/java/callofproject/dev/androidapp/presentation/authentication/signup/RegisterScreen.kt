@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
@@ -159,6 +160,7 @@ fun RegisterScreen(
                         )
                 },
                 value = viewModel.state.userRegisterDTO.password,
+                visualTransformation = PasswordVisualTransformation(),
                 onValueChange = { viewModel.onEvent(OnPasswordChange(it)) },
                 label = { Text(stringResource(R.string.text_password)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -176,6 +178,7 @@ fun RegisterScreen(
                             contentDescription = stringResource(R.string.default_image_description)
                         )
                 },
+                visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 value = confirmPassword,
                 onValueChange = {

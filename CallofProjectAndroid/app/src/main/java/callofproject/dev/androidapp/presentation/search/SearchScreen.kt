@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,7 +40,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.components.DropDownComponent
@@ -104,7 +107,7 @@ fun SearchScreen(
 
         if (state.isLoading)
             LoadingComponent(it)
-        else {
+       else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -185,7 +188,23 @@ fun SearchScreen(
                             )
                         }
                     }
-                    items(state.searchResult.projects.projects.size) {
+                    if (state.searchResult.projects.projects.isEmpty())
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(it),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Text(
+                                    text = "No projects found",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight(700)
+                                )
+                            }
+                        }
+                    else items(state.searchResult.projects.projects.size) {
                         Card(
                             colors = CardColors(
                                 containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -236,7 +255,23 @@ fun SearchScreen(
                     }
                 }
                 if (isSelectedUsers)
-                    items(state.searchResult.users.users.size) {
+                    if (state.searchResult.users.users.isEmpty())
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(it),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Text(
+                                    text = "No Users found",
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight(700)
+                                )
+                            }
+                        }
+                    else items(state.searchResult.users.users.size) {
                         val user = state.searchResult.users.users[it]
                         Card(
                             colors = CardColors(
