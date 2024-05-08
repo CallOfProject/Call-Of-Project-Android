@@ -33,12 +33,10 @@ class UserProfileUseCase @Inject constructor(
 ) {
     suspend fun saveCourse(courseCreateDTO: CourseCreateDTO): Resource<CourseDTO> {
         return try {
-
             val responseMessage = service.saveCourse(
                 courseCreateDTO = courseCreateDTO,
                 token = getBearerToken()
             )
-
             Resource.Success(responseMessage.`object`.toCourseDTO())
 
         } catch (e: Exception) {
@@ -49,7 +47,6 @@ class UserProfileUseCase @Inject constructor(
 
     suspend fun saveEducation(educationCreateDTO: EducationCreateDTO): Resource<EducationDTO> {
         return try {
-
             val responseMessage = service.saveEducation(
                 educationCreateDTO = educationCreateDTO,
                 token = getBearerToken()
@@ -96,7 +93,6 @@ class UserProfileUseCase @Inject constructor(
 
     suspend fun updateCourse(courseUpdateDTO: CourseUpdateDTO): Resource<CourseDTO> {
         return try {
-
             val responseMessage = service.updateCourse(
                 courseUpdateDTO = courseUpdateDTO,
                 token = getBearerToken()

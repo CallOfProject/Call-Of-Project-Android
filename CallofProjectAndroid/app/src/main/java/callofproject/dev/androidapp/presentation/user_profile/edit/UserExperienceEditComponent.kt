@@ -170,7 +170,6 @@ fun UserExperienceEditComponent(
                                 experienceId = experienceDTO.experienceId
                             )
                         )
-                        onDismissRequest()
                     }) {
                         Text(text = stringResource(R.string.btn_save))
                     }

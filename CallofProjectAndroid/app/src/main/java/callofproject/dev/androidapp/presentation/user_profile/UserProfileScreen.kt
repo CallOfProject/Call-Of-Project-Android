@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.presentation.user_profile
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,10 +8,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -35,26 +39,46 @@ fun UserProfileScreen(
     topBar: @Composable () -> Unit,
     bottomBar: @Composable () -> Unit
 ) {
-    val state = viewModel.state
-
+    val state = viewModel.getState()
     val context = LocalContext.current
-
+    val expandedUpsertEducation = remember { mutableStateOf(false) }
+    val expandedAddEducation = remember { mutableStateOf(false) }
+    val expandedUpdateCourse = remember { mutableStateOf(false) }
+    val expandedAddCourse = remember { mutableStateOf(false) }
+    val expandedEditAboutMe = remember { mutableStateOf(false) }
+    val expandedUpsertExperience = remember { mutableStateOf(false) }
+    val expandedAddExperience = remember { mutableStateOf(false) }
+    val expandedUpdateLink = remember { mutableStateOf(false) }
+    val expandedAddLink = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
+        viewModel.getUiEvent().collect { event ->
             when (event) {
-                is UiEvent.ShowSnackbar -> {
-                    scaffoldState.showSnackbar(
-                        withDismissAction = true,
-                        message = event.msg.asString(context),
-                        duration = SnackbarDuration.Short
-                    )
+                is UiEvent.ShowToastMessageViaStatus -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT)
+                        .show()
+
+                    if (event.success) {
+                        expandedUpsertEducation.value = false
+                        expandedAddEducation.value = false
+                        expandedUpdateCourse.value = false
+                        expandedAddCourse.value = false
+                        expandedEditAboutMe.value = false
+                        expandedUpsertExperience.value = false
+                        expandedAddExperience.value = false
+                        expandedUpdateLink.value = false
+                        expandedAddLink.value = false
+                    }
+                }
+
+                is UiEvent.ShowToastMessage -> {
+                    Toast.makeText(context, event.message.asString(context), Toast.LENGTH_SHORT)
+                        .show()
                 }
 
                 else -> Unit
             }
         }
     }
-
     LaunchedEffect(key1 = true) { viewModel.findUserProfileByUserId() }
 
     Scaffold(
@@ -80,11 +104,34 @@ fun UserProfileScreen(
                 UserProfileTopComponent(state)
                 UserRatingComponent(state)
                 UploadFileComponent(state, viewModel)
-                UserAboutMeComponent(state, viewModel)
-                UserEducationComponent(state, viewModel)
-                UserExperienceComponent(state, viewModel)
-                UserCoursesComponent(state, viewModel)
-                UserLinksComponent(state, viewModel)
+                UserAboutMeComponent(
+                    state,
+                    viewModel,
+                    expandedUpsertAboutMe = expandedEditAboutMe
+                )
+                UserEducationComponent(
+                    state,
+                    viewModel,
+                    expandedUpsertEducation = expandedUpsertEducation,
+                    expandedAddEducation = expandedAddEducation
+                )
+                UserExperienceComponent(
+                    state,
+                    viewModel,
+                    expandedUpsertExperience = expandedUpsertExperience,
+                    expandedAddExperience = expandedAddExperience
+                )
+                UserCoursesComponent(
+                    state, viewModel,
+                    expandedUpdateCourse = expandedUpdateCourse,
+                    expandedAddCourse = expandedAddCourse
+                )
+                UserLinksComponent(
+                    state,
+                    viewModel,
+                    expandedUpdateLink = expandedUpdateLink,
+                    expandedAddLink = expandedAddLink
+                )
                 UserTagsComponent(state, viewModel)
             }
         }

@@ -96,7 +96,6 @@ fun UserLinkEditComponent(
 
                     Button(onClick = {
                         confirmEvent(linkDTO.copy(linkTitle = linkName, link = link))
-                        onDismissRequest()
                     }) { Text(text = stringResource(R.string.btn_save)) }
                 }
 

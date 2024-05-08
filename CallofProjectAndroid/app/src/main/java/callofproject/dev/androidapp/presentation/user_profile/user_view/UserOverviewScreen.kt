@@ -30,7 +30,7 @@ fun UserOverviewScreen(
     topBar: @Composable () -> Unit,
     bottomBar: @Composable () -> Unit
 ) {
-    val state = viewModel.state
+    val state = viewModel.getState()
 
     LaunchedEffect(key1 = true) { viewModel.findUserProfileByUserId(userId) }
 

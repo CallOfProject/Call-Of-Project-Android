@@ -15,6 +15,7 @@ import callofproject.dev.androidapp.di.interceptor.LocalDateTimeFormatterInterce
 import callofproject.dev.androidapp.di.interceptor.PlainPreferencesInterceptor
 import callofproject.dev.androidapp.domain.preferences.IEncryptedPreferences
 import callofproject.dev.androidapp.domain.preferences.IPreferences
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModelHelper
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -97,5 +98,4 @@ object AppModule {
     @Provides
     @Singleton
     fun provideGson(): Gson = GsonBuilder().create()
-
 }

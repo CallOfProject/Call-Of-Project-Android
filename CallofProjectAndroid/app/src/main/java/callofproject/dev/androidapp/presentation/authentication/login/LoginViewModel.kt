@@ -49,9 +49,11 @@ class LoginViewModel @Inject constructor(
 
         is LoginEvent.OnRegisterButtonClick -> onRegisterClick()
 
-        is LoginEvent.OnUsernameChange -> state = state.copy(userLoginDTO = state.userLoginDTO.copy(username = event.username))
+        is LoginEvent.OnUsernameChange -> state =
+            state.copy(userLoginDTO = state.userLoginDTO.copy(username = event.username))
 
-        is LoginEvent.OnPasswordChange -> state = state.copy(userLoginDTO = state.userLoginDTO.copy(password = event.password))
+        is LoginEvent.OnPasswordChange -> state =
+            state.copy(userLoginDTO = state.userLoginDTO.copy(password = event.password))
     }
 
     private suspend fun loginCallback(result: Resource<AuthenticationResponse>) = when (result) {
@@ -79,7 +81,8 @@ class LoginViewModel @Inject constructor(
 
 
     private fun login() {
-        useCases.authentication.login(state.userLoginDTO).onEach { loginCallback(it) }
+        useCases.authentication.login(state.userLoginDTO)
+            .onEach { loginCallback(it) }
             .launchIn(viewModelScope)
     }
 
@@ -99,9 +102,8 @@ class LoginViewModel @Inject constructor(
                 state = state.copy(userLoginDTO = UserLoginDTO(username, password))
                 login()
             }
-        } else
-            viewModelScope.launch {
-                _uiEvent.send(ShowSnackbar(DynamicString("Please login again")))
-            }
+        } else viewModelScope.launch {
+            _uiEvent.send(ShowSnackbar(DynamicString("Please login again")))
+        }
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import callofproject.dev.androidapp.domain.dto.connection.UserConnectionDTO
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,9 @@ class ConnectionViewModel @Inject constructor(
 
     private var findAllJob: Job? = null
 
-    init { findConnections() }
+    init {
+        findConnections()
+    }
 
     fun onEvent(event: ConnectionEvent) = when (event) {
         is ConnectionEvent.FindConnections -> findConnections()
@@ -36,106 +39,43 @@ class ConnectionViewModel @Inject constructor(
     }
 
     private fun removeConnection(friendId: String) {
-
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.removeConnection(friendId).let { res ->
-                when (res) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true, error = "")
-                    }
-
-                    is Resource.Success -> {
-                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
-                    }
-
-                    is Resource.Error -> {
-                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
-                    }
-                }
-            }
+            useCaseFacade.communicationUseCase
+                .removeConnection(friendId)
+                .let { resourceCallbackForCRUD(it, friendId) }
         }
     }
 
     private fun unblockConnection(friendId: String) {
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.unblockConnection(friendId).let { res ->
-                when (res) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true, error = "")
-                    }
-
-                    is Resource.Success -> {
-                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
-                    }
-
-                    is Resource.Error -> {
-                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
-                    }
-                }
-            }
+            useCaseFacade.communicationUseCase
+                .unblockConnection(friendId)
+                .let { resourceCallbackForCRUD(it, friendId) }
         }
 
     }
 
     private fun blockConnection(friendId: String) {
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.blockConnection(friendId).let { res ->
-                when (res) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true, error = "")
-                    }
-
-                    is Resource.Success -> {
-                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
-                    }
-
-                    is Resource.Error -> {
-                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
-                    }
-                }
-            }
+            useCaseFacade.communicationUseCase
+                .blockConnection(friendId)
+                .let { resourceCallbackForCRUD(it, friendId) }
         }
-
     }
 
     private fun rejectConnection(friendId: String) {
-
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.answerConnectionRequest(friendId, false).let { res ->
-                when (res) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true, error = "")
-                    }
-
-                    is Resource.Success -> {
-                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
-                    }
-
-                    is Resource.Error -> {
-                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
-                    }
-                }
-            }
+            useCaseFacade.communicationUseCase
+                .answerConnectionRequest(friendId, false)
+                .let { resourceCallbackForCRUD(it, friendId) }
         }
     }
 
     private fun acceptConnection(friendId: String) {
         viewModelScope.launch {
-            useCaseFacade.communicationUseCase.answerConnectionRequest(friendId, true).let { res ->
-                when (res) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true, error = "")
-                    }
-
-                    is Resource.Success -> {
-                        state = state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId }) }
-
-                    is Resource.Error -> {
-                        state = state.copy(isLoading = false, error = res.message ?: "An error occurred")
-                    }
-                }
-            }
-
+            useCaseFacade.communicationUseCase
+                .answerConnectionRequest(friendId, true)
+                .let { resourceCallbackForCRUD(it, friendId) }
         }
 
     }
@@ -144,66 +84,53 @@ class ConnectionViewModel @Inject constructor(
         findAllJob?.cancel()
         state = state.copy(isLoading = true)
         findAllJob = viewModelScope.launch {
-            useCaseFacade.communicationUseCase.findBlockedConnections().let {
-                when (it) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true, error = "")
-                    }
-
-                    is Resource.Success -> {
-                        state = state.copy(connections = it.data ?: emptyList())
-                    }
-
-                    is Resource.Error -> {
-                        state = state.copy(error = it.message ?: "An error occurred")
-                    }
-                }
-            }
+            useCaseFacade.communicationUseCase.findBlockedConnections()
+                .let(::resourceCallbackForFind)
         }
     }
 
     private fun findPendingConnections() {
         findAllJob?.cancel()
+
         state = state.copy(isLoading = true)
+
         findAllJob = viewModelScope.launch {
-            useCaseFacade.communicationUseCase.findPendingConnections().let {
-                when (it) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true, error = "")
-                    }
-
-                    is Resource.Success -> {
-                        state = state.copy(connections = it.data ?: emptyList())
-                    }
-
-                    is Resource.Error -> {
-                        state = state.copy(error = it.message ?: "An error occurred")
-                    }
-                }
-            }
+            useCaseFacade.communicationUseCase.findPendingConnections().let(::resourceCallbackForFind)
         }
 
     }
 
+
     private fun findConnections() {
         findAllJob?.cancel()
+
         state = state.copy(isLoading = true)
+
         findAllJob = viewModelScope.launch {
-            useCaseFacade.communicationUseCase.findConnections().let {
-                when (it) {
-                    is Resource.Loading -> {
-                        state = state.copy(isLoading = true, error = "")
-                    }
+            useCaseFacade.communicationUseCase.findConnections().let(::resourceCallbackForFind)
+        }
+    }
 
-                    is Resource.Success -> {
-                        state = state.copy(connections = it.data ?: emptyList(),)
-                    }
 
-                    is Resource.Error -> {
-                        state = state.copy(error = it.message ?: "An error occurred")
-                    }
-                }
+    private fun resourceCallbackForFind(resource: Resource<List<UserConnectionDTO>>) {
+        state = when (resource) {
+            is Resource.Loading -> state.copy(isLoading = true, error = "")
+
+            is Resource.Success -> state.copy(connections = resource.data ?: emptyList())
+
+            is Resource.Error -> state.copy(error = resource.message ?: "An error occurred")
+        }
+    }
+
+    private fun resourceCallbackForCRUD(res: Resource<Boolean>, friendId: String) {
+        state = when (res) {
+            is Resource.Loading -> state.copy(isLoading = true, error = "")
+
+            is Resource.Success -> {
+                state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
             }
+
+            is Resource.Error -> state.copy(isLoading = false, error = res.message ?: "An error occurred")
         }
     }
 }

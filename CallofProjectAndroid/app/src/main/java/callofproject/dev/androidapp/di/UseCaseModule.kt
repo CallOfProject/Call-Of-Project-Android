@@ -35,7 +35,7 @@ object UseCaseModule {
         project = ProjectUseCase(service, preferences),
         userProfile = UserProfileUseCase(service, preferences),
         notification = NotificationUseCase(context, preferences, service),
-        search = SearchUseCase(context, preferences, service),
+        search = SearchUseCase(preferences, service),
         communicationUseCase = CommunicationUseCase(preferences, service)
     )
 

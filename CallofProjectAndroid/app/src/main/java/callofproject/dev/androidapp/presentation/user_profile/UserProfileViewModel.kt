@@ -1,9 +1,7 @@
 package callofproject.dev.androidapp.presentation.user_profile
 
+import android.content.Context
 import android.net.Uri
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
@@ -16,39 +14,36 @@ import callofproject.dev.androidapp.data.mapper.toExperienceUpdateDTO
 import callofproject.dev.androidapp.data.mapper.toLinkCreateDTO
 import callofproject.dev.androidapp.data.mapper.toLinkUpdateDTO
 import callofproject.dev.androidapp.data.mapper.toUserProfileUpdateDTO
+import callofproject.dev.androidapp.data.validator.validate
+import callofproject.dev.androidapp.di.interceptor.LocalDateFormatterInterceptor
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
-import callofproject.dev.androidapp.util.Resource
-import callofproject.dev.androidapp.util.route.UiEvent
-import callofproject.dev.androidapp.util.route.UiEvent.ShowSnackbar
+import callofproject.dev.androidapp.util.route.UiEvent.ShowToastMessage
 import callofproject.dev.androidapp.util.route.UiText.DynamicString
-import callofproject.dev.androidapp.util.route.UiText.StringResource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
     private val useCaseFacade: UseCaseFacade,
-    private val preferences: IPreferences
+    private val preferences: IPreferences,
+    @LocalDateFormatterInterceptor val dateTimeFormatter: DateTimeFormatter,
+    @ApplicationContext private val context: Context,
+    private val viewModelHelper: UserProfileViewModelHelper
 ) : ViewModel() {
-
-    var state by mutableStateOf(UserProfileState())
-        private set
-    private val _uiEvent = Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
 
     private var uploadImageJob: Job? = null
     private var uploadCVJob: Job? = null
@@ -57,503 +52,241 @@ class UserProfileViewModel @Inject constructor(
         preferences.clearFilterObjects()
     }
 
+    fun getState() = viewModelHelper.state
+    private fun getUiEventForViewModel() = viewModelHelper._uiEvent
+    fun getUiEvent() = viewModelHelper.uiEvent
+
+
     fun onEvent(event: UserProfileEvent) = when (event) {
+        is UserProfileEvent.OnUpdateAboutMe -> updateAboutMe(event.aboutMe)
         is UserProfileEvent.OnCreateEducation -> saveEducation(event.educationDTO)
         is UserProfileEvent.OnUpdateEducation -> updateEducation(event.educationDTO)
+        is UserProfileEvent.OnDeleteEducation -> deleteEducation(event.educationId)
         is UserProfileEvent.OnCreateExperience -> saveExperience(event.experienceDTO)
         is UserProfileEvent.OnUpdateExperience -> updateExperience(event.experienceDTO)
+        is UserProfileEvent.OnDeleteExperience -> deleteExperience(event.experienceId)
         is UserProfileEvent.OnCreateCourse -> saveCourse(event.courseDTO)
         is UserProfileEvent.OnUpdateCourse -> updateCourse(event.courseDTO)
+        is UserProfileEvent.OnDeleteCourse -> deleteCourse(event.courseId)
         is UserProfileEvent.OnCreateLink -> saveLink(event.linkDTO)
         is UserProfileEvent.OnUpdateLink -> updateLink(event.linkDTO)
-        is UserProfileEvent.OnUpdateAboutMe -> updateAboutMe(event.aboutMe)
-        is UserProfileEvent.OnUploadProfilePhoto -> uploadProfilePhoto(event.pp)
-        is UserProfileEvent.OnUploadCv -> uploadCv(event.file)
         is UserProfileEvent.OnRemoveLinkClicked -> removeLink(event.linkId)
-        is UserProfileEvent.OnDeleteCourse -> deleteCourse(event.courseId)
-        is UserProfileEvent.OnDeleteEducation -> deleteEducation(event.educationId)
-        is UserProfileEvent.OnDeleteExperience -> deleteExperience(event.experienceId)
         is UserProfileEvent.OnCreateTag -> createTag(event.tagName)
         is UserProfileEvent.OnRemoveTag -> removeTag(event.tagId)
-    }
-
-    private fun removeTag(tagId: String) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.removeUserTag(UUID.fromString(tagId))
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(tags = state.userProfileDTO.profile.tags.filter {
-                                            it.tagId != tagId
-                                        })
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                        }
-
-                        is Resource.Loading -> {}
-                    }
-                }
-        }
-    }
-
-    private fun createTag(tagName: String) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.createUserTag(tagName)
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(tags = state.userProfileDTO.profile.tags + result.data!!)
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                        }
-
-                        is Resource.Loading -> {}
-                    }
-                }
-        }
-    }
-
-    private fun deleteExperience(experienceId: String) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.removeExperience(experienceId)
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(experiences = state.userProfileDTO.profile.experiences.filter {
-                                            it.experienceId != experienceId
-                                        })
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                        }
-
-                        is Resource.Loading -> {}
-                    }
-                }
-        }
-    }
-
-    private fun deleteEducation(educationId: String) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.removeEducation(educationId)
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(educations = state.userProfileDTO.profile.educations.filter {
-                                            it.educationId != educationId
-                                        })
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                        }
-
-                        is Resource.Loading -> {}
-                    }
-                }
-        }
-    }
-
-    private fun deleteCourse(courseId: String) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.removeCourse(courseId)
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(courses = state.userProfileDTO.profile.courses.filter {
-                                            it.courseId != courseId
-                                        })
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                        }
-
-                        is Resource.Loading -> {}
-                    }
-                }
-        }
-    }
-
-    private fun removeLink(linkId: Long) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.removeLink(linkId)
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(links = state.userProfileDTO.profile.links.filter {
-                                            it.linkId != linkId
-                                        })
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                        }
-
-                        is Resource.Loading -> {}
-                    }
-                }
-        }
-    }
-
-    private fun uploadCv(file: Uri) {
-        uploadCVJob?.cancel()
-        uploadCVJob = viewModelScope.launch {
-            useCaseFacade.uploadFile.uploadCv(file)
-                .onStart { delay(500L) }
-                .onEach { uploadCvCallback(it) }.launchIn(this)
-        }
-    }
-
-    private suspend fun uploadCvCallback(resource: Resource<String>) = when (resource) {
-        is Resource.Success -> uploadCvSuccessCallback(resource.data!!)
-        is Resource.Error -> uploadCvErrorCallback()
-        is Resource.Loading -> state = state.copy(isCvLoading = true, isPhotoLoading = false)
-    }
-
-    private suspend fun uploadCvSuccessCallback(data: String) {
-        state = state.copy(
-            userProfileDTO = state.userProfileDTO
-                .copy(profile = state.userProfileDTO.profile.copy(cv = data)),
-            isCvLoading = false
-        )
-        _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_cv_uploaded)))
-    }
-
-    private suspend fun uploadCvErrorCallback() {
-        state = state.copy(isCvLoading = false)
-        _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_cv_upload_fail)))
-    }
-
-
-    private fun uploadProfilePhoto(file: Uri) {
-        uploadImageJob?.cancel()
-        uploadImageJob = viewModelScope.launch {
-            useCaseFacade.uploadFile.uploadProfilePhoto(file)
-                .onStart { delay(1000) }
-                .onEach { uploadPhotoCallback(it) }
-                .launchIn(this)
-        }
-    }
-
-    private suspend fun uploadPhotoCallback(resource: Resource<String>) = when (resource) {
-        is Resource.Success -> uploadPhotoSuccessCallback(resource.data!!)
-        is Resource.Error -> uploadPhotoErrorCallback()
-        is Resource.Loading -> state = state.copy(isPhotoLoading = true)
-    }
-
-    private suspend fun uploadPhotoSuccessCallback(data: String) {
-        state = state.copy(
-            userProfileDTO = state.userProfileDTO.copy(
-                profile = state.userProfileDTO.profile.copy(profilePhoto = data)
-            ), isPhotoLoading = false)
-        _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_profile_photo_uploaded)))
-    }
-
-    private suspend fun uploadPhotoErrorCallback() {
-        state = state.copy(isPhotoLoading = false)
-        _uiEvent.send(ShowSnackbar(StringResource(R.string.msg_profile_photo_upload_fail)))
+        is UserProfileEvent.OnUploadProfilePhoto -> uploadProfilePhoto(event.pp)
+        is UserProfileEvent.OnUploadCv -> uploadCv(event.file)
     }
 
     private fun updateAboutMe(aboutMe: String) {
         viewModelScope.launch {
-            val userId = preferences.getUserId()!!
+            val profileUpdateDTO = getState().userProfileDTO
+                .profile
+                .copy(aboutMe = aboutMe)
+                .toUserProfileUpdateDTO(preferences.getUserId()!!)
 
-            val profileUpdateDTO =
-                state.userProfileDTO.profile.copy(aboutMe = aboutMe).toUserProfileUpdateDTO(userId)
-
-            useCaseFacade.userProfile.updateUserProfile(profileUpdateDTO).let { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        state = state.copy(
-                            userProfileDTO = state.userProfileDTO.copy(
-                                profile = state.userProfileDTO.profile.copy(aboutMe = aboutMe)
-                            )
-                        )
-                    }
-
-                    is Resource.Error -> {
-                        _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                    }
-
-                    is Resource.Loading -> {}
-                }
-            }
-        }
-
-    }
-
-    private fun updateLink(linkDTO: LinkDTO) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.updateLink(linkDTO.toLinkUpdateDTO(preferences.getUserId()!!))
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(links = state.userProfileDTO.profile.links.map {
-                                            if (it.linkId == result.data!!.linkId) result.data else it
-                                        })
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                        }
-
-                        is Resource.Loading -> {}
-                    }
-                }
-        }
-    }
-
-    private fun saveLink(linkDTO: LinkDTO) {
-        viewModelScope.launch {
-            val userId = preferences.getUserId()!!
-            useCaseFacade.userProfile.saveLink(linkDTO.toLinkCreateDTO(userId))
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO
-                                    .copy(
-                                        profile = state.userProfileDTO.profile
-                                            .copy(links = state.userProfileDTO.profile.links + result.data!!)
-                                    )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            _uiEvent.send(ShowSnackbar(DynamicString(result.message!!)))
-                        }
-
-                        is Resource.Loading -> {}
-                    }
-                }
-        }
-
-    }
-
-    private fun updateCourse(courseDTO: CourseDTO) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.updateCourse(courseDTO.toCourseUpdateDTO(preferences.getUserId()!!))
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(courses = state.userProfileDTO.profile.courses.map {
-                                            if (it.courseId == result.data!!.courseId) result.data else it
-                                        })
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
-                        }
-
-                        is Resource.Loading -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                        }
-                    }
-                }
-        }
-    }
-
-    private fun saveCourse(courseDTO: CourseDTO) {
-        viewModelScope.launch {
-            val userId = preferences.getUserId()!!
-            useCaseFacade.userProfile.saveCourse(courseDTO.toCourseCreateDTO(userId))
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO
-                                    .copy(
-                                        profile = state.userProfileDTO.profile
-                                            .copy(courses = state.userProfileDTO.profile.courses + result.data!!)
-                                    )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
-                        }
-
-                        is Resource.Loading -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                        }
-                    }
-                }
-        }
-    }
-
-    private fun updateExperience(experienceDTO: ExperienceDTO) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.updateExperience(
-                experienceDTO.toExperienceUpdateDTO(preferences.getUserId()!!)).let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile
-                                        .copy(experiences = state.userProfileDTO.profile.experiences.map {
-                                            if (it.experienceId == result.data!!.experienceId) result.data else it
-                                        })
-                                )
-                            )
-                        }
-                        is Resource.Error -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
-                        }
-
-                        is Resource.Loading -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                        }
-                    }
-                }
-        }
-    }
-
-    private fun saveExperience(experienceDTO: ExperienceDTO) {
-        viewModelScope.launch {
-            val userId = preferences.getUserId()!!
-            useCaseFacade.userProfile.saveExperience(experienceDTO.toExperienceCreateDTO(userId))
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO
-                                    .copy(
-                                        profile = state.userProfileDTO.profile
-                                            .copy(experiences = state.userProfileDTO.profile.experiences + result.data!!)
-                                    )
-                            )
-                        }
-                        is Resource.Error -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
-                        }
-
-                        is Resource.Loading -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                        }
-                    }
-                }
-        }
-    }
-
-    private fun updateEducation(educationDTO: EducationDTO) {
-        viewModelScope.launch {
-            useCaseFacade.userProfile.updateEducation(educationDTO.toEducationUpdateDTO(preferences.getUserId()!!))
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile.copy(
-                                        educations = state.userProfileDTO.profile.educations.map {
-                                            if (it.educationId == result.data!!.educationId) result.data else it
-                                        }
-                                    )
-                                )
-                            )
-                        }
-
-                        is Resource.Error -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
-                        }
-
-                        is Resource.Loading -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                        }
-                    }
-                }
+            useCaseFacade.userProfile
+                .updateUserProfile(profileUpdateDTO)
+                .let { viewModelHelper.updateAboutMeCallback(it, aboutMe) }
         }
     }
 
     private fun saveEducation(educationDTO: EducationDTO) {
         viewModelScope.launch {
-            val userId = preferences.getUserId()!!
-            useCaseFacade.userProfile.saveEducation(educationDTO.toEducationUpsertDTO(userId))
-                .let { result ->
-                    when (result) {
-                        is Resource.Success -> {
-                            state = state.copy(
-                                userProfileDTO = state.userProfileDTO.copy(
-                                    profile = state.userProfileDTO.profile.copy(
-                                        educations = state.userProfileDTO.profile.educations + result.data!!
-                                    )
-                                )
-                            )
-                        }
-                        is Resource.Error -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
-                        }
+            val validatorMsg = educationDTO.validate(educationDTO, context, dateTimeFormatter)
 
-                        is Resource.Loading -> {
-                            //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                        }
-                    }
-                }
+            if (validatorMsg != context.getString(R.string.msg_education_valid)) {
+                getUiEventForViewModel().send(ShowToastMessage(DynamicString(validatorMsg)))
+                return@launch
+            }
+
+            useCaseFacade.userProfile
+                .saveEducation(educationDTO.toEducationUpsertDTO(preferences.getUserId()!!))
+                .let { viewModelHelper.saveEducationCallback(it) }
         }
     }
 
+    private fun updateEducation(educationDTO: EducationDTO) {
+        viewModelScope.launch {
+            val validatorMsg = educationDTO.validate(educationDTO, context, dateTimeFormatter)
+
+            if (validatorMsg != context.getString(R.string.msg_education_valid)) {
+                getUiEventForViewModel().send(ShowToastMessage(DynamicString(validatorMsg)))
+                return@launch
+            }
+
+            useCaseFacade.userProfile
+                .updateEducation(educationDTO.toEducationUpdateDTO(preferences.getUserId()!!))
+                .let { viewModelHelper.updateEducationCallback(it) }
+        }
+    }
+
+
+    private fun deleteEducation(educationId: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile.removeEducation(educationId)
+                .let { viewModelHelper.deleteEducationCallback(it, educationId) }
+        }
+    }
+
+
+    private fun saveExperience(experienceDTO: ExperienceDTO) {
+        viewModelScope.launch {
+            val validatorMsg = experienceDTO.validate(experienceDTO, context, dateTimeFormatter)
+
+            if (validatorMsg != context.getString(R.string.msg_experience_valid)) {
+                getUiEventForViewModel().send(ShowToastMessage(DynamicString(validatorMsg)))
+                return@launch
+            }
+
+            useCaseFacade.userProfile
+                .saveExperience(experienceDTO.toExperienceCreateDTO(preferences.getUserId()!!))
+                .let { viewModelHelper.saveExperienceCallback(it) }
+        }
+    }
+
+
+    private fun updateExperience(experienceDTO: ExperienceDTO) {
+        viewModelScope.launch {
+            val validatorMsg = experienceDTO.validate(experienceDTO, context, dateTimeFormatter)
+
+            if (validatorMsg != context.getString(R.string.msg_experience_valid)) {
+                getUiEventForViewModel().send(ShowToastMessage(DynamicString(validatorMsg)))
+                return@launch
+            }
+
+            useCaseFacade.userProfile
+                .updateExperience(experienceDTO.toExperienceUpdateDTO(preferences.getUserId()!!))
+                .let { viewModelHelper.updateExperienceCallback(it) }
+        }
+    }
+
+    private fun deleteExperience(experienceId: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile
+                .removeExperience(experienceId)
+                .let { viewModelHelper.deleteExperienceCallback(it, experienceId) }
+        }
+    }
+
+    private fun saveCourse(courseDTO: CourseDTO) {
+        viewModelScope.launch {
+            val validatorMsg = courseDTO.validate(courseDTO, context, dateTimeFormatter)
+
+            if (validatorMsg != context.getString(R.string.msg_course_valid)) {
+                getUiEventForViewModel().send(ShowToastMessage(DynamicString(validatorMsg)))
+                return@launch
+            }
+
+            useCaseFacade.userProfile
+                .saveCourse(courseDTO.toCourseCreateDTO(preferences.getUserId()!!))
+                .let { viewModelHelper.saveCourseCallback(it) }
+        }
+    }
+
+    private fun updateCourse(courseDTO: CourseDTO) {
+        viewModelScope.launch {
+            val validatorMsg = courseDTO.validate(courseDTO, context, dateTimeFormatter)
+
+            if (validatorMsg != context.getString(R.string.msg_course_valid)) {
+                getUiEventForViewModel().send(ShowToastMessage(DynamicString(validatorMsg)))
+                return@launch
+            }
+            useCaseFacade.userProfile
+                .updateCourse(courseDTO.toCourseUpdateDTO(preferences.getUserId()!!))
+                .let { viewModelHelper.updateCourseCallback(it) }
+        }
+    }
+
+    private fun deleteCourse(courseId: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile
+                .removeCourse(courseId)
+                .let { viewModelHelper.deleteCourseCallback(it, courseId) }
+        }
+    }
+
+    private fun saveLink(linkDTO: LinkDTO) {
+        viewModelScope.launch {
+
+            val validatorMsg = linkDTO.validate(linkDTO, context)
+
+            if (validatorMsg != context.getString(R.string.msg_link_valid)) {
+                getUiEventForViewModel().send(ShowToastMessage(DynamicString(validatorMsg)))
+                return@launch
+            }
+
+            useCaseFacade.userProfile
+                .saveLink(linkDTO.toLinkCreateDTO(preferences.getUserId()!!))
+                .let { viewModelHelper.saveLinkCallback(it) }
+        }
+    }
+
+    private fun updateLink(linkDTO: LinkDTO) {
+        viewModelScope.launch {
+            val validatorMsg = linkDTO.validate(linkDTO, context)
+
+            if (validatorMsg != context.getString(R.string.msg_link_valid)) {
+                getUiEventForViewModel().send(ShowToastMessage(DynamicString(validatorMsg)))
+                return@launch
+            }
+            useCaseFacade.userProfile
+                .updateLink(linkDTO.toLinkUpdateDTO(preferences.getUserId()!!))
+                .let { viewModelHelper.updateLinkCallback(it) }
+        }
+    }
+
+    private fun removeLink(linkId: Long) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile
+                .removeLink(linkId)
+                .let { viewModelHelper.deleteLinkCallback(it, linkId) }
+        }
+    }
+
+    private fun createTag(tagName: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile
+                .createUserTag(tagName)
+                .let { viewModelHelper.createTagCallback(it) }
+        }
+    }
+
+    private fun removeTag(tagId: String) {
+        viewModelScope.launch {
+            useCaseFacade.userProfile
+                .removeUserTag(UUID.fromString(tagId))
+                .let { viewModelHelper.removeTagCallback(it, tagId) }
+        }
+    }
+
+    private fun uploadCv(file: Uri) {
+        uploadCVJob?.cancel()
+
+        uploadCVJob = viewModelScope.launch {
+            useCaseFacade.uploadFile.uploadCv(file)
+                .onStart { delay(500L) }
+                .onEach { viewModelHelper.uploadCvCallback(it) }
+                .launchIn(this)
+        }
+    }
+
+    private fun uploadProfilePhoto(file: Uri) {
+        uploadImageJob?.cancel()
+
+        uploadImageJob = viewModelScope.launch {
+            useCaseFacade.uploadFile.uploadProfilePhoto(file)
+                .onStart { delay(1000) }
+                .onEach { viewModelHelper.uploadPhotoCallback(it) }
+                .launchIn(this)
+        }
+    }
+
+
     fun findUserProfileByUserId(userId: String = preferences.getUserId()!!) {
         viewModelScope.launch {
-            useCaseFacade.userProfile.findUserProfile(userId).let { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        state = state.copy(userProfileDTO = result.data!!)
-                    }
-
-                    is Resource.Error -> {
-                        //_uiEvent.send(UiEvent.ShowSnackbar(result.message!!))
-                    }
-
-                    is Resource.Loading -> {
-                        //_uiEvent.send(UiEvent.ShowSnackbar("Loading"))
-                    }
-                }
-            }
+            useCaseFacade.userProfile
+                .findUserProfile(userId)
+                .let { viewModelHelper.findUserProfileCallback(it) }
         }
     }
 }

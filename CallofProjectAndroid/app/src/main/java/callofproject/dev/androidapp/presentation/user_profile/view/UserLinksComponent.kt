@@ -3,6 +3,7 @@ package callofproject.dev.androidapp.presentation.user_profile.view
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,17 +35,19 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.O
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModel
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserLinkEditComponent
+import callofproject.dev.androidapp.util.route.UiEvent
 
 @Composable
 fun UserLinksComponent(
     state: UserProfileState,
     viewModel: UserProfileViewModel,
-    isEditable: Boolean = true
+    isEditable: Boolean = true,
+    expandedUpdateLink: MutableState<Boolean> = mutableStateOf(false),
+    expandedAddLink: MutableState<Boolean> = mutableStateOf(false),
 ) {
     val context = LocalContext.current
-    var expandedUpdateLink by remember { mutableStateOf(false) }
-    var expandedAddLink by remember { mutableStateOf(false) }
     var selectedLinkIndex by remember { mutableIntStateOf(-1) }
+
 
     EditableCardComponent(
         title = stringResource(R.string.title_links),
@@ -51,7 +56,7 @@ fun UserLinksComponent(
         imageDescription = "Add",
         isEditable = isEditable,
         removable = false,
-        onIconClick = { expandedAddLink = true }
+        onIconClick = { expandedAddLink.value = true }
     ) {
         LazyColumn {
             items(state.userProfileDTO.profile.links.size) { index ->
@@ -65,7 +70,7 @@ fun UserLinksComponent(
                     removable = true,
                     onRemoveClick = { viewModel.onEvent(OnRemoveLinkClicked(link.linkId)) },
                     onIconClick = {
-                        expandedUpdateLink = true;
+                        expandedUpdateLink.value = true;
                         selectedLinkIndex = index
                     }
                 ) { LinkDetails(link, context) }
@@ -75,15 +80,15 @@ fun UserLinksComponent(
 
 
 
-    if (expandedAddLink)
+    if (expandedAddLink.value)
         UserLinkEditComponent(
-            onDismissRequest = { expandedAddLink = false },
+            onDismissRequest = { expandedAddLink.value = false },
             confirmEvent = { viewModel.onEvent(OnCreateLink(it)) }
         )
 
-    if (expandedUpdateLink)
+    if (expandedUpdateLink.value)
         UserLinkEditComponent(
-            onDismissRequest = { expandedUpdateLink = false },
+            onDismissRequest = { expandedUpdateLink.value = false },
             linkDTO = state.userProfileDTO.profile.links[selectedLinkIndex],
             confirmEvent = { viewModel.onEvent(OnUpdateLink(it)) }
         )

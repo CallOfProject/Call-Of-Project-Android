@@ -16,6 +16,6 @@ data class EducationDTO(
     @SerializedName("finish_date")
     val finishDate: String = "Finish Date",
     @SerializedName("is_continue")
-    val isContinue: Boolean = false,
+    var isContinue: Boolean = false,
     val gpa: Double = 0.0
 )

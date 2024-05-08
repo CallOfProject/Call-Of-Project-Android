@@ -15,14 +15,16 @@ class CommunicationUseCase @Inject constructor(
 
     suspend fun sendCommunicationRequest(friendId: UUID): Resource<Boolean> {
         return try {
-
             val responseMessage = service.sendConnectionRequest(
                 userId = UUID.fromString(pref.getUserId()!!),
                 connectionId = friendId,
                 token = pref.getToken()!!
             )
 
-            Resource.Success(responseMessage.`object`)
+            if (responseMessage.statusCode == 2002)
+                return Resource.Error(responseMessage.message)
+
+            return Resource.Success(responseMessage.`object`)
 
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An error occurred")
@@ -35,7 +37,6 @@ class CommunicationUseCase @Inject constructor(
         notificationId: String? = ""
     ): Resource<Boolean> {
         return try {
-
 
             val responseMessage = notificationId?.let {
                 service.answerConnectionRequest(
@@ -73,9 +74,8 @@ class CommunicationUseCase @Inject constructor(
             )
 
             Resource.Success(responseMessage.`object`)
-
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "An error occurred")
+            Resource.Error(e.message ?: "Unexpected error occurred")
         }
     }
 
@@ -91,7 +91,7 @@ class CommunicationUseCase @Inject constructor(
             Resource.Success(responseMessage.`object`)
 
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "An error occurred")
+            Resource.Error(e.message ?: "Unexpected error occurred")
         }
     }
 
@@ -119,8 +119,6 @@ class CommunicationUseCase @Inject constructor(
                 token = pref.getToken()!!
             )
 
-            Log.d("Connections", responseMessage.`object`.users.toString())
-
             Resource.Success(responseMessage.`object`.users)
 
         } catch (e: Exception) {
@@ -136,7 +134,7 @@ class CommunicationUseCase @Inject constructor(
                 userId = UUID.fromString(pref.getUserId()!!),
                 token = pref.getToken()!!
             )
-            Log.d("Blocked", responseMessage.`object`.users.toString())
+
             Resource.Success(responseMessage.`object`.users)
 
         } catch (e: Exception) {

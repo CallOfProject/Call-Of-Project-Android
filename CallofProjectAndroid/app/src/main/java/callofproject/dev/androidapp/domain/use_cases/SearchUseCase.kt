@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
-    private val context: Context,
     private val pref: IPreferences,
     private val service: ICallOfProjectService,
 ) {

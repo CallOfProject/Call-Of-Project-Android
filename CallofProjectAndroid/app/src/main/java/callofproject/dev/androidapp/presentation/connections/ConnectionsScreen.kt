@@ -285,7 +285,5 @@ private fun PersonCard(
                 }
             }
         }
-
-
     }
 }
