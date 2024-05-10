@@ -248,7 +248,7 @@ fun ProjectOverviewScreen(
                     ) {
                         RowBasedCardComponent(
                             title = stringResource(R.string.title_projectMaxParticipant),
-                            value = state.projectOverviewDTO.maxParticipant.toString()
+                            value = "${state.projectOverviewDTO.projectParticipants.size}/${state.projectOverviewDTO.maxParticipant}"
                         )
                         RowBasedCardComponent(
                             title = stringResource(R.string.title_projectProfessionLevel),

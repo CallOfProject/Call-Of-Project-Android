@@ -42,7 +42,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.NotificationDataType.CONNECTION_REQUEST
 import callofproject.dev.androidapp.domain.dto.NotificationDataType.PROJECT_JOIN_REQUEST
-import callofproject.dev.androidapp.domain.dto.NotificationDataType.REQUEST
 import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnAcceptConnectionRequest
 import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnAcceptProjectJoinRequest
 import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnRejectConnectionRequest

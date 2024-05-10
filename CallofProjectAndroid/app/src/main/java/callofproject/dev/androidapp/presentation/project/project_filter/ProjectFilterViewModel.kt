@@ -2,7 +2,6 @@ package callofproject.dev.androidapp.presentation.project.project_filter
 
 import android.content.Context
 import android.content.res.Resources
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue

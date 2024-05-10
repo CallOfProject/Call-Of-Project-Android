@@ -3,7 +3,6 @@ package callofproject.dev.androidapp.presentation.user_profile.view
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -35,7 +33,6 @@ import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.O
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModel
 import callofproject.dev.androidapp.presentation.user_profile.edit.UserLinkEditComponent
-import callofproject.dev.androidapp.util.route.UiEvent
 
 @Composable
 fun UserLinksComponent(

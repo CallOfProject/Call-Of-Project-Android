@@ -4,7 +4,6 @@ import android.content.Context
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.data.extension.toLocalDate
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
-import callofproject.dev.androidapp.domain.dto.user_profile.education.Education
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO

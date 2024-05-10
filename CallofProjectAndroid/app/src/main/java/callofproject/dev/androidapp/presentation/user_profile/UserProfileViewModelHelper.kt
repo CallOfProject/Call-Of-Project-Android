@@ -13,7 +13,6 @@ import callofproject.dev.androidapp.domain.dto.user_profile.experience.Experienc
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
 import callofproject.dev.androidapp.util.Resource
 import callofproject.dev.androidapp.util.route.UiEvent
-import callofproject.dev.androidapp.util.route.UiEvent.ShowSnackbar
 import callofproject.dev.androidapp.util.route.UiEvent.ShowToastMessage
 import callofproject.dev.androidapp.util.route.UiText
 import callofproject.dev.androidapp.util.route.UiText.StringResource
