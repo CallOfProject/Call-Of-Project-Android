@@ -168,20 +168,24 @@ fun MainScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier.padding(10.dp),
                                 content = {
-                                    Row {
-                                        Text(
-                                            text = state.projectDiscoveryList[it].projectTitle,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Text(
-                                            text = "-" + state.projectDiscoveryList[it].creationDate,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Normal,
-                                            fontSize = 12.sp,
-                                        )
-                                    }
+                                    Text(
+                                        text = state.projectDiscoveryList[it].projectTitle,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = when (selectedSortOption.value) {
+                                            SORT_CREATION_DATE -> state.projectDiscoveryList[it].creationDate
+                                            SORT_START_DATE -> state.projectDiscoveryList[it].startDate
+                                            SORT_APPLICATION_DEADLINE -> state.projectDiscoveryList[it].applicationDeadline
+                                            SORT_EXPECTED_COMPLETION_DATE -> state.projectDiscoveryList[it].expectedCompletionDate
+                                            else -> state.projectDiscoveryList[it].creationDate
+                                        },
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center,
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 12.sp,
+                                    )
                                     Text(
                                         text = state.projectDiscoveryList[it].projectSummary,
                                         style = MaterialTheme.typography.bodySmall,

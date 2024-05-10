@@ -59,6 +59,7 @@ The application uses the following dependencies:
 <img width="200" src="./images/theme/dark/filter_project.png">
 <img width="200" src="./images/theme/dark/search_1.png">
 <img width="200" src="./images/theme/dark/search_2.png">
+<img width="200" src="./images/theme/dark/notifications_dark.png">
 </p>
 
 ### Light Theme
@@ -69,6 +70,7 @@ The application uses the following dependencies:
 <img width="200" src="./images/theme/light/profile.png">
 <img width="200" src="./images/theme/light/my_projects.png">
 <img width="200" src="./images/theme/light/project_filter.png">
+<img width="200" src="./images/theme/light/notifications_light.png">
 </p>
 
 ## Sample Video

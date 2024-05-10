@@ -2,29 +2,8 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="MainActivity">
+      <entry key="call-of-project">
         <State />
-      </entry>
-      <entry key="PreviewConnectionsScreen">
-        <State />
-      </entry>
-      <entry key="PreviewTag">
-        <State />
-      </entry>
-      <entry key="app">
-        <State>
-          <runningDeviceTargetsSelectedWithDialog>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="RZ8MA2DTHCZ" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetsSelectedWithDialog>
-        </State>
       </entry>
     </value>
   </component>

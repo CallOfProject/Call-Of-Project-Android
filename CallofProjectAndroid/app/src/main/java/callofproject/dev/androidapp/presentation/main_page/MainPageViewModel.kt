@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.presentation.main_page
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.di.interceptor.LocalDateFormatterInterceptor
+import callofproject.dev.androidapp.domain.dto.project.ProjectDiscoveryDTO
 import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.domain.use_cases.UseCaseFacade
 import callofproject.dev.androidapp.util.Resource
@@ -100,6 +102,7 @@ class MainPageViewModel @Inject constructor(
             }
         }
     }
+
     // Default sort is by creation date and descending
     private fun sortProjects(sortType: String) {
         when (sortType) {
@@ -137,12 +140,12 @@ class MainPageViewModel @Inject constructor(
         }
 
     }
+
     private fun navigateToProjectOverview(projectId: String) {
         viewModelScope.launch {
             _uiEvent.send(UiEvent.Navigate("${Route.PROJECT_OVERVIEW}/${projectId}/0"))
         }
     }
-
 
 
     private fun findProjectDiscovery() {
@@ -187,5 +190,4 @@ class MainPageViewModel @Inject constructor(
     private fun startWebSocket() = webSocketClient.connectWebSocket()
 
     private fun toLocalDate(date: String): LocalDate = LocalDate.parse(date, dateTimeFormatter)
-
 }
