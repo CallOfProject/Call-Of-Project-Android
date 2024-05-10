@@ -162,6 +162,7 @@
     <string name="msg_link_updated">Link updated successfully</string>
     <string name="msg_link_not_saved">Link not saved</string>
     <string name="msg_link_not_updated">Link not updated</string>
+    <string name="msg_blocked_user">Your account blocked!</string>
 
 
     <string-array name="array_projectStatus">
