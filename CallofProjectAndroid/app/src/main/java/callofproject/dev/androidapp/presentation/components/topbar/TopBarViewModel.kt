@@ -3,6 +3,7 @@ package callofproject.dev.androidapp.presentation.components.topbar
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import callofproject.dev.androidapp.domain.preferences.IPreferences
+import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarViewModel.Companion.selectedItemIndex
 import callofproject.dev.androidapp.util.route.Route
 import callofproject.dev.androidapp.util.route.UiEvent
 import callofproject.dev.androidapp.websocket.WebSocketClient
@@ -27,6 +28,7 @@ class TopBarViewModel @Inject constructor(
 
     private fun logoutApp() {
         viewModelScope.launch {
+            selectedItemIndex.value = 0
             webSocket.disconnectWebSocket()
             pref.clearUserInformation()
             _uiEvent.send(UiEvent.Navigate(Route.LOGIN))

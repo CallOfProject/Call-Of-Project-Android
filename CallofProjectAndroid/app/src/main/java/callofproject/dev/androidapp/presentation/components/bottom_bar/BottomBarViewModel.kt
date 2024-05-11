@@ -44,11 +44,16 @@ class BottomBarViewModel @Inject constructor(
         receiveNotification()
     }
 
+
+
     private fun receiveNotification() {
         viewModelScope.launch {
-            notificationFlow.collect { _ ->
+            notificationFlow.onEach {
                 state = state.copy(unReadNotificationsCount = state.unReadNotificationsCount + 1)
             }
+        /*    notificationFlow.collect { _ ->
+                state = state.copy(unReadNotificationsCount = state.unReadNotificationsCount + 1)
+            }*/
         }
     }
 

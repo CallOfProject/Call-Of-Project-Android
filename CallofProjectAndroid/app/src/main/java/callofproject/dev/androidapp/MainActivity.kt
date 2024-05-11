@@ -21,6 +21,7 @@ import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.presentation.authentication.login.LoginScreen
 import callofproject.dev.androidapp.presentation.authentication.signup.RegisterScreen
 import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarComponent
+import callofproject.dev.androidapp.presentation.components.bottom_bar.BottomBarViewModel.Companion.selectedItemIndex
 import callofproject.dev.androidapp.presentation.components.topbar.TopAppBarComponent
 import callofproject.dev.androidapp.presentation.connections.ConnectionsScreen
 import callofproject.dev.androidapp.presentation.main_page.MainScreen
@@ -59,7 +60,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //initializePushNotifications()
+        selectedItemIndex.value = 0
         setContent {
             CallofProjectAndroidTheme {
                 val navController = rememberNavController()
@@ -314,6 +315,21 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        selectedItemIndex.value = 0
+    }
+
+    override fun onStart() {
+        super.onStart()
+        selectedItemIndex.value = 0
+    }
+
+    override fun onResume() {
+        super.onResume()
+        selectedItemIndex.value = 0
     }
 
 
