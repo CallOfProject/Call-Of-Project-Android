@@ -351,6 +351,7 @@ class UserProfileViewModelHelper @Inject constructor() {
                                     .filter { it.linkId != linkId })
                         )
                 )
+                _uiEvent.send(ShowToastMessage(StringResource(R.string.msg_link_deleted)))
             }
 
             is Resource.Error -> {

@@ -33,8 +33,7 @@ class ProjectFilterViewModel @Inject constructor(
     private val useCases: UseCaseFacade,
     private val gson: Gson,
     private val pref: IPreferences
-) :
-    ViewModel() {
+) : ViewModel() {
     private val resources = context.resources as Resources
 
     val professionLevels = resources.getStringArray(R.array.array_professionLevels).toList()

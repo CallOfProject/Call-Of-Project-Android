@@ -267,6 +267,5 @@ class UserProfileUseCase @Inject constructor(
             Resource.Error(e.message ?: "An error occurred")
         }
     }
-
     private fun getBearerToken(): String = preferences.getToken()!!
 }

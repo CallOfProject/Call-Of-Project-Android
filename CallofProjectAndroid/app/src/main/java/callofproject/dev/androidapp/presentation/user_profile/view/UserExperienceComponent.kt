@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.experience.ExperienceDTO
+import callofproject.dev.androidapp.presentation.components.AlertDialog
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
@@ -36,7 +37,7 @@ fun UserExperienceComponent(
 ) {
 
     var selectedExperienceIndex by remember { mutableIntStateOf(-1) }
-
+    var expandedAlertDialog by remember { mutableStateOf(false) }
 
     EditableCardComponent(
         stringResource(R.string.title_experience),
@@ -57,17 +58,22 @@ fun UserExperienceComponent(
                     height = 250.dp,
                     title = experience.companyName,
                     isEditable = isEditable,
-                    onRemoveClick = {
-                        viewModel.onEvent(
-                            UserProfileEvent.OnDeleteExperience(
-                                experience.experienceId
-                            )
-                        )
-                    },
+                    onRemoveClick = { expandedAlertDialog = true },
                     onIconClick = {
                         expandedUpsertExperience.value = true; selectedExperienceIndex = index
                     }
                 ) { ExperienceDetails(experience = experience) }
+
+                if (expandedAlertDialog)
+                    AlertDialog(
+                        onDismissRequest = { expandedAlertDialog = false },
+                        onConfirmation = {
+                            viewModel.onEvent(UserProfileEvent.OnDeleteExperience(experience.experienceId))
+                        },
+                        dialogTitle = stringResource(R.string.dialog_title_remove_experience),
+                        dialogText = stringResource(R.string.dialog_text_remove_experience),
+                        confirmMessage = stringResource(R.string.btn_remove)
+                    )
             }
         }
     }

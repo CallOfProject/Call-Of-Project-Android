@@ -32,14 +32,17 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,6 +50,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.connection.UserConnectionDTO
+import callofproject.dev.androidapp.presentation.components.AlertDialog
+import callofproject.dev.androidapp.presentation.project.project_participants.ProjectParticipantsEvent
 import callofproject.dev.androidapp.util.route.UiEvent
 import coil.compose.rememberAsyncImagePainter
 
@@ -141,25 +146,25 @@ private fun TopFilterChip(
     ) {
         items(list) { item ->
             val isSelected = item == selectedItem.value
+
             FilterChip(
                 modifier = Modifier.padding(horizontal = 6.dp),
                 selected = isSelected,
                 onClick = {
-                    if (isSelected)
-                        selectedItem.value = ""
-                    else selectedItem.value = item
+                    if (!isSelected) {
+                        selectedItem.value = item
+                        when (item) {
+                            "Connections" -> {
+                                viewModel.onEvent(ConnectionEvent.FindConnections)
+                            }
 
-                    when (item) {
-                        "Connections" -> {
-                            viewModel.onEvent(ConnectionEvent.FindConnections)
-                        }
+                            "Pending Requests" -> {
+                                viewModel.onEvent(ConnectionEvent.FindPendingConnections)
+                            }
 
-                        "Pending Requests" -> {
-                            viewModel.onEvent(ConnectionEvent.FindPendingConnections)
-                        }
-
-                        else -> {
-                            viewModel.onEvent(ConnectionEvent.FindBlockedConnections)
+                            else -> {
+                                viewModel.onEvent(ConnectionEvent.FindBlockedConnections)
+                            }
                         }
                     }
                 },
@@ -169,6 +174,7 @@ private fun TopFilterChip(
     }
 }
 
+
 @Composable
 private fun PersonCard(
     isConnections: Boolean,
@@ -177,6 +183,8 @@ private fun PersonCard(
     user: UserConnectionDTO,
     viewModel: ConnectionViewModel
 ) {
+    var expandedAlertDialogForBlock by remember { mutableStateOf(false) }
+    var expandedAlertDialogForRemove by remember { mutableStateOf(false) }
     Card(
         colors = CardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
@@ -223,7 +231,7 @@ private fun PersonCard(
             }
             if (!isPending && !isBlocked && isConnections) {
                 IconButton(onClick = {
-                    viewModel.onEvent(ConnectionEvent.BlockConnection(user.userId))
+                    expandedAlertDialogForBlock = true
                 }) {
                     Icon(
                         painter = painterResource(R.drawable.block_person),
@@ -235,7 +243,7 @@ private fun PersonCard(
                 }
 
                 IconButton(onClick = {
-                    viewModel.onEvent(ConnectionEvent.RemoveConnection(user.userId))
+                   expandedAlertDialogForRemove = true
                 }) {
                     Icon(
                         painter = painterResource(R.drawable.trash),
@@ -286,4 +294,26 @@ private fun PersonCard(
             }
         }
     }
+
+    if (expandedAlertDialogForBlock)
+        AlertDialog(
+            onDismissRequest = { expandedAlertDialogForBlock = false },
+            onConfirmation = {
+                viewModel.onEvent(ConnectionEvent.BlockConnection(user.userId))
+            },
+            dialogTitle = stringResource(R.string.dialog_title_block_connection),
+            dialogText = stringResource(R.string.dialog_text_block_connection),
+            confirmMessage = stringResource(R.string.dialog_confirm_block_connection)
+        )
+
+    if (expandedAlertDialogForRemove)
+        AlertDialog(
+            onDismissRequest = { expandedAlertDialogForRemove = false },
+            onConfirmation = {
+                viewModel.onEvent(ConnectionEvent.RemoveConnection(user.userId))
+            },
+            dialogTitle = stringResource(R.string.dialog_title_remove_connection),
+            dialogText = stringResource(R.string.dialog_text_remove_connection),
+            confirmMessage = stringResource(R.string.dialog_confirm_remove_connection)
+        )
 }

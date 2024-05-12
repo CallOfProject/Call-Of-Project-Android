@@ -42,11 +42,11 @@ class ProjectOverviewViewModel @Inject constructor(
             projectUseCase.project.sendProjectJoinRequest(projectId).let { result ->
                 when (result) {
                     is Resource.Success -> {
-                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.request_sent)))
+                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString(result.data!!.message)))
                     }
 
                     is Resource.Error -> {
-                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString(result.message!!)))
+                        _uiEvent.send(UiEvent.ShowSnackbar(UiText.DynamicString(result.data!!.message)))
                     }
 
                     is Resource.Loading -> {}

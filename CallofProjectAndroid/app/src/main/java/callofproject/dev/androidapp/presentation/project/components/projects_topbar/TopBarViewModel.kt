@@ -21,6 +21,7 @@ class TopBarViewModel @Inject constructor() : ViewModel() {
     fun onEvent(event: TopBarEvent) = when (event) {
         is TopBarEvent.OnClickProjectOverviewBtn -> onNavigate("${Route.PROJECT_OVERVIEW}/${event.projectId}/${selectedItemIndex.value}")
         is TopBarEvent.OnClickProjectDetailsBtn -> onNavigate("${Route.PROJECT_DETAILS}/${event.projectId}/${selectedItemIndex.value}")
+        is TopBarEvent.OnClickProjectParticipantsBtn -> onNavigate("${Route.PROJECT_PARTICIPANTS}/${event.projectId}/${selectedItemIndex.value}")
     }
 
     private fun onNavigate(route: String) {

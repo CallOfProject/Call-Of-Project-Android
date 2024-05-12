@@ -50,33 +50,31 @@ fun UserTagEditComponent(
     removeEvent: (String) -> Unit,
     userTagDTO: List<UserTagDTO> = emptyList()
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     var tagName by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    Dialog(onDismissRequest = onDismissRequest)
-    {
-        Card(
+    Dialog(onDismissRequest = onDismissRequest) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(500.dp)
-                .border(width = 1.dp, color = MaterialTheme.colorScheme.primary),
-            colors = CardColors(
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.primary,
-                disabledContainerColor = Color.Transparent,
-                disabledContentColor = Color.Transparent
-            ),
+                .padding(5.dp)
         ) {
-            Column(
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp),
+                    .height(500.dp)
+                    .border(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+                colors = CardColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = Color.Transparent
+                ),
             ) {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp),
-                    contentAlignment = Alignment.CenterStart
+                        .padding(10.dp)
                 ) {
                     BasicTextField(
                         value = tagName,
@@ -93,6 +91,22 @@ fun UserTagEditComponent(
                             .background(MaterialTheme.colorScheme.background, CircleShape)
                             .padding(horizontal = 10.dp, vertical = 10.dp),
                         maxLines = 1,
+                        textStyle = TextStyle(color = MaterialTheme.colorScheme.onTertiaryContainer),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                if (tagName.isEmpty())
+                                    return@KeyboardActions
+
+                                confirmEvent(tagName)
+                                keyboardController?.hide()
+
+                                tagName = ""
+                            }
+                        ),
                         decorationBox = { innerTextField ->
                             Box(
                                 modifier = Modifier.fillMaxWidth(),
@@ -108,43 +122,21 @@ fun UserTagEditComponent(
                                 innerTextField()
                             }
                         },
-                        textStyle = TextStyle(color = MaterialTheme.colorScheme.onTertiaryContainer),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Done
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                if (tagName.isEmpty()) {
-                                    return@KeyboardActions
-                                }
-                                confirmEvent(tagName)
-                                keyboardController?.hide()
-
-                                tagName = ""
-                            }
-                        ),
-                        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary)
+                        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
                     )
+                    FlowRow(
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                            .padding(top = 5.dp)
+                    ) {
+                        userTagDTO.forEach { userTag ->
+                            TagItem(
+                                text = userTag.tagName,
+                                onClickRemove = { removeEvent(userTag.tagId) },
+                            )
+                        }
+                    }
                 }
-
-            }
-        }
-
-        FlowRow(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(top = 50.dp),
-
-            ) {
-
-            userTagDTO.forEach {
-                TagItem(
-                    text = it.tagName,
-                    onClickRemove = {
-                        removeEvent(it.tagId)
-                    },
-                )
             }
         }
     }

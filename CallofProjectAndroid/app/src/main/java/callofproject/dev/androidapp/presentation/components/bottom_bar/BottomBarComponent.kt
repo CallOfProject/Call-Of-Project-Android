@@ -140,9 +140,9 @@ fun BottomBarComponent(
                                     Badge {
                                         Text(text = viewModel.state.unReadNotificationsCount.toString())
                                     }
-                                } else if (item.hasNews) {
+                                }/* else if (item.hasNews) {
                                     Badge()
-                                }
+                                }*/
                             }
                         ) {
                             Icon(

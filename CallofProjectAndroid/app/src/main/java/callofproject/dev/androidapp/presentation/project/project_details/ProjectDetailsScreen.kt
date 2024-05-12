@@ -286,12 +286,14 @@ fun ProjectDetailsScreen(
 
                     NotEditableCardComponent(
                         stringResource(R.string.title_projectTags),
-                        250.dp,
+                        400.dp,
                     ) {
                         FlowRow(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .wrapContentSize(Alignment.CenterStart),
+                                .wrapContentSize(Alignment.CenterStart)
+                                .verticalScroll(rememberScrollState())
+                            ,
                         ) {
                             (0..<state.projectDetailsDTO.projectTags.size).forEach { idx ->
                                 TagItem(

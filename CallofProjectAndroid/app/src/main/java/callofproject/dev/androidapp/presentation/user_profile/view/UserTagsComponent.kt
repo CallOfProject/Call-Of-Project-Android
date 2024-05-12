@@ -1,9 +1,12 @@
 package callofproject.dev.androidapp.presentation.user_profile.view
 
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -48,6 +51,7 @@ fun UserTagsComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentSize(Alignment.CenterStart)
+                .verticalScroll(rememberScrollState())
         ) {
 
             (0..<state.userProfileDTO.profile.tags.size).forEach { idx ->

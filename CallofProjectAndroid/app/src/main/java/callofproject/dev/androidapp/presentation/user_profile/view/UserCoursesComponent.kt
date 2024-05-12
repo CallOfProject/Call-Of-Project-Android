@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.course.CourseDTO
+import callofproject.dev.androidapp.presentation.components.AlertDialog
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
+import callofproject.dev.androidapp.presentation.connections.ConnectionEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileViewModel
@@ -35,7 +37,7 @@ fun UserCoursesComponent(
     expandedAddCourse: MutableState<Boolean> = mutableStateOf(false),
 ) {
     var selectedCourseIndex by remember { mutableIntStateOf(-1) }
-
+    var expandedAlertDialog by remember { mutableStateOf(false) }
 
 
     EditableCardComponent("Courses",
@@ -55,19 +57,28 @@ fun UserCoursesComponent(
                 EditableCardComponent(
                     title = course.courseName,
                     isEditable = isEditable,
-                    onRemoveClick = { viewModel.onEvent(UserProfileEvent.OnDeleteCourse(course.courseId)) },
+                    onRemoveClick = { expandedAlertDialog = true },
                     onIconClick = {
                         expandedUpdateCourse.value = true
                         selectedCourseIndex = index
                     },
                     height = 250.dp
-                )
-                {
-                    CourseDetails(course)
-                }
+                ) { CourseDetails(course) }
+
+                if (expandedAlertDialog)
+                    AlertDialog(
+                        onDismissRequest = { expandedAlertDialog = false },
+                        onConfirmation = {
+                            viewModel.onEvent(UserProfileEvent.OnDeleteCourse(course.courseId))
+                        },
+                        dialogTitle = stringResource(R.string.dialog_title_remove_course),
+                        dialogText = stringResource(R.string.dialog_text_remove_course),
+                        confirmMessage = stringResource(R.string.btn_remove)
+                    )
             }
         }
     }
+
 
     if (expandedUpdateCourse.value)
         UserCourseEditComponent(

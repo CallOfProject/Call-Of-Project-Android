@@ -4,6 +4,7 @@ import android.util.Log
 import callofproject.dev.androidapp.data.remote.ICallOfProjectService
 import callofproject.dev.androidapp.domain.dto.MultipleResponseMessagePageable
 import callofproject.dev.androidapp.domain.dto.NotificationDTO
+import callofproject.dev.androidapp.domain.dto.ResponseMessage
 import callofproject.dev.androidapp.domain.dto.filter.ProjectFilterDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectDetailDTO
 import callofproject.dev.androidapp.domain.dto.project.ProjectJoinRequestDTO
@@ -16,6 +17,7 @@ import callofproject.dev.androidapp.domain.preferences.IPreferences
 import callofproject.dev.androidapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.util.UUID
 import java.util.UUID.fromString
 import javax.inject.Inject
 
@@ -135,7 +137,7 @@ class ProjectUseCase @Inject constructor(
     }
 
 
-    suspend fun sendProjectJoinRequest(projectId: String): Resource<ProjectParticipantRequestDTO> {
+    suspend fun sendProjectJoinRequest(projectId: String): Resource<ResponseMessage<ProjectParticipantRequestDTO>> {
         return try {
             val response = service.sendProjectJoinRequest(
                 projectId = fromString(projectId),
@@ -143,7 +145,7 @@ class ProjectUseCase @Inject constructor(
                 token = preferences.getToken()!!
             )
 
-            Resource.Success(response.`object`!!)
+            Resource.Success(response)
 
         } catch (e: Exception) {
             Resource.Error(e.message ?: "An unexpected error occurred")
@@ -176,5 +178,23 @@ class ProjectUseCase @Inject constructor(
             }
         }
 
+    }
+
+
+
+
+    suspend fun removeProjectParticipant(userId: UUID, projectId: UUID): Resource<ResponseMessage<Boolean>> {
+        return try {
+            val result = service.deleteProjectParticipants(
+                userId = userId,
+                projectId = projectId,
+                token = preferences.getToken()!!
+            )
+
+            Resource.Success(result)
+
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
     }
 }

@@ -107,7 +107,7 @@ fun SearchScreen(
 
         if (state.isLoading)
             LoadingComponent(it)
-       else {
+        else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -307,8 +307,8 @@ fun SearchScreen(
                                             .clip(RectangleShape),
                                         alignment = Alignment.Center
                                     )
-
                                     Column(
+                                        verticalArrangement = Arrangement.SpaceBetween,
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                         modifier = Modifier.padding(10.dp),
                                         content = {

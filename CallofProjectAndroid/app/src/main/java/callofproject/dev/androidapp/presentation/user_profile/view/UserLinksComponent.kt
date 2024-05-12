@@ -26,7 +26,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.link.LinkDTO
+import callofproject.dev.androidapp.presentation.components.AlertDialog
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
+import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnCreateLink
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnRemoveLinkClicked
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent.OnUpdateLink
@@ -44,7 +46,7 @@ fun UserLinksComponent(
 ) {
     val context = LocalContext.current
     var selectedLinkIndex by remember { mutableIntStateOf(-1) }
-
+    var expandedAlertDialog by remember { mutableStateOf(false) }
 
     EditableCardComponent(
         title = stringResource(R.string.title_links),
@@ -65,12 +67,23 @@ fun UserLinksComponent(
                     title = link.linkTitle,
                     isEditable = isEditable,
                     removable = true,
-                    onRemoveClick = { viewModel.onEvent(OnRemoveLinkClicked(link.linkId)) },
+                    onRemoveClick = { expandedAlertDialog = true },
                     onIconClick = {
                         expandedUpdateLink.value = true;
                         selectedLinkIndex = index
                     }
                 ) { LinkDetails(link, context) }
+
+                if (expandedAlertDialog)
+                    AlertDialog(
+                        onDismissRequest = { expandedAlertDialog = false },
+                        onConfirmation = {
+                            viewModel.onEvent(OnRemoveLinkClicked(link.linkId))
+                        },
+                        dialogTitle = stringResource(R.string.dialog_title_remove_link),
+                        dialogText = stringResource(R.string.dialog_text_remove_link),
+                        confirmMessage = stringResource(R.string.btn_remove)
+                    )
             }
         }
     }

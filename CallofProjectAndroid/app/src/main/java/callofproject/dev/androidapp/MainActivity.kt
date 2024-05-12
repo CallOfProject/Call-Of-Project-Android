@@ -30,6 +30,7 @@ import callofproject.dev.androidapp.presentation.project.my_projects.MyProjectsS
 import callofproject.dev.androidapp.presentation.project.project_details.ProjectDetailsScreen
 import callofproject.dev.androidapp.presentation.project.project_filter.FilteredProjectScreen
 import callofproject.dev.androidapp.presentation.project.project_overview.ProjectOverviewScreen
+import callofproject.dev.androidapp.presentation.project.project_participants.ProjectParticipantsScreen
 import callofproject.dev.androidapp.presentation.search.SearchScreen
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileScreen
 import callofproject.dev.androidapp.presentation.user_profile.user_view.UserOverviewScreen
@@ -43,6 +44,7 @@ import callofproject.dev.androidapp.util.route.Route.PROFILE
 import callofproject.dev.androidapp.util.route.Route.PROJECTS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_DETAILS
 import callofproject.dev.androidapp.util.route.Route.PROJECT_OVERVIEW
+import callofproject.dev.androidapp.util.route.Route.PROJECT_PARTICIPANTS
 import callofproject.dev.androidapp.util.route.Route.SEARCH_RESULT
 import callofproject.dev.androidapp.util.route.Route.SIGN_UP
 import callofproject.dev.androidapp.util.route.Route.USER_OVERVIEW
@@ -208,6 +210,28 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(
+                            "$PROJECT_PARTICIPANTS/{projectId}/{selectedNavBarIndex}", arguments =
+                            listOf(
+                                navArgument("projectId") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("selectedNavBarIndex") {
+                                    type = NavType.IntType
+                                }
+                            )
+                        ) {
+                            val projectId = it.arguments?.getString("projectId")
+                            val selectedIndex = it.arguments?.getInt("selectedNavBarIndex")
+                            ProjectParticipantsScreen(
+                                projectId = projectId!!,
+                                scaffoldState = scaffoldState,
+                                onNavigate = navController::navigate,
+                                selectedNavBar = selectedIndex!!
+                            )
+
+                        }
+
+                        composable(
                             "$PROJECT_DETAILS/{projectId}/{selectedNavBarIndex}",
                             arguments = listOf(
                                 navArgument("projectId") {
@@ -316,22 +340,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        selectedItemIndex.value = 0
-    }
-
-    override fun onStart() {
-        super.onStart()
-        selectedItemIndex.value = 0
-    }
-
-    override fun onResume() {
-        super.onResume()
-        selectedItemIndex.value = 0
-    }
-
 
     private fun initializePushNotifications() {
         OneSignal.Debug.logLevel = LogLevel.VERBOSE

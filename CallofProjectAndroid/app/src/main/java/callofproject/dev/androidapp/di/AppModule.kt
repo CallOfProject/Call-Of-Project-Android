@@ -15,16 +15,21 @@ import callofproject.dev.androidapp.di.interceptor.LocalDateTimeFormatterInterce
 import callofproject.dev.androidapp.di.interceptor.PlainPreferencesInterceptor
 import callofproject.dev.androidapp.domain.preferences.IEncryptedPreferences
 import callofproject.dev.androidapp.domain.preferences.IPreferences
+import callofproject.dev.androidapp.domain.use_cases.NotificationUseCase
+import callofproject.dev.androidapp.websocket.WebSocketClient
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 @Module

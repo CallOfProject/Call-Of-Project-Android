@@ -7,6 +7,7 @@ object Route {
     const val PROFILE = "profile"
     const val PROJECT_OVERVIEW = "project_overview"
     const val PROJECT_DETAILS = "project_details"
+    const val PROJECT_PARTICIPANTS = "project_participants"
     const val NOTIFICATIONS = "notifications"
     const val PROJECTS = "projects"
     const val FILTERED_PROJECTS = "filtered_projects"

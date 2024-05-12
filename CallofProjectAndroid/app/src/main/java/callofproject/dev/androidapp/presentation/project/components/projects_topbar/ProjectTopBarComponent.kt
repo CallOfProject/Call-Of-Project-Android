@@ -15,10 +15,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.presentation.project.components.projects_topbar.TopBarEvent.OnClickProjectDetailsBtn
 import callofproject.dev.androidapp.presentation.project.components.projects_topbar.TopBarEvent.OnClickProjectOverviewBtn
+import callofproject.dev.androidapp.presentation.project.components.projects_topbar.TopBarEvent.OnClickProjectParticipantsBtn
 import callofproject.dev.androidapp.util.route.UiEvent
 
 private const val BOTTOM_NAVBAR_PROJECT_OVERVIEW = "Project Overview"
 private const val BOTTOM_NAVBAR_PROJECT_DETAILS = "Project Details"
+private const val BOTTOM_NAVBAR_PROJECT_PARTICIPANTS = "Project Participants"
 
 @Composable
 fun ProjectTopBarComponent(
@@ -38,6 +40,11 @@ fun ProjectTopBarComponent(
             title = BOTTOM_NAVBAR_PROJECT_DETAILS,
             selectedIcon = painterResource(R.drawable.baseline_details_24),
             unselectedIcon = painterResource(R.drawable.baseline_details_24),
+        ),
+        ProjectTopNavigationItem(
+            title = BOTTOM_NAVBAR_PROJECT_PARTICIPANTS,
+            selectedIcon = painterResource(R.drawable.people),
+            unselectedIcon = painterResource(R.drawable.people),
         ),
     )
 
@@ -66,6 +73,7 @@ fun ProjectTopBarComponent(
                     when (index) {
                         0 -> viewModel.onEvent(OnClickProjectOverviewBtn(projectId))
                         1 -> viewModel.onEvent(OnClickProjectDetailsBtn(projectId))
+                        2 -> viewModel.onEvent(OnClickProjectParticipantsBtn(projectId))
                     }
                 },
                 label = { Text(text = item.title) },

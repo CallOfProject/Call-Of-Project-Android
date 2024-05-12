@@ -1,5 +1,6 @@
 package callofproject.dev.androidapp.presentation.components.bottom_bar
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,8 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BottomBarViewModel @Inject constructor(
-    private val useCaseFacade: UseCaseFacade,
-    private val webSocketClient: WebSocketClient
+    private val webSocketClient: WebSocketClient,
+    private val useCaseFacade: UseCaseFacade
 ) : ViewModel() {
 
     private val _uiEvent = Channel<UiEvent>()
@@ -34,28 +35,25 @@ class BottomBarViewModel @Inject constructor(
     var state by mutableStateOf(BottomBarState())
         private set
 
-    val notificationFlow: SharedFlow<NotificationDTO> = webSocketClient.notificationFlow
-
-    companion object {
-        var selectedItemIndex = mutableStateOf(0)
-    }
+    private val notificationFlow: SharedFlow<NotificationDTO> = webSocketClient.notificationFlow
 
     init {
         receiveNotification()
     }
 
-
+    companion object {
+        var selectedItemIndex = mutableStateOf(0)
+    }
 
     private fun receiveNotification() {
         viewModelScope.launch {
-            notificationFlow.onEach {
+            notificationFlow.collect { notification ->
+                Log.d("BottomBarViewModel", "Notification received: ${notification.message}")
                 state = state.copy(unReadNotificationsCount = state.unReadNotificationsCount + 1)
             }
-        /*    notificationFlow.collect { _ ->
-                state = state.copy(unReadNotificationsCount = state.unReadNotificationsCount + 1)
-            }*/
         }
     }
+
 
     fun onEvent(event: BottomBarEvent) = when (event) {
         is BottomBarEvent.Navigate -> onNavigate(event.route)

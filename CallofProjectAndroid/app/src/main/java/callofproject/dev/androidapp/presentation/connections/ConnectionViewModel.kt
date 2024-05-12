@@ -80,7 +80,7 @@ class ConnectionViewModel @Inject constructor(
 
     }
 
-    private fun findBlockedConnections() {
+    fun findBlockedConnections() {
         findAllJob?.cancel()
         state = state.copy(isLoading = true)
         findAllJob = viewModelScope.launch {
@@ -89,19 +89,20 @@ class ConnectionViewModel @Inject constructor(
         }
     }
 
-    private fun findPendingConnections() {
+    fun findPendingConnections() {
         findAllJob?.cancel()
 
         state = state.copy(isLoading = true)
 
         findAllJob = viewModelScope.launch {
-            useCaseFacade.communicationUseCase.findPendingConnections().let(::resourceCallbackForFind)
+            useCaseFacade.communicationUseCase.findPendingConnections()
+                .let(::resourceCallbackForFind)
         }
 
     }
 
 
-    private fun findConnections() {
+    fun findConnections() {
         findAllJob?.cancel()
 
         state = state.copy(isLoading = true)
@@ -127,10 +128,16 @@ class ConnectionViewModel @Inject constructor(
             is Resource.Loading -> state.copy(isLoading = true, error = "")
 
             is Resource.Success -> {
-                state.copy(isLoading = false, error = "", connections = state.connections.filter { it.userId != friendId })
+                state.copy(
+                    isLoading = false,
+                    error = "",
+                    connections = state.connections.filter { it.userId != friendId })
             }
 
-            is Resource.Error -> state.copy(isLoading = false, error = res.message ?: "An error occurred")
+            is Resource.Error -> state.copy(
+                isLoading = false,
+                error = res.message ?: "An error occurred"
+            )
         }
     }
 }

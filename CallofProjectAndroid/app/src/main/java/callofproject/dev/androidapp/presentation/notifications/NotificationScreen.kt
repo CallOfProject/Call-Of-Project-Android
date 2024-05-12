@@ -31,6 +31,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +46,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.NotificationDataType.CONNECTION_REQUEST
 import callofproject.dev.androidapp.domain.dto.NotificationDataType.PROJECT_JOIN_REQUEST
+import callofproject.dev.androidapp.presentation.components.AlertDialog
+import callofproject.dev.androidapp.presentation.connections.ConnectionEvent
 import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnAcceptConnectionRequest
 import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnAcceptProjectJoinRequest
 import callofproject.dev.androidapp.presentation.notifications.NotificationEvent.OnRejectConnectionRequest
@@ -60,7 +66,7 @@ fun NotificationScreen(
 
     val state = viewModel.state
     val context = LocalContext.current
-
+    var expandedAlertDialog by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
@@ -114,7 +120,7 @@ fun NotificationScreen(
                             }
 
                             OutlinedButton(onClick = {
-                                viewModel.onEvent(NotificationEvent.OnClearAllClicked)
+                                expandedAlertDialog = true
                             }) {
                                 Text(text = stringResource(R.string.btn_clearAll))
                             }
@@ -157,6 +163,17 @@ fun NotificationScreen(
         }
 
     }
+
+    if (expandedAlertDialog)
+        AlertDialog(
+            onDismissRequest = { expandedAlertDialog = false },
+            onConfirmation = {
+                viewModel.onEvent(NotificationEvent.OnClearAllClicked)
+            },
+            dialogTitle = stringResource(R.string.dialog_title_clear_notifications),
+            dialogText = stringResource(R.string.dialog_text_clear_notifications),
+            confirmMessage = stringResource(R.string.dialog_confirm_clear_notifications)
+        )
 }
 
 @Composable

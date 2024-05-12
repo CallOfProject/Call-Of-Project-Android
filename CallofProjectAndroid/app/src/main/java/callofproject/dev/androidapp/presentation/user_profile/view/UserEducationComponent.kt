@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import callofproject.dev.androidapp.R
 import callofproject.dev.androidapp.domain.dto.user_profile.education.EducationDTO
+import callofproject.dev.androidapp.presentation.components.AlertDialog
 import callofproject.dev.androidapp.presentation.components.EditableCardComponent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileEvent
 import callofproject.dev.androidapp.presentation.user_profile.UserProfileState
@@ -35,7 +36,7 @@ fun UserEducationComponent(
     expandedAddEducation: MutableState<Boolean> = mutableStateOf(false),
 ) {
     var selectedEducationIndex by remember { mutableIntStateOf(-1) }
-
+    var expandedAlertDialog by remember { mutableStateOf(false) }
     EditableCardComponent(
         "Education",
         500.dp,
@@ -51,9 +52,21 @@ fun UserEducationComponent(
                     height = 250.dp,
                     title = state.userProfileDTO.profile.educations[idx].schoolName,
                     isEditable = isEditable,
-                    onRemoveClick = { viewModel.onEvent(UserProfileEvent.OnDeleteEducation(state.userProfileDTO.profile.educations[idx].educationId)) },
-                    onIconClick = { expandedUpsertEducation.value = true; selectedEducationIndex = idx }
+                    onRemoveClick = { expandedAlertDialog = true },
+                    onIconClick = {
+                        expandedUpsertEducation.value = true; selectedEducationIndex = idx
+                    }
                 ) { EducationDetails(state.userProfileDTO.profile.educations[idx]) }
+                if (expandedAlertDialog)
+                    AlertDialog(
+                        onDismissRequest = { expandedAlertDialog = false },
+                        onConfirmation = {
+                            viewModel.onEvent(UserProfileEvent.OnDeleteEducation(state.userProfileDTO.profile.educations[idx].educationId))
+                        },
+                        dialogTitle = stringResource(R.string.dialog_title_remove_education),
+                        dialogText = stringResource(R.string.dialog_text_remove_education),
+                        confirmMessage = stringResource(R.string.btn_remove)
+                    )
             }
         }
     }

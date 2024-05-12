@@ -322,4 +322,11 @@ interface ICallOfProjectService {
         @Query("tid") tagId: UUID,
         @Header("Authorization") token: String
     ): ResponseMessage<UserTagsDTO>
+
+    @DELETE("/api/project/project-owner/participant/remove")
+    suspend fun deleteProjectParticipants(
+        @Query("uid") userId: UUID,
+        @Query("pid") projectId: UUID,
+        @Header("Authorization") token: String
+    ): ResponseMessage<Boolean>
 }

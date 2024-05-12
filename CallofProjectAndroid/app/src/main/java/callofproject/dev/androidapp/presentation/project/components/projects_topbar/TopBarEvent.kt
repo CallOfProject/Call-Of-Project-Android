@@ -4,4 +4,5 @@ package callofproject.dev.androidapp.presentation.project.components.projects_to
 sealed class TopBarEvent {
     data class OnClickProjectOverviewBtn(val projectId: String) : TopBarEvent()
     data class OnClickProjectDetailsBtn(val projectId: String) : TopBarEvent()
+    data class OnClickProjectParticipantsBtn(val projectId: String) : TopBarEvent()
 }
